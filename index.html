@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <script src="node_modules/babel-standalone/babel.min.js"></script> 
+
+    <style>
+        html,
+        body {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+    </style>
+    
+    </script>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Babylon</title>
+    </head>
+
+    <script src="node_modules/rxjs/bundles/Rx.js"></script>
+    <script src="node_modules/ramda/dist/ramda.js"></script>
+    <script src="node_modules/babylonjs/dist/preview release/babylon.max.js"></script>
+    <script src="node_modules/babylonjs/dist/preview release//inspector/babylon.inspector.bundle.js"></script>
+    <script src="node_modules/snabbdom/dist/snabbdom.js"></script>
+    <script src="node_modules/snabbdom/dist/snabbdom-props.js"></script>
+    <script src="node_modules/snabbdom/dist/snabbdom-attributes.js"></script>
+
+    <body>
+        <canvas id="renderCanvas"></canvas>
+    </body>
+
+    <script type="text/jsx" src="utils.js"></script>
+    <script type="text/jsx" src="def.js"></script>
+    <script type="text/jsx" src="base.js"></script>
+    <script type="text/jsx" src="VPC.js"></script>
+    <script type="text/jsx" src="EC2.js"></script>
+    <script type="text/jsx" src="index.js"></script>
+
+</html>

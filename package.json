@@ -1,9 +1,9 @@
 {
-  "private": true,
+  "private": false,
   "license": "MIT",
-  "name": "react-babylonjs",
+  "name": "react-babylonjs-3d",
   "version": "0.0.1",
-  "description": "babylonjs in a declarative way: CycleJS, ReactJS, RxJS",
+  "description": "BabylonJS 3D in a declarative way: CycleJS, ReactJS, RxJS",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

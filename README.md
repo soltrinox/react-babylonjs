@@ -14,6 +14,7 @@ There are alot of things to implement. As this project is in it's very early sta
 * unit test
 * compose all the properties and behaviours
 * events hook
+* npm package
 * webpack
 * layout(flexbox)
 * create npm package

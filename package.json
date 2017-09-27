@@ -1,9 +1,9 @@
 {
   "private": true,
   "license": "MIT",
-  "name": " cyclejs-driver-babylonjs",
+  "name": "react-babylonjs",
   "version": "0.0.1",
-  "description": "babylonjs in a declarative way: cyclejs, react, RxJS",
+  "description": "babylonjs in a declarative way: CycleJS, ReactJS, RxJS",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

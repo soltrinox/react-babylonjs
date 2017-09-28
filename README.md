@@ -1,5 +1,7 @@
 # react-babylonjs
 
+This package is under development and so for doesn't offer any functionality, please don't install it yet... But keep reading and find out what it's going to do...
+
 The idea was abstract way all the complexity required to create graphs using BabylonJS.
 Inspired by ReactJS, CycleJS I decided to borrow the VirtualDOM concept to fill the gap between BabylonJS and the declarative paradigm.
 
@@ -14,9 +16,9 @@ There are alot of things to implement. As this project is in it's very early sta
 * unit test
 * compose all the properties and behaviours
 * events hook
-* npm package
-* webpack
+* ~~webpack~~
 * layout(flexbox)
+* set materials and textures as style
 * create npm package
 * support for hot reload
 * support creation of library components(JSX)
@@ -27,6 +29,8 @@ There are alot of things to implement. As this project is in it's very early sta
 Don't be shy, if you want to help, just create a pull request. 
 
 Look how easy it can be to create 3D graphs using JSX syntax:
+
+1. - parent property setter flavor
 ```jsx
 <scene clearColor={[0, 1, 0]}>
     <hemisphericLight name="light1" target={[0, 1, 0]} intensity={0.5} />
@@ -57,5 +61,41 @@ Look how easy it can be to create 3D graphs using JSX syntax:
             </standardMaterial>
         </parentProp>
     </box>
+</scene>
+```
+
+2. - css flavor
+```jsx
+<scene style={{ clearColor:[0, 1, 0] }}>
+    <hemisphericLight name="light1" target={[0, 1, 0]} intensity={0.5} />
+    <freeCamera name="camera1" 
+        style={{
+            fxaaPostProcess: {
+                options: 1,
+                samplingMode: BABYLON.Texture.TRILINEAR_SAMPLINGMODE,  
+            },
+        }}
+        position={[0, 5, -10]}
+        defaultTarget={[0, 0, 0]}
+    >
+        <parentPropList name="inputs">
+            <defaultCameraMouseZoomInput />
+            <defaultCameraKeyboardMoveInput />
+        </parentPropList>
+    </freeCamera>
+
+    <box name="skybox" size={1000} infiniteDistance={true}
+        style={{
+            standardMaterial: {
+                backFaceCulling: false,
+                diffuseColor: [0, 0, 0],
+                specularColor: [0, 0, 0],
+                cubeTexture: {
+                    url:"assets/textures/nebula",
+                    coordinatesMode:{BABYLON.Texture.SKYBOX_MODE},
+                },
+            },  
+        }}
+    />
 </scene>
 ```

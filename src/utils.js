@@ -1,13 +1,3 @@
-const { h } = snabbdom;
-const hh = (name, props, ...children) => {
-    // console.group('hh=>>>>', name);
-    // console.log('props =>', props);
-    // console.log('children =>', children);
-    // console.groupEnd();
-
-    return snabbdom.h(name, { props }, children);
-};
-
 var LOG = false;
 const util = {
     inspect: (args, opts) =>
@@ -86,3 +76,9 @@ const DEBUG = (source, ...args) =>
             .join(`\n`),*/
         '\n[end]======='
     );
+module.exports = {
+    DEBUG,
+    WRAPPER,
+    c,
+    util,
+};

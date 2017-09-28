@@ -1,4 +1,5 @@
-/** @jsx hh */
+const EC2 = require('./EC2')
+const { Ground,ShaderMaterial,Texture } = require('./def')
 /*
 working on that shit to make JSX work
 const VPC = ({position, ec2},) => (
@@ -77,7 +78,12 @@ const VPC = ({ position, ec2s }) =>
                           EC2({ position: { start: [3, -0.01, 2], end: [3, 0.2, 2] } }),
                           EC2({ position: { start: [3, -0.01, 3], end: [3, 0.2, 3] } }),
                           EC2({ position: { start: [3, -0.01, 4], end: [3, 0.2, 4] } }),
+                          EC2({ position: { start: [4, -0.01, 1], end: [4, 0.2, 1] } }),
+                          EC2({ position: { start: [4, -0.01, 2], end: [4, 0.2, 2] } }),
+                          EC2({ position: { start: [4, -0.01, 3], end: [4, 0.2, 3] } }),
+                          EC2({ position: { start: [4, -0.01, 4], end: [4, 0.2, 4] } }),
                       ]
                     : []
             )
     );
+module.exports = VPC;

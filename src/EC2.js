@@ -1,4 +1,4 @@
-/** @jsx hh */
+
 const EC2 = ({ position }) => (
     <box
         name="ec2-box"
@@ -27,6 +27,8 @@ const EC2 = ({ position }) => (
         </parentProp>
     </box>
 );
+
+module.exports = EC2
 // TODO: ellipsoid is not working!!!
 // {}
 

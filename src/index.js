@@ -1,5 +1,11 @@
-/** @jsx hh */
-const nodeTypes = createNodes(_allDefs);
+const Rx = require('rxjs');
+const def = require('./def');
+const BABYLON = require('babylonjs');
+const snabbdom = require('snabbdom');
+const snabbdom_props = require('snabbdom/modules/props');
+const nodeTypes = def.createNodes(def.allDefs);
+const { Node } = def;
+const VPC = require('./VPC');
 
 class BabylonSceneAPI {
     constructor(canvas, engine) {
@@ -7,7 +13,7 @@ class BabylonSceneAPI {
         this.canvas = canvas;
         this.engine = engine;
         this.scene = new BABYLON.Scene(engine);
-        this.scene.debugLayer.show({
+        /*this.scene.debugLayer.show({
             popup: true,
             initialTab: 2,
             newColors: {
@@ -19,7 +25,7 @@ class BabylonSceneAPI {
                 colorTop: 'red',
                 colorBottom: 'blue',
             },
-        });
+        });*/
     }
 
     startRenderLoop() {
@@ -79,7 +85,6 @@ class BabylonSceneAPI {
         return node.tagName;
     }
 }
-
 const LOAD = () => {
     const canvasEl = document.querySelector('#renderCanvas');
     const engine = new BABYLON.Engine(canvasEl, true);
@@ -142,16 +147,13 @@ const LOAD = () => {
             </parentProp>
         </ground>
     );
-
-    const time = Rx.Observable.interval(10, Rx.Scheduler.queue);
+    const time = Rx.Observable.interval(10, Rx.Scheduler.queue).take(1);
 
     const tmp = time
-        .take(100)
-        // .map(i => i * 0.01)
-        .map(i => (
+        .map(() => (
             <scene clearColor={[0, 1, 0]}>
                 <hemisphericLight name="light1" target={[0, 1, 0]} intensity={0.5} />
-                <freeCamera name="camera1" position={[0, 5, -10]} defaultTarget={[0, 0, 0]}>
+                <freeCamera name="camera1" position={[0, 5, -10]} defaultTarget={[0, 0, 1]}>
                     <parent name="camera">
                         <fxaaPostProcess />
                     </parent>
@@ -162,7 +164,7 @@ const LOAD = () => {
                 </freeCamera>
                 {Sky}
                 {ScenarioGround}
-                {VPC({ position: [-5, 1, 5], ec2s: true })}
+                {VPC({ position: [0, 1, 0], ec2s: true })}
             </scene>
         ))
         .distinct()

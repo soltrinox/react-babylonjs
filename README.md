@@ -1,10 +1,10 @@
 # react-babylonjs
 
-## This package is under development and so for doesn't offer any functionality, please don't install it yet... But keep reading and find out what it's going to do...
+## This package is under development and for now it doesn't offer any functionality, please don't install it, not just yet... But keep reading and find out what it's going to do...
 ======
 
 ### So far
-For all you can do is clone this repo run `npm install` and `npm start`.
+For now all you can do is clone this repo, run `npm install` and `npm start`.
 Then open on the browser the address http://localhost:8080/.
 As prove of concept this project is already using a virtual tree and abstracting away all the code that we would have to write if we were using directly BabylonJS.
 

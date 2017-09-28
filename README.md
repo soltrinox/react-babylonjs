@@ -1,6 +1,7 @@
 # react-babylonjs
 
-This package is under development and so for doesn't offer any functionality, please don't install it yet... But keep reading and find out what it's going to do...
+## This package is under development and so for doesn't offer any functionality, please don't install it yet... But keep reading and find out what it's going to do...
+======
 
 The idea was abstract way all the complexity required to create graphs using BabylonJS.
 Inspired by ReactJS, CycleJS I decided to borrow the VirtualDOM concept to fill the gap between BabylonJS and the declarative paradigm.

@@ -91,8 +91,8 @@ Look how easy it can be to create 3D graphs using JSX syntax:
                 diffuseColor: [0, 0, 0],
                 specularColor: [0, 0, 0],
                 cubeTexture: {
-                    url:"assets/textures/nebula",
-                    coordinatesMode:{BABYLON.Texture.SKYBOX_MODE},
+                    url: "assets/textures/nebula",
+                    coordinatesMode: BABYLON.Texture.SKYBOX_MODE,
                 },
             },  
         }}

@@ -40,14 +40,16 @@ Look how easy it can be to create 3D graphs using JSX syntax:
 ```jsx
 <scene clearColor={[0, 1, 0]}>
     <hemisphericLight name="light1" target={[0, 1, 0]} intensity={0.5} />
-    <freeCamera name="camera1" position={[0, 5, -10]} defaultTarget={[0, 0, 0]}>
-        <parent name="camera">
-            <fxaaPostProcess />
-        </parent>
-        <parentPropList name="inputs">
-            <defaultCameraMouseZoomInput />
-            <defaultCameraKeyboardMoveInput />
-        </parentPropList>
+    <freeCamera
+        name="camera1"
+        position={[0, y, z]}
+        defaultTarget={[0, 0, 1]}
+        inputs={[defaultCameraKeyboardMoveInput, defaultCameraMouseZoomInput]}
+    >
+        <fxaaPostProcess
+            options={1}
+            samplingMode={BABYLON.Texture.TRILINEAR_SAMPLINGMODE}
+        />
     </freeCamera>
 
     <box name="skybox" size={1000} infiniteDistance={true}>
@@ -83,13 +85,8 @@ Look how easy it can be to create 3D graphs using JSX syntax:
         }}
         position={[0, 5, -10]}
         defaultTarget={[0, 0, 0]}
-    >
-        <parentPropList name="inputs">
-            <defaultCameraMouseZoomInput />
-            <defaultCameraKeyboardMoveInput />
-        </parentPropList>
-    </freeCamera>
-
+        inputs={[defaultCameraKeyboardMoveInput, defaultCameraMouseZoomInput]}
+    />
     <box name="skybox" size={1000} infiniteDistance={true}
         style={{
             standardMaterial: {

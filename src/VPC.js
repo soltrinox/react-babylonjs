@@ -40,6 +40,7 @@ const VPC = ({ position, ec2s }) =>
         [
             ShaderMaterial(
                 {
+                    name: 'vpc-tile',
                     attributes: ['position', 'uv'],
                     uniforms: [
                         'worldViewProjection',
@@ -55,7 +56,6 @@ const VPC = ({ position, ec2s }) =>
                     boxSize: 0.5,
                     edgeColor: [0, 0, 0, 1.0],
                     hue: [0.4, 0.4, 0.4, 1],
-                    name: 'vpc-tile',
                     shaderPath: '/assets/shaders/tile',
                 },
                 [

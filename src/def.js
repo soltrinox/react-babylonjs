@@ -1,201 +1,55 @@
+'use strict';
 const BABYLON = require('babylonjs');
 const R = require('RAMDA');
 const Rx = require('rxjs');
 const { h } = require('snabbdom');
-const ZOOM_SENSITIVITY = 200;
 
-class DefaultCameraKeyboardMoveInput {
-    constructor() {
-        this.keys = [];
-        this.keysUp = [38];
-        this.keysDown = [40];
-        this.keysLeft = [37];
-        this.keysRight = [39];
-        this.keysPlus = [187];
-        this.keysDash = [189];
-    }
+const parentPropNameInsertHook = node =>
+    node.elm.parentPropName
+        ? (node.elm.parent[node.elm.parentPropName] = node.elm.babylonCMP)
+        : null;
 
-    getTypeName() {
-        return 'DefaultCameraKeyboardMoveInput';
-    }
-
-    getSimpleName() {
-        return 'keyboard';
-    }
-
-    attachControl(element, noPreventDefault) {
-        const _this = this;
-        if (!this.onKeyDown) {
-            element.tabIndex = 1;
-            this.onKeyDown = function(evt) {
-                if (
-                    _this.keysUp.indexOf(evt.keyCode) !== -1 ||
-                    _this.keysDown.indexOf(evt.keyCode) !== -1 ||
-                    _this.keysLeft.indexOf(evt.keyCode) !== -1 ||
-                    _this.keysRight.indexOf(evt.keyCode) !== -1 ||
-                    _this.keysPlus.indexOf(evt.keyCode) !== -1 ||
-                    _this.keysDash.indexOf(evt.keyCode) !== -1
-                ) {
-                    let index = _this.keys.indexOf(evt.keyCode);
-                    if (index === -1) {
-                        _this.keys.push(evt.keyCode);
-                    }
-                    if (!noPreventDefault) {
-                        evt.preventDefault();
-                    }
-                }
-            };
-            this.onKeyUp = function(evt) {
-                if (
-                    _this.keysUp.indexOf(evt.keyCode) !== -1 ||
-                    _this.keysDown.indexOf(evt.keyCode) !== -1 ||
-                    _this.keysLeft.indexOf(evt.keyCode) !== -1 ||
-                    _this.keysRight.indexOf(evt.keyCode) !== -1 ||
-                    _this.keysPlus.indexOf(evt.keyCode) !== -1 ||
-                    _this.keysDash.indexOf(evt.keyCode) !== -1
-                ) {
-                    let index = _this.keys.indexOf(evt.keyCode);
-                    if (index >= 0) {
-                        _this.keys.splice(index, 1);
-                    }
-                    if (!noPreventDefault) {
-                        evt.preventDefault();
-                    }
-                }
-            };
-            element.addEventListener('keydown', this.onKeyDown, false);
-            element.addEventListener('keyup', this.onKeyUp, false);
-            BABYLON.Tools.RegisterTopRootEvents([{ name: 'blur', handler: this.onLostFocus }]);
-        }
-    }
-
-    detachControl(element) {
-        if (this.onKeyDown) {
-            element.removeEventListener('keydown', this.onKeyDown);
-            element.removeEventListener('keyup', this.onKeyUp);
-            BABYLON.Tools.UnregisterTopRootEvents([{ name: 'blur', handler: this.onLostFocus }]);
-            this.keys = [];
-            this.onKeyDown = null;
-            this.onKeyUp = null;
-        }
-    }
-
-    checkInputs() {
-        if (this.onKeyDown) {
-            let camera = this.camera;
-
-            for (var index = 0; index < this.keys.length; index++) {
-                let keyCode = this.keys[index];
-                let speed = camera._computeLocalCameraSpeed();
-                if (this.keysLeft.indexOf(keyCode) !== -1) {
-                    camera._localDirection.copyFromFloats(-speed, 0, 0);
-                } else if (this.keysUp.indexOf(keyCode) !== -1) {
-                    camera._localDirection.copyFromFloats(0, speed, 0);
-                } else if (this.keysRight.indexOf(keyCode) !== -1) {
-                    camera._localDirection.copyFromFloats(speed, 0, 0);
-                } else if (this.keysDown.indexOf(keyCode) !== -1) {
-                    camera._localDirection.copyFromFloats(0, -speed, 0);
-                } else if (this.keysPlus.indexOf(keyCode) !== -1) {
-                    camera._localDirection.copyFromFloats(0, 0, speed);
-                } else if (this.keysDash.indexOf(keyCode) !== -1) {
-                    camera._localDirection.copyFromFloats(0, 0, -speed);
-                }
-
-                if (camera.getScene().useRightHandedSystem) {
-                    camera._localDirection.z *= -1;
-                }
-
-                camera.getViewMatrix().invertToRef(camera._cameraTransformMatrix);
-                BABYLON.Vector3.TransformNormalToRef(
-                    camera._localDirection,
-                    camera._cameraTransformMatrix,
-                    camera._transformedDirection
-                );
-
-                if (
-                    this.keysPlus.indexOf(keyCode) === -1 &&
-                    this.keysDash.indexOf(keyCode) === -1
-                ) {
-                    camera._localDirection.multiplyInPlace(new BABYLON.Vector3(1, 1, 0));
-                    camera._transformedDirection.y = 0;
-                }
-
-                camera.cameraDirection.addInPlace(camera._transformedDirection);
+const parentMesh = node => {
+    const cmp = node.elm.babylonCMP;
+    if (cmp instanceof BABYLON.Mesh) {
+        node.elm.children.forEach(child => {
+            if (child.babylonCMP && child.babylonCMP instanceof BABYLON.Mesh) {
+                child.babylonCMP.parent = cmp;
             }
-        }
+        });
     }
+};
 
-    onLostFocus() {
-        this.keys = [];
-    }
-}
-
-class DefaultCameraMouseZoomInput {
-    constructor() {
-        this.observer = null;
-        this.wheelZoom = this.wheelZoom.bind(this);
-        this.wheelPrecision = 3;
-        this.noPreventDefault = true;
-    }
-
-    wheelZoom(p) {
-        if (p.type !== BABYLON.PointerEventTypes.POINTERWHEEL) return;
-        var event = p.event;
-        var delta = 0;
-
-        if (event.wheelDelta) {
-            delta = event.wheelDelta / (this.wheelPrecision * ZOOM_SENSITIVITY);
-        } else if (event.detail) {
-            delta = -event.detail / this.wheelPrecision;
-        }
-
-        if (delta) {
-            let dirX = Math.sin(this.camera.rotation.y) * Math.cos(this.camera.rotation.x);
-            let dirY = -Math.sin(this.camera.rotation.x);
-            let dirZ = Math.cos(this.camera.rotation.y) * Math.cos(this.camera.rotation.x);
-            let move = new BABYLON.Vector3(delta * dirX, delta * dirY, delta * dirZ);
-            this.camera.cameraDirection.addInPlace(move);
-        }
-
-        if (event.preventDefault) {
-            if (!this.noPreventDefault) {
-                event.preventDefault();
-            }
-        }
-    }
-
-    getTypeName() {
-        return 'DefaultCameraMouseZoomInput';
-    }
-
-    getSimpleName() {
-        return 'mouseZoom';
-    }
-
-    attachControl(element, noPreventDefault) {
-        this.noPreventDefault = noPreventDefault;
-        this.observer = this.camera
-            .getScene()
-            .onPointerObservable.add(this.wheelZoom, BABYLON.PointerEventTypes.POINTERWHEEL);
-    }
-
-    detachControl(element) {
-        if (this._observer && element) {
-            this.camera.getScene().onPointerObservable.remove(this._observer);
-            this._observer = null;
-            this._wheel = null;
-        }
-    }
-}
+const _hooks = {
+    sphere: {
+        insert: parentMesh,
+    },
+    box: {
+        insert: parentMesh,
+    },
+    ground: {
+        insert: parentMesh,
+    },
+    shaderMaterial: {
+        insert: parentPropNameInsertHook,
+    },
+    fxaaPostProcess: {
+        insert: node => {
+            node.elm.camera = node.elm.parent;
+        },
+    },
+};
+const { DefaultCameraKeyboardMoveInput, DefaultCameraMouseZoomInput } = require('./camera-inputs');
 
 const Scene = (props, children) => h('scene', { props }, children);
 const FreeCamera = (props, children) => h('freeCamera', { props }, children);
 const HemisphericLight = (props, children) => h('hemisphericLight', { props }, children);
-const Sphere = props => h('sphere', { props });
-const Ground = (props, children) => h('ground', { props }, children);
-const ShaderMaterial = (props, children) => h('shaderMaterial', { props }, children);
+const Sphere = (props, children) => h('sphere', { props, props, hook: _hooks.sphere }, children);
+const Ground = (props, children) => h('ground', { props, hook: _hooks.ground }, children);
+const ShaderMaterial = (props, children) =>
+    h('shaderMaterial', { props, hook: _hooks.shaderMaterial }, children);
 const Texture = (props, children) => h('texture', { props }, children);
-const Box = (props, children) => h('box', { props }, children);
+const Box = (props, children) => h('box', { props, hook: _hooks.box }, children);
 const StandardMaterial = (props, children) => h('standardMaterial', { props }, children);
 const CubeTexture = (props, children) => h('cubeTexture', { props }, children);
 
@@ -271,8 +125,10 @@ const createProp = (node, name, opts, { canvas, engine, scene }) =>
             }
 
             this[`_${name}`] = newValue;
+            let created = false;
 
             if (opts.createIfNotExists && !this.babylonCMP) {
+                created = true;
                 this.babylonCMP = this.createBabylonComponent();
             }
 
@@ -280,7 +136,7 @@ const createProp = (node, name, opts, { canvas, engine, scene }) =>
                 return;
             }
 
-            if (opts.recreate) {
+            if (!created && opts.recreate) {
                 this.babylonCMP = this.createBabylonComponent();
             }
 
@@ -368,11 +224,9 @@ const HemisphericLightDefinitions = {
             new BABYLON.Vector3(...node.target),
             scene
         );
+
         propsSetters.intensity.setter(node.intensity, node.intensity, node, cmp);
-        // TODO: dependency fix
-        if (node.parentPropName) {
-            node.parent[node.parentPropName] = cmp;
-        }
+
         return cmp;
     },
 };
@@ -408,9 +262,14 @@ const defaultCameraKeyboardMoveInputDefinitions = {
 const fxaaPostProcessDefinitions = {
     tagName: 'fxaaPostProcess',
     props: {
-        parent: { createIfNotExists: true },
-        camera: { createIfNotExists: true, everySet: true },
+        parent: {},
+        camera: { createIfNotExists: true, recreate: true },
+        options: {
+            recreate: true,
+        },
+        samplingMode: { recreate: true },
     },
+    delayCreator: true,
     creator: (propsSetters, canvas, engine, scene, node) => () => {
         if (!node.camera || !node.camera.babylonCMP) {
             return null;
@@ -418,11 +277,12 @@ const fxaaPostProcessDefinitions = {
 
         const cmp = new BABYLON.FxaaPostProcess(
             'fxaa',
-            1,
+            node.options,
             node.camera.babylonCMP,
-            BABYLON.Texture.TRILINEAR_SAMPLINGMODE
+            node.samplingMode
         );
 
+        cmp.dispose = cmp.dispose.bind(cmp, node.camera.babylonCMP);
         return cmp;
     },
 };
@@ -431,7 +291,12 @@ const FreeCameraDefinitions = {
     tagName: 'freeCamera',
     props: {
         parent: { createIfNotExists: true },
-        position: { recreate: true },
+        position: {
+            required: true,
+            setter: (oldValue, newValue, node, cmp) => {
+                cmp.position = new BABYLON.Vector3(...newValue);
+            },
+        },
         defaultTarget: {
             setOnce: true,
             setter: (oldValue, newValue, node, cmp) => {
@@ -441,22 +306,9 @@ const FreeCameraDefinitions = {
             },
         },
         inputs: {
-            createOnGet: true,
-            creator: (node, cmp, { canvas, engine, scene }) => {
-                const items = [];
-
-                return {
-                    push: value => {
-                        items.push(value);
-                    },
-                    remove: value => {
-                        const i = items.indexOf(value);
-                        if (i > -1) {
-                            items.splice(i, 1);
-                        }
-                    },
-                    _items: items,
-                };
+            setter: (oldValue, newValue, node, cmp) => {
+                oldValue && oldValue.forEach(input => cmp.inputs.remove(input));
+                newValue && newValue.forEach(input => cmp.inputs.add(input));
             },
         },
         babylonCMP: {
@@ -472,21 +324,13 @@ const FreeCameraDefinitions = {
 
                     scene.activeCameras.push(newValue);
                     newValue.attachControl(canvas, true);
-                    node.inputs._items.forEach(item => {
-                        newValue.inputs.add(item);
-                    });
-
-                    node.children.filter(child => child.tagName === 'parent').forEach(child => {
-                        child.parent = node;
-                    });
                 }
             },
         },
     },
-
     creator: (propsSetters, canvas, engine, scene, node) => () => {
         const cmp = new BABYLON.FreeCamera(node.name, new BABYLON.Vector3(...node.position), scene);
-        cmp.inputs.removeByType('FreeCameraKeyboardMoveInput');
+        cmp.inputs.clear();
 
         propsSetters.defaultTarget.setter(
             node.defaultTarget,
@@ -494,6 +338,9 @@ const FreeCameraDefinitions = {
             node,
             cmp
         );
+
+        propsSetters.inputs.setter(null, node.inputs, node, cmp);
+
         return cmp;
     },
 };
@@ -550,13 +397,13 @@ const GroundDefinitions = {
         propsSetters.material.setter(node.material, node.material, node, cmp);
         propsSetters.position.setter(node.position, node.position, node, cmp);
 
-        if (cmp instanceof BABYLON.Mesh) {
-            node.children.forEach(child => {
-                if (child.babylonCMP && child.babylonCMP instanceof BABYLON.Mesh) {
-                    child.babylonCMP.parent = cmp;
-                }
-            });
-        }
+        // if (cmp instanceof BABYLON.Mesh) {
+        //     node.children.forEach(child => {
+        //         if (child.babylonCMP && child.babylonCMP instanceof BABYLON.Mesh) {
+        //             child.babylonCMP.parent = cmp;
+        //         }
+        //     });
+        // }
 
         // TODO: dependency fix
         if (node.parentPropName) {
@@ -636,10 +483,6 @@ const ShaderMaterialDefinitions = {
             propsSetters.textureSampler.setter(node.textureSampler, node.textureSampler, node, cmp);
         }
 
-        // TODO: dependency fix
-        if (node.parentPropName) {
-            node.parent[node.parentPropName] = cmp;
-        }
         return cmp;
     },
 };
@@ -899,4 +742,5 @@ module.exports = {
     Box,
     StandardMaterial,
     CubeTexture,
+    hooks: _hooks,
 };

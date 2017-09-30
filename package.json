@@ -2,7 +2,7 @@
   "private": false,
   "license": "MIT",
   "name": "react-babylonjs-3d",
-  "version": "0.0.1-alpha4",
+  "version": "0.0.1-alpha5",
   "description": "BabylonJS 3D in a declarative way: CycleJS, ReactJS, RxJS",
   "main": "index.js",
   "scripts": {

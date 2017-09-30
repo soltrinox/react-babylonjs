@@ -6,6 +6,7 @@ const snabbdom_props = require('snabbdom/modules/props');
 const nodeTypes = def.createNodes(def.allDefs);
 const { Node } = def;
 const VPC = require('./VPC');
+const { DefaultCameraKeyboardMoveInput, DefaultCameraMouseZoomInput } = require('./camera-inputs');
 
 class BabylonSceneAPI {
     constructor(canvas, engine) {
@@ -13,8 +14,8 @@ class BabylonSceneAPI {
         this.canvas = canvas;
         this.engine = engine;
         this.scene = new BABYLON.Scene(engine);
-        /*this.scene.debugLayer.show({
-            popup: true,
+        window.BABYLON = BABYLON;
+        this.scene.debugLayer.show({
             initialTab: 2,
             newColors: {
                 backgroundColor: '#eee',
@@ -25,7 +26,7 @@ class BabylonSceneAPI {
                 colorTop: 'red',
                 colorBottom: 'blue',
             },
-        });*/
+        });
     }
 
     startRenderLoop() {
@@ -37,6 +38,7 @@ class BabylonSceneAPI {
     }
 
     createElement(tagName) {
+        // console.log({ tagName });
         const fn = nodeTypes[tagName];
         if (!fn) {
             throw new Error(`<${tagName}> has not a creator function`);
@@ -70,6 +72,10 @@ class BabylonSceneAPI {
     }
 
     nextSibling(node) {
+        if (!node.parent) {
+            return null;
+        }
+
         const parent = node.parent;
         const i = parent.getChildIndex(node);
         const sublingIndex = i + 1;
@@ -93,10 +99,22 @@ const LOAD = () => {
     window.addEventListener('resize', function() {
         engine.resize();
     });
+    const myModule = {
+        // pre: (...args) => console.log('pre=>', args),
+        // create: (...args) => console.log('create=>', ...args),
+        // update: (...args) => console.log('update=>', args),
+        destroy: (...args) => console.log('MODULE.destroy=>', args),
+        // post: (...args) => console.log('post=>', args),
+        remove: (vnode, cb) => {
+            console.log('MODULE.remove=>', [vnode, cb]);
+            cb();
+        },
+    };
 
-    var patch = snabbdom.init([snabbdom_props.propsModule], babylonSceneAPI);
+    const patch = snabbdom.init([snabbdom_props.propsModule, myModule], babylonSceneAPI);
     const parentContainer = new Node('app');
-    const container = new Node('All');
+    const container = new Node('root');
+
     parentContainer.addChild(container);
 
     const Sky = (
@@ -120,9 +138,10 @@ const LOAD = () => {
     );
 
     const ScenarioGround = (
-        <ground name={'ground1'} width={2000} height={2000} subdivisions={2} position={[0, 0, 0]}>
+        <ground name="ground1" width={2000} height={2000} subdivisions={2} position={[0, 0, 0]}>
             <parentProp name="material">
                 <shaderMaterial
+                    name="ground1-tile"
                     attributes={['position', 'uv']}
                     uniforms={[
                         'worldViewProjection',
@@ -137,7 +156,6 @@ const LOAD = () => {
                     boxSize={0.5}
                     edgeColor={[0, 0, 0, 1.0]}
                     hue={[0.3, 0.3, 0.3, 1.0]}
-                    name="ground1-tile"
                     shaderPath="/assets/shaders/groundTile"
                 >
                     <parentProp name="tileTex">
@@ -147,24 +165,53 @@ const LOAD = () => {
             </parentProp>
         </ground>
     );
-    const time = Rx.Observable.interval(10, Rx.Scheduler.queue).take(1);
+    const frameRatePerSec = 50;
+    const duration = 1000;
+    const total = frameRatePerSec * duration / 1000;
+    const y = { from: 1, to: 5 };
+    const z = { from: -2, to: -16 };
+
+    const time = Rx.Observable.interval(1000 / frameRatePerSec, Rx.Scheduler.queue).take(total + 1);
+    const defaultCameraKeyboardMoveInput = new DefaultCameraKeyboardMoveInput();
+    const defaultCameraMouseZoomInput = new DefaultCameraMouseZoomInput();
+
+    const calcAxis = axis => {
+        const delta = (axis.to - axis.from) / total;
+        return i => i * delta + axis.from;
+    };
+
+    const calcZ = calcAxis(z);
+    const calcY = calcAxis(y);
+    const ec2AreVisible$ = Rx.Observable
+        .timer(duration + 5500)
+        .mapTo(false)
+        .take(0)
+        .startWith(true);
 
     const tmp = time
-        .map(() => (
-            <scene clearColor={[0, 1, 0]}>
+        .combineLatest(ec2AreVisible$, (i, ec2AreVisible) => ({ i, ec2AreVisible }))
+        .map(({ i, ec2AreVisible }) => ({
+            y: calcY(i),
+            z: calcZ(i),
+            ec2AreVisible,
+        }))
+        .map(({ z, y, ec2AreVisible }) => (
+            <scene clearColor={[0, 0, 0]}>
                 <hemisphericLight name="light1" target={[0, 1, 0]} intensity={0.5} />
-                <freeCamera name="camera1" position={[0, 5, -10]} defaultTarget={[0, 0, 1]}>
-                    <parent name="camera">
-                        <fxaaPostProcess />
-                    </parent>
-                    <parentPropList name="inputs">
-                        <defaultCameraMouseZoomInput />
-                        <defaultCameraKeyboardMoveInput />
-                    </parentPropList>
+                <freeCamera
+                    name="camera1"
+                    position={[0, y, z]}
+                    defaultTarget={[0, 0, 1]}
+                    inputs={[defaultCameraKeyboardMoveInput, defaultCameraMouseZoomInput]}
+                >
+                    <fxaaPostProcess
+                        options={1}
+                        samplingMode={BABYLON.Texture.TRILINEAR_SAMPLINGMODE}
+                    />
                 </freeCamera>
                 {Sky}
                 {ScenarioGround}
-                {VPC({ position: [0, 1, 0], ec2s: true })}
+                {VPC({ position: [0, 1, 0], ec2s: ec2AreVisible })}
             </scene>
         ))
         .distinct()
@@ -181,7 +228,7 @@ const LOAD = () => {
         a => {
             // console.log({ a });
         },
-        e => console.log({ e }),
+        e => console.error(e),
         c => console.log({ c })
     );
 };

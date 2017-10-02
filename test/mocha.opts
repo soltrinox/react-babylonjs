@@ -1,0 +1,6 @@
+--require ./test/setup
+--ui bdd
+--timeout 200
+--recursive
+--sort
+test/**/*.spec.js

@@ -6,13 +6,17 @@
   "description": "BabylonJS 3D in a declarative way: CycleJS, ReactJS, RxJS",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha --opts test/mocha.opts",
     "start": "webpack-dev-server --color --progress",
     "dev": "webpack --watch"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/viniciusrmcarneiro/react-babylonjs.git"
+  },
+  "engines": {
+    "node": ">= 8.2.1",
+    "npm": ">= 5.30.0"
   },
   "author": "Vinicius R. M. Carneiro",
   "dependencies": {
@@ -27,7 +31,10 @@
     "babel-loader": "7.1.2",
     "babel-plugin-transform-react-jsx": "6.24.1",
     "babel-preset-es2017": "6.24.1",
+    "chai": "4.1.2",
     "html-webpack-plugin": "2.30.1",
+    "mocha": "3.5.3",
+    "sinon": "4.0.0",
     "webpack": "3.6.0",
     "webpack-dev-server": "2.9.1"
   }

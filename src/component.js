@@ -24,9 +24,6 @@ const createComponent = opts => {
 };
 
 const hh = (name, props, children) => {
-    if (name === 'VPC') {
-        console.log(JSON.stringify({ name, props, children }, null, 3));
-    }
     return { name, props, children };
 };
 

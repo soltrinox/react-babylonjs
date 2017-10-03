@@ -6,9 +6,40 @@
   "description": "BabylonJS 3D in a declarative way: CycleJS, ReactJS, RxJS",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --opts test/mocha.opts",
+    "test-only": "mocha --opts test/mocha.opts",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "test": "nyc mocha --opts test/mocha.opts",
     "start": "webpack-dev-server --color --progress",
     "dev": "webpack --watch"
+  },
+  "nyc": {
+    "watermarks": {
+      "lines": [
+        80,
+        95
+      ],
+      "functions": [
+        80,
+        95
+      ],
+      "branches": [
+        80,
+        95
+      ],
+      "statements": [
+        80,
+        95
+      ]
+    },
+    "exclude": [
+      "**/*.spec.js",
+      "examples",
+      "test"
+    ],
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ]
   },
   "repository": {
     "type": "git",
@@ -32,8 +63,10 @@
     "babel-plugin-transform-react-jsx": "6.24.1",
     "babel-preset-es2017": "6.24.1",
     "chai": "4.1.2",
+    "coveralls": "^3.0.0",
     "html-webpack-plugin": "2.30.1",
     "mocha": "3.5.3",
+    "nyc": "^11.2.1",
     "sinon": "4.0.0",
     "webpack": "3.6.0",
     "webpack-dev-server": "2.9.1"

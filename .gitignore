@@ -57,7 +57,3 @@ typings/
 
 # dotenv environment variables file
 .env
-
-src/def.js
-
-src/VPC.js

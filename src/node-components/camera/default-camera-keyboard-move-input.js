@@ -1,9 +1,6 @@
-'use strict';
-const BABYLON = require('babylonjs');
-const ZOOM_SENSITIVITY = 200;
-
-class DefaultCameraKeyboardMoveInput {
-    constructor() {
+module.exports = class DefaultCameraKeyboardMoveInput {
+    constructor(BABYLON) {
+        this.BABYLON = BABYLON;
         this.keys = [];
         this.keysUp = [38];
         this.keysDown = [40];
@@ -63,7 +60,7 @@ class DefaultCameraKeyboardMoveInput {
             };
             element.addEventListener('keydown', this.onKeyDown, false);
             element.addEventListener('keyup', this.onKeyUp, false);
-            BABYLON.Tools.RegisterTopRootEvents([{ name: 'blur', handler: this.onLostFocus }]);
+            this.BABYLON.Tools.RegisterTopRootEvents([{ name: 'blur', handler: this.onLostFocus }]);
         }
     }
 
@@ -71,7 +68,9 @@ class DefaultCameraKeyboardMoveInput {
         if (this.onKeyDown) {
             element.removeEventListener('keydown', this.onKeyDown);
             element.removeEventListener('keyup', this.onKeyUp);
-            BABYLON.Tools.UnregisterTopRootEvents([{ name: 'blur', handler: this.onLostFocus }]);
+            this.BABYLON.Tools.UnregisterTopRootEvents([
+                { name: 'blur', handler: this.onLostFocus },
+            ]);
             this.keys = [];
             this.onKeyDown = null;
             this.onKeyUp = null;
@@ -104,7 +103,7 @@ class DefaultCameraKeyboardMoveInput {
                 }
 
                 camera.getViewMatrix().invertToRef(camera._cameraTransformMatrix);
-                BABYLON.Vector3.TransformNormalToRef(
+                this.BABYLON.Vector3.TransformNormalToRef(
                     camera._localDirection,
                     camera._cameraTransformMatrix,
                     camera._transformedDirection
@@ -114,7 +113,7 @@ class DefaultCameraKeyboardMoveInput {
                     this.keysPlus.indexOf(keyCode) === -1 &&
                     this.keysDash.indexOf(keyCode) === -1
                 ) {
-                    camera._localDirection.multiplyInPlace(new BABYLON.Vector3(1, 1, 0));
+                    camera._localDirection.multiplyInPlace(new this.BABYLON.Vector3(1, 1, 0));
                     camera._transformedDirection.y = 0;
                 }
 
@@ -126,67 +125,4 @@ class DefaultCameraKeyboardMoveInput {
     onLostFocus() {
         this.keys = [];
     }
-}
-
-class DefaultCameraMouseZoomInput {
-    constructor() {
-        this.observer = null;
-        this.wheelZoom = this.wheelZoom.bind(this);
-        this.wheelPrecision = 3;
-        this.noPreventDefault = true;
-    }
-
-    wheelZoom(p) {
-        if (p.type !== BABYLON.PointerEventTypes.POINTERWHEEL) return;
-        var event = p.event;
-        var delta = 0;
-
-        if (event.wheelDelta) {
-            delta = event.wheelDelta / (this.wheelPrecision * ZOOM_SENSITIVITY);
-        } else if (event.detail) {
-            delta = -event.detail / this.wheelPrecision;
-        }
-
-        if (delta) {
-            let dirX = Math.sin(this.camera.rotation.y) * Math.cos(this.camera.rotation.x);
-            let dirY = -Math.sin(this.camera.rotation.x);
-            let dirZ = Math.cos(this.camera.rotation.y) * Math.cos(this.camera.rotation.x);
-            let move = new BABYLON.Vector3(delta * dirX, delta * dirY, delta * dirZ);
-            this.camera.cameraDirection.addInPlace(move);
-        }
-
-        if (event.preventDefault) {
-            if (!this.noPreventDefault) {
-                event.preventDefault();
-            }
-        }
-    }
-
-    getTypeName() {
-        return 'DefaultCameraMouseZoomInput';
-    }
-
-    getSimpleName() {
-        return 'mouseZoom';
-    }
-
-    attachControl(element, noPreventDefault) {
-        this.noPreventDefault = noPreventDefault;
-        this.observer = this.camera
-            .getScene()
-            .onPointerObservable.add(this.wheelZoom, BABYLON.PointerEventTypes.POINTERWHEEL);
-    }
-
-    detachControl(element) {
-        if (this._observer && element) {
-            this.camera.getScene().onPointerObservable.remove(this._observer);
-            this._observer = null;
-            this._wheel = null;
-        }
-    }
-}
-
-module.exports = {
-    DefaultCameraKeyboardMoveInput,
-    DefaultCameraMouseZoomInput,
 };

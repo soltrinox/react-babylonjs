@@ -1,11 +1,11 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 module.exports = {
-    entry: './src/index.js',
+    entry: './src/main.js',
     output: {
         filename: 'bundle.js',
-        path: path.resolve(__dirname, 'dist'),
     },
     devtool: 'inline-source-map',
     devServer: {
@@ -25,15 +25,12 @@ module.exports = {
     },
     plugins: [
         new webpack.ProvidePlugin({
-            hh: './hh.js',
-            util: ['./utils.js', 'util'],
-            DEBUG: ['./utils.js', 'DEBUG'],
-            WRAPPER: ['./utils.js', 'WRAPPER'],
-            c: ['./utils.js', 'c'],
+            hh: path.resolve(__dirname, '../src/hh.js'),
+            hhh: path.resolve(__dirname, '../src/hhh.js'),
         }),
         new webpack.HotModuleReplacementPlugin(),
         new HtmlWebpackPlugin({
-            template: 'src/index.html',
+            template: './index.html',
             title: 'BabylonJS as React',
             inject: 'body',
         }),

@@ -1,5 +1,10 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+         <title><%= htmlWebpackPlugin.options.title %></title>
+    </head>
+
     <style>
         html,
         body {
@@ -10,21 +15,15 @@
             padding: 0;
         }
 
-        #renderCanvas {
+        #canvas-container {
             width: 100%;
             height: 100%;
             touch-action: none;
         }
     </style>
-    
-    </script>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-         <title><%= htmlWebpackPlugin.options.title %></title>
-    </head>
 
     <body>
-        <canvas id="renderCanvas"></canvas>
+        <canvas id="canvas-container"></canvas>
     </body>
 
 </html>

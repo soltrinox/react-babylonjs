@@ -1,7 +1,6 @@
 class Node {
-    constructor(tagName, engine, scene) {
-        this.engine = engine;
-        this.scene = scene;
+    constructor(tagName, context) {
+        this.context = context;
         this.tagName = tagName;
         this.children = [];
         this.props = {};

@@ -15,6 +15,7 @@ describe('babylon-scene-api', function() {
             .to.have.all.keys([
                 'appendChild',
                 'createElement',
+                'createRootElement',
                 'createElementNS',
                 'insertBefore',
                 'nextSibling',

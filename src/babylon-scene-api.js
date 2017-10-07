@@ -1,26 +1,35 @@
-// const defs = require('./defs');
-
-// const { allDefs, createNodes } = require('./def');
-// const nodeTypes = createNodes(allDefs);
+const components = require('./node-components');
 const snabbdom = require('snabbdom');
 const snabbdomProps = require('snabbdom/modules/props');
+const nodes = require('./node-components');
+const helpers = require('./helpers');
+const { Node } = require('./node');
 
-const createBabylonSceneAPI = ({ BABYLON, canvas, engine, scene } = {}) => {
+const createBabylonSceneAPI = (context = {}) => {
+    const { BABYLON, canvas, engine, scene } = context;
     if (!BABYLON || !canvas || !engine || !scene) {
         throw new Error(
             'Invalid paramaters, you need to provide a single parameter:\n{BABYLON, canvas, engine, scene}'
         );
     }
+    const _nodeTypes = helpers.componentToNodes(nodes);
 
     const createElement = tagName => {
-        const fn = nodeTypes[tagName];
+        const fn = _nodeTypes[tagName];
         if (!fn) {
             throw new Error(`<${tagName}> has not a creator function`);
         }
-        return fn(canvas, engine, scene);
+        return fn(context);
     };
 
-    const createElementNS = (ns, tagName) => nodeTypes[tagName](canvas, engine, scene);
+    const createRootElement = () => {
+        const parentContainer = new Node('app');
+        const container = new Node('root');
+        parentContainer.addChild(container);
+        return container;
+    };
+
+    const createElementNS = (ns, tagName) => _nodeTypes[tagName](context);
 
     const appendChild = (node, child) => node.addChild(child);
 
@@ -52,6 +61,7 @@ const createBabylonSceneAPI = ({ BABYLON, canvas, engine, scene } = {}) => {
     const tagName = node => node.tagName;
 
     const babylonAPI = {
+        createRootElement,
         createElement,
         createElementNS,
         appendChild,
@@ -60,6 +70,9 @@ const createBabylonSceneAPI = ({ BABYLON, canvas, engine, scene } = {}) => {
         parentNode,
         nextSibling,
         tagName,
+        createTextNode: (...args) => {
+            throw new Error(...args);
+        },
     };
 
     Object.defineProperty(babylonAPI, 'scene', {

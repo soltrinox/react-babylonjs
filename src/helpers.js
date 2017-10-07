@@ -1,11 +1,10 @@
 const R = require('RAMDA');
-const { NodeBabylon } = require('../node');
+const { NodeBabylon } = require('./node');
 
-const createProp = (node, name, opts, { canvas, engine, scene }) =>
+const createProp = (node, name, opts, context) =>
     Object.defineProperty(node, name, {
         set: function(value) {
             // TODO: reafactor this shit code, let's compose it!
-
             const newValue = opts.transform ? opts.transform(value) : value;
             const oldValue = this[`_${name}`];
 
@@ -34,23 +33,23 @@ const createProp = (node, name, opts, { canvas, engine, scene }) =>
             }
 
             if (opts.setter) {
-                opts.setter(oldValue, newValue, this, this.babylonCMP, { canvas, engine, scene });
+                opts.setter(oldValue, newValue, this, this.babylonCMP, context);
             }
         },
         get: function() {
             if (opts.createOnGet && !this[`_${name}`]) {
-                this[`_${name}`] = opts.creator(this, this.babylonCMP, { canvas, engine, scene });
+                this[`_${name}`] = opts.creator(this, this.babylonCMP, context);
             }
 
             return this[`_${name}`];
         },
     });
 
-const wrapperDef = def => (canvas, engine, scene) => {
+const wrapperDef = def => context => {
     const NodeClass = def.nodeClass || NodeBabylon;
-    const node = new NodeClass(def.tagName, engine, scene);
+    const node = new NodeClass(def.tagName, context);
 
-    const createBabylonComponent = def.creator(def.props, canvas, engine, scene, node);
+    const createBabylonComponent = def.creator(def.props, context, node);
 
     node.createBabylonComponent = () => {
         return createBabylonComponent();
@@ -71,11 +70,7 @@ const wrapperDef = def => (canvas, engine, scene) => {
 
             this._babylonCMP = newValue;
             if (def.props.babylonCMP && def.props.babylonCMP.setter) {
-                def.props.babylonCMP.setter(oldValue, newValue, node, newValue, {
-                    canvas,
-                    engine,
-                    scene,
-                });
+                def.props.babylonCMP.setter(oldValue, newValue, node, newValue, context);
             }
 
             if (oldValue) {
@@ -89,18 +84,18 @@ const wrapperDef = def => (canvas, engine, scene) => {
 
     for (let prop in def.props) {
         if (prop !== 'babylonCMP') {
-            createProp(node, prop, def.props[prop], { canvas, engine, scene });
+            createProp(node, prop, def.props[prop], context);
         }
     }
 
     return node;
 };
 
-const createDefs = defs =>
-    R.reduce((all, def) => Object.assign(all, { [`${def.tagName}`]: wrapperDef(def) }), {});
-
-const defToNodes = defs => createDefs(defs);
+const componentToNodes = R.reduce(
+    (all, def) => Object.assign(all, { [`${def.tagName}`]: wrapperDef(def) }),
+    {}
+);
 
 module.exports = {
-    defToNodes,
+    componentToNodes,
 };

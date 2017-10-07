@@ -69,7 +69,7 @@ const freeCamera = {
         },
         inputs: {
             createOnGet: true,
-            creator: (node, cmp, { canvas, engine, scene }) => {
+            creator: (node, cmp) => {
                 const items = [];
 
                 return {
@@ -87,7 +87,7 @@ const freeCamera = {
             },
         },
         babylonCMP: {
-            setter: (oldValue, newValue, node, cmp, { canvas, engine, scene }) => {
+            setter: (oldValue, newValue, node, cmp, { canvas, scene }) => {
                 if (oldValue != newValue) {
                     if (oldValue) {
                         oldValue.detachControl(canvas);
@@ -99,9 +99,12 @@ const freeCamera = {
 
                     scene.activeCameras.push(newValue);
                     newValue.attachControl(canvas, true);
-                    node.inputs._items.forEach(item => {
-                        newValue.inputs.add(item);
-                    });
+
+                    if (node.inputs._items) {
+                        node.inputs._items.forEach(item => {
+                            newValue.inputs.add(item);
+                        });
+                    }
 
                     node.children.filter(child => child.tagName === 'parent').forEach(child => {
                         child.parent = node;
@@ -111,7 +114,8 @@ const freeCamera = {
         },
     },
 
-    creator: (propsSetters, { BABYLON, canvas, engine, scene }, node) => () => {
+    creator: (propsSetters, context, node) => () => {
+        const { BABYLON, scene } = context;
         const cmp = new BABYLON.FreeCamera(node.name, new BABYLON.Vector3(...node.position), scene);
         cmp.inputs.removeByType('FreeCameraKeyboardMoveInput');
 
@@ -119,7 +123,8 @@ const freeCamera = {
             node.defaultTarget,
             node.defaultTarget || null,
             node,
-            cmp
+            cmp,
+            context
         );
         return cmp;
     },

@@ -7,64 +7,77 @@ const createStubApi = sandbox =>
     });
 
 describe('COMPONENT RENDER', function() {
-    const sandbox = sinon.sandbox.create();
-    const api = createStubApi(sandbox);
+    before(function() {
+        this.sandbox = sinon.sandbox.create();
+        this.api = createStubApi(this.sandbox);
+    });
 
     after(function() {
-        sandbox.restore();
+        this.sandbox.restore();
     });
 
     it('should not render if no vtree is provided', function() {
         const expectedError = 'Invalid paramaters, you need a vtree.';
-        const component = createComponent({ api });
+        const component = createComponent({ api: this.api });
         expect(component.render).to.throw(expectedError);
     });
 });
 
 describe('WHEN RENDER', function() {
-    const sandbox = sinon.sandbox.create();
-    const api = createStubApi(sandbox);
-    const component = createComponent({ api });
+    before(function() {
+        this.sandbox = sinon.sandbox.create();
+        this.api = createStubApi(this.sandbox);
 
-    const rootElement = Symbol('ROOT-ELEMEMT');
-    const vtree = hh('box', { size: 8 });
+        this.component = createComponent({ api: this.api });
 
-    api.createRootElement.onCall(0).returns(rootElement);
+        this.rootElement = Symbol('ROOT-ELEMEMT');
+        this.vtree = hh('box', { size: 8 });
 
-    const patchReturns = [Symbol('1'), Symbol('2')];
-    patchReturns.forEach((value, i) => api.patch.onCall(i).returns(value));
+        this.api.createRootElement.onCall(0).returns(this.rootElement);
+
+        this.patchReturns = [Symbol('1'), Symbol('2')];
+        this.patchReturns.forEach((value, i) => this.api.patch.onCall(i).returns(value));
+    });
 
     after(function() {
-        sandbox.restore();
+        this.sandbox.restore();
     });
 
     describe('FIRST RENDER', function() {
+        before(function() {
+            this.sandbox.resetHistory();
+        });
+
         it('should render', function() {
-            component.render(vtree);
+            this.component.render(this.vtree);
         });
 
         it('should create a root element', function() {
-            sinon.assert.calledOnce(api.createRootElement);
+            sinon.assert.calledOnce(this.api.createRootElement);
         });
 
         it('should call patch with the root element and the vtree', function() {
-            sinon.assert.calledOnce(api.patch);
-            sinon.assert.calledWithExactly(api.patch, rootElement, vtree);
+            sinon.assert.calledOnce(this.api.patch);
+            sinon.assert.calledWithExactly(this.api.patch, this.rootElement, this.vtree);
         });
     });
 
     describe('SECOND RENDER', function() {
+        before(function() {
+            this.sandbox.resetHistory();
+        });
+
         it('should allow to call render more than once', function() {
-            component.render(vtree);
+            this.component.render(this.vtree);
         });
 
         it('should not call createRootElement', function() {
-            sinon.assert.calledOnce(api.createRootElement);
+            sinon.assert.notCalled(this.api.createRootElement);
         });
 
         it('should call patch', function() {
-            sinon.assert.calledTwice(api.patch);
-            sinon.assert.calledWithExactly(api.patch.getCall(1), patchReturns[0], vtree);
+            sinon.assert.calledOnce(this.api.patch);
+            sinon.assert.calledWithExactly(this.api.patch, this.patchReturns[0], this.vtree);
         });
     });
 });

@@ -1,5 +1,3 @@
-const BABYLON = require('babylonjs');
-
 const hemisphericLight = {
     tagName: 'hemisphericLight',
     props: {
@@ -10,7 +8,7 @@ const hemisphericLight = {
             },
         },
     },
-    creator: (propsSetters, canvas, engine, scene, node) => () => {
+    creator: (propsSetters, { BABYLON, canvas, engine, scene }, node) => () => {
         const cmp = new BABYLON.HemisphericLight(
             node.name,
             new BABYLON.Vector3(...node.target),

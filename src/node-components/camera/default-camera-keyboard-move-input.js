@@ -1,4 +1,3 @@
-
 module.exports = class DefaultCameraKeyboardMoveInput {
     constructor(BABYLON) {
         this.BABYLON = BABYLON;
@@ -69,7 +68,9 @@ module.exports = class DefaultCameraKeyboardMoveInput {
         if (this.onKeyDown) {
             element.removeEventListener('keydown', this.onKeyDown);
             element.removeEventListener('keyup', this.onKeyUp);
-            this.BABYLON.Tools.UnregisterTopRootEvents([{ name: 'blur', handler: this.onLostFocus }]);
+            this.BABYLON.Tools.UnregisterTopRootEvents([
+                { name: 'blur', handler: this.onLostFocus },
+            ]);
             this.keys = [];
             this.onKeyDown = null;
             this.onKeyUp = null;

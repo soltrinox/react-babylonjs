@@ -1,6 +1,9 @@
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/viniciusrmcarneiro/react-babylonjs/issues)
 
 [![Build Status](https://travis-ci.org/viniciusrmcarneiro/react-babylonjs.svg)](https://travis-ci.org/viniciusrmcarneiro/react-babylonjs)
+[![bitHound Overall Score](https://www.bithound.io/github/viniciusrmcarneiro/react-babylonjs/badges/score.svg)](https://www.bithound.io/github/viniciusrmcarneiro/react-babylonjs)
+
+[![bitHound Code](https://www.bithound.io/github/viniciusrmcarneiro/react-babylonjs/badges/code.svg)](https://www.bithound.io/github/viniciusrmcarneiro/react-babylonjs)
 [![bitHound Dependencies](https://www.bithound.io/github/viniciusrmcarneiro/react-babylonjs/badges/dependencies.svg)](https://www.bithound.io/github/viniciusrmcarneiro/react-babylonjs/master/dependencies/npm)
 [![bitHound Dev Dependencies](https://www.bithound.io/github/viniciusrmcarneiro/react-babylonjs/badges/devDependencies.svg)](https://www.bithound.io/github/viniciusrmcarneiro/react-babylonjs/master/dependencies/npm)
 
@@ -12,7 +15,7 @@
 # react-babylonjs
 
 ## This package is under development and for now it doesn't offer any functionality, please don't install it, not just yet... But keep reading and find out what it's going to do...
-======
+=
 
 ### So far
 For now all you can do is clone this repo, run `npm install` and `npm start`.
@@ -31,14 +34,16 @@ This projects allows you to:
 
 There are alot of things to implement. As this project is in it's very early stage, some very simple things are still to be implemented. So far the ROADMAP is:
 * ~~webpack~~
-* ~~unit test~~
+* ~~unit test for api~~
+* ~~examples~~
 * ~~CI travis~~
+* ~~create npm package~~
+* unit test for node components
 * Coveralls
 * compose all the properties and behaviours
 * events hook
 * layout(flexbox)
 * set materials and textures as style
-* create npm package
 * support for hot reload
 * support creation of library components(JSX)
 * animations

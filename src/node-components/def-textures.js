@@ -1,12 +1,10 @@
-const BABYLON = require('babylonjs');
-
 const texture = {
     tagName: 'texture',
     props: {
         parent: { createIfNotExists: true },
         url: { recreate: true },
     },
-    creator: (propsSetters, canvas, engine, scene, node) => () => {
+    creator: (propsSetters, { BABYLON, canvas, engine, scene }, node) => () => {
         const cmp = new BABYLON.Texture(node.url, scene);
 
         // TODO: dependency fix
@@ -27,7 +25,7 @@ const cubeTexture = {
             setter: (oldValue, newValue, node, cmp) => (cmp.coordinatesMode = newValue),
         },
     },
-    creator: (propsSetters, canvas, engine, scene, node) => () => {
+    creator: (propsSetters, { BABYLON, canvas, engine, scene }, node) => () => {
         const cmp = new BABYLON.CubeTexture(node.url, scene);
 
         propsSetters.coordinatesMode.setter(node.coordinatesMode, node.coordinatesMode, node, cmp);

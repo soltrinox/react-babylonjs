@@ -1,5 +1,3 @@
-const BABYLON = require('babylonjs');
-
 const sphere = {
     tagName: 'sphere',
     props: {
@@ -12,9 +10,10 @@ const sphere = {
             },
         },
     },
-    creator: (propsSetters, canvas, engine, scene, node) => () => {
+    creator: (propsSetters, context, node) => () => {
+        const { BABYLON, scene } = context;
         const cmp = BABYLON.Mesh.CreateSphere(node.name, node.subdivisions, node.diameter, scene);
-        propsSetters.position.setter(node.position, node.position, node, cmp);
+        propsSetters.position.setter(node.position, node.position, node, cmp, context);
 
         // TODO: dependency fix
         if (node.parentPropName) {
@@ -36,11 +35,12 @@ const ground = {
         },
         subdivisions: { recreate: true },
         position: {
-            setter: (oldValue, newValue, node, cmp) =>
+            setter: (oldValue, newValue, node, cmp, { BABYLON }) =>
                 (cmp.position = new BABYLON.Vector3(...newValue)),
         },
     },
-    creator: (propsSetters, canvas, engine, scene, node) => () => {
+    creator: (propsSetters, context, node) => () => {
+        const { BABYLON, canvas, engine, scene } = context;
         const cmp = BABYLON.Mesh.CreateGround(
             node.name,
             node.width,
@@ -49,8 +49,8 @@ const ground = {
             scene
         );
 
-        propsSetters.material.setter(node.material, node.material, node, cmp);
-        propsSetters.position.setter(node.position, node.position, node, cmp);
+        propsSetters.material.setter(node.material, node.material, node, cmp, context);
+        propsSetters.position.setter(node.position, node.position, node, cmp, context);
 
         if (cmp instanceof BABYLON.Mesh) {
             node.children.forEach(child => {
@@ -111,7 +111,7 @@ const box = {
                 (cmp.ellipsoid = new BABYLON.Vector3(...newValue)),
         },
     },
-    creator: (propsSetters, canvas, engine, scene, node) => () => {
+    creator: (propsSetters, { BABYLON, canvas, engine, scene }, node) => () => {
         const cmp = node.options
             ? BABYLON.MeshBuilder.CreateBox(node.name, Object.assign({}, node.options), scene)
             : new BABYLON.Mesh.CreateBox(node.name, node.size, scene);

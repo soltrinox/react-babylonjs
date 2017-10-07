@@ -57,7 +57,7 @@
     "snabbdom": "^0.7.0"
   },
   "peerDepedencies": {
-    "babylonjs": "^3.1.0-alpha3.5"
+    "babylonjs": "3.*"
   },
   "devDependencies": {
     "chai": "4.1.2",

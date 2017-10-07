@@ -1,5 +1,5 @@
 describe('babylon-scene-api', function() {
-    const { createBabylonSceneAPI } = require('../src/babylon-scene-api');
+    const { createBabylonSceneAPI, ErrorInvalidChildrenType } = require('../src/babylon-scene-api');
 
     it('should not initialize paramaters are not provided', () => {
         const expectedError =
@@ -13,6 +13,7 @@ describe('babylon-scene-api', function() {
         expect(api)
             .to.an('object')
             .to.have.all.keys([
+                'createTextNode',
                 'appendChild',
                 'createElement',
                 'createRootElement',
@@ -24,5 +25,15 @@ describe('babylon-scene-api', function() {
                 'tagName',
                 'patch',
             ]);
+    });
+
+    describe('methods', function() {
+        before(function() {
+            this.api = createBabylonSceneAPI({ BABYLON: {}, canvas: {}, engine: {}, scene: {} });
+        });
+
+        it('createTextNode should throw an Error', function() {
+            expect(this.api.createTextNode).to.throw(ErrorInvalidChildrenType);
+        });
     });
 });

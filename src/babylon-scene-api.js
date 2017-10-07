@@ -5,6 +5,12 @@ const nodes = require('./node-components');
 const helpers = require('./helpers');
 const { Node } = require('./node');
 
+class ErrorInvalidChildrenType extends Error {
+    constructor(){
+        super('The components children can either be an array or null.');
+    }
+}
+
 const createBabylonSceneAPI = (context = {}) => {
     const { BABYLON, canvas, engine, scene } = context;
     if (!BABYLON || !canvas || !engine || !scene) {
@@ -71,7 +77,7 @@ const createBabylonSceneAPI = (context = {}) => {
         nextSibling,
         tagName,
         createTextNode: (...args) => {
-            throw new Error(...args);
+            throw new ErrorInvalidChildrenType();
         },
     };
 
@@ -92,4 +98,4 @@ const createBabylonSceneAPI = (context = {}) => {
     return Object.assign({ patch }, babylonAPI);
 };
 
-module.exports = { createBabylonSceneAPI };
+module.exports = { createBabylonSceneAPI, ErrorInvalidChildrenType };

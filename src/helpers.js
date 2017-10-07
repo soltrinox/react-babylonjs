@@ -1,4 +1,4 @@
-const R = require('RAMDA');
+const R = require('ramda');
 const { NodeBabylon } = require('./node');
 
 const createProp = (node, name, opts, context) =>

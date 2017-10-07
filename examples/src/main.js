@@ -96,8 +96,7 @@ const ScenarioGround = (
     </ground>
 );
 
-
-const vtree2 = (y, z) => (
+const vtree2 = ({ y, z }) => (
     <scene clearColor={[0, 0, 0]}>
         <hemisphericLight name="light1" target={[0, 1, 0]} intensity={0.5} />
         <freeCamera name="camera1" position={[0, y, z]} defaultTarget={[0, 0, 1]} inputs={[]}>
@@ -108,7 +107,7 @@ const vtree2 = (y, z) => (
     </scene>
 );
 
-component.render(vtree2(5, -16));
+component.render(vtree2( {y:5 z:-16 }));
 
 window.addEventListener('resize', function() {
     engine.resize();

@@ -10,7 +10,7 @@
 
 # react-babylonjs
 
-## This package is under development and for now it doesn't offer much... keep reading and find out what it can do and what it already does...
+## This package is under development and for now it doesn't offer much... keep reading and find out what it already can do and what it will do...
 
 ### So far
 The better way to get started is to clone this [repo](https://github.com/viniciusrmcarneiro/react-babylonjs-3d-example), it's a very simple example. Doing that you could focus on how you can compose your BABYLON components.

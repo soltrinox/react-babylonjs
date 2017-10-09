@@ -1,9 +1,15 @@
+
 <!DOCTYPE html>
+
+
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-         <title><%= htmlWebpackPlugin.options.title %></title>
-    </head>
+
+
+<head>
+    <meta http-equiv="Content-Type"
+        content="text/html; charset=utf-8">
+
+    <title><%= htmlWebpackPlugin.options.title %></title>
 
     <style>
         html,
@@ -15,15 +21,29 @@
             padding: 0;
         }
 
-        #canvas-container {
+        .scenes {
             width: 100%;
             height: 100%;
-            touch-action: none;
+            display: flex;
+            background-color: cyan;
         }
+
+        .component {
+            touch-action: none;
+            flex: 1 1 100%;
+            margin: 5px;
+        }
+
     </style>
+</head>
 
-    <body>
-        <canvas id="canvas-container"></canvas>
-    </body>
+<body>
 
+    <div class="scenes">
+
+        <canvas class="component" data-view="VTree1"></canvas>
+        <canvas class="component" data-view="VTree2"></canvas>
+
+    </div>
+</body>
 </html>

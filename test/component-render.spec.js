@@ -1,4 +1,4 @@
-const { createComponent, hh } = require('../src/component');
+const { createApp, hh } = require('../src/component');
 
 const createStubApi = sandbox =>
     sandbox.stub({
@@ -18,8 +18,8 @@ describe('COMPONENT RENDER', function() {
 
     it('should not render if no vtree is provided', function() {
         const expectedError = 'Invalid paramaters, you need a vtree.';
-        const component = createComponent({ api: this.api });
-        expect(component.render).to.throw(expectedError);
+        const app = createApp({ api: this.api });
+        expect(app.render).to.throw(expectedError);
     });
 });
 
@@ -28,7 +28,7 @@ describe('WHEN RENDER', function() {
         this.sandbox = sinon.sandbox.create();
         this.api = createStubApi(this.sandbox);
 
-        this.component = createComponent({ api: this.api });
+        this.app = createApp({ api: this.api });
 
         this.rootElement = Symbol('ROOT-ELEMEMT');
         this.vtree = hh('box', { size: 8 });
@@ -49,7 +49,7 @@ describe('WHEN RENDER', function() {
         });
 
         it('should render', function() {
-            this.component.render(this.vtree);
+            this.app.render(this.vtree);
         });
 
         it('should create a root element', function() {
@@ -68,7 +68,7 @@ describe('WHEN RENDER', function() {
         });
 
         it('should allow to call render more than once', function() {
-            this.component.render(this.vtree);
+            this.app.render(this.vtree);
         });
 
         it('should not call createRootElement', function() {

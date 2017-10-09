@@ -117,7 +117,7 @@ const box = {
             : new BABYLON.Mesh.CreateBox(node.name, node.size, scene);
 
         // TODO: auto set props
-        if (node.infiniteDistance)
+        if (typeof node.infiniteDistance !== 'undefined')
             propsSetters.infiniteDistance.setter(
                 node.infiniteDistance,
                 node.infiniteDistance,

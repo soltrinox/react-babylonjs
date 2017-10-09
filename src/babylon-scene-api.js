@@ -1,12 +1,12 @@
 const components = require('./node-components');
 const snabbdom = require('snabbdom');
-const snabbdomProps = require('snabbdom/modules/props');
+const snabbdomProps = require('./snabbdom-props').default;
 const nodes = require('./node-components');
 const helpers = require('./helpers');
 const { Node } = require('./node');
 
 class ErrorInvalidChildrenType extends Error {
-    constructor(){
+    constructor() {
         super('The components children can either be an array or null.');
     }
 }
@@ -80,22 +80,35 @@ const createBabylonSceneAPI = (context = {}) => {
             throw new ErrorInvalidChildrenType();
         },
     };
+    const patch = snabbdom.init([snabbdomProps], babylonAPI);
+    const extraKeys = { patch, canvas, scene, engine };
 
-    Object.defineProperty(babylonAPI, 'scene', {
-        get: () => scene,
-    });
+    const handler = {
+        get(target, key) {
+            if (extraKeys[key]) {
+                return extraKeys[key];
+            }
 
-    Object.defineProperty(babylonAPI, 'canvas', {
-        get: () => canvas,
-    });
+            return target[key];
+        },
 
-    Object.defineProperty(babylonAPI, 'engine', {
-        get: () => engine,
-    });
+        set(target, key, value) {
+            return false;
+        },
 
-    const patch = snabbdom.init([snabbdomProps.propsModule], babylonAPI);
+        has(target, key) {
+            if (extraKeys[key]) {
+                return true;
+            }
+            return key in target;
+        },
 
-    return Object.assign({ patch }, babylonAPI);
+        ownKeys: target => Reflect.ownKeys(target).concat(Object.keys(extraKeys)),
+
+        getPrototypeOf: () => Object.prototype,
+    };
+
+    return new Proxy(babylonAPI, handler);
 };
 
 module.exports = { createBabylonSceneAPI, ErrorInvalidChildrenType };

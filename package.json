@@ -2,10 +2,22 @@
   "private": false,
   "license": "MIT",
   "name": "react-babylonjs-3d",
-  "version": "0.0.1-alpha6",
-  "description": "BabylonJS 3D in a declarative way: CycleJS, ReactJS, RxJS",
-  "main": "index.js",
+  "version": "0.0.2",
+  "description": "BabylonJS 3D in a declarative way",
+  "main": "lib/react-babylon-3d.min.js",
+  "keywords": [
+    "babylonjs",
+    "react",
+    "jsx"
+  ],
+  "contributors": [
+    {
+      "name": "Vinicius Carneiro",
+      "email": "vinicius.ribeiro.carneiro@gmail.com"
+    }
+  ],
   "scripts": {
+    "build": "webpack",
     "test-only": "mocha --opts test/mocha.opts",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "test": "nyc mocha --opts test/mocha.opts",
@@ -60,11 +72,16 @@
     "babylonjs": "3.*"
   },
   "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-env": "^1.6.0",
     "chai": "4.1.2",
     "coveralls": "^3.0.0",
     "mocha": "^4.0.0",
     "nyc": "^11.2.1",
     "prettier": "^1.7.4",
-    "sinon": "^4.0.1"
+    "sinon": "^4.0.1",
+    "webpack": "^3.6.0"
   }
 }

@@ -1,30 +1,24 @@
 const BABYLON = require('babylonjs');
+const Sky = ({ size, infiniteDistance }) => (
+    <box name="skybox" size={size} infiniteDistance={infiniteDistance}>
+        <parentProp name="material">
+            <standardMaterial
+                name="skyboxMaterial"
+                backFaceCulling={false}
+                diffuseColor={[0, 0, 0]}
+                specularColor={[0, 0, 0]}
+            >
+                <parentProp name="reflectionTexture">
+                    <cubeTexture
+                        url="assets/textures/nebula"
+                        coordinatesMode={BABYLON.Texture.SKYBOX_MODE}
+                    />
+                </parentProp>
+            </standardMaterial>
+        </parentProp>
+    </box>
+);
 
-const Sky = values =>
-    hh('box', values, [
-        hh('parentProp', { props: { name: 'material' } }, [
-            hh(
-                'standardMaterial',
-                {
-                    props: {
-                        name: 'skyboxMaterial',
-                        backFaceCulling: false,
-                        diffuseColor: [0, 0, 0],
-                        specularColor: [0, 0, 0],
-                    },
-                },
-                [
-                    hh('parentProp', { props: { name: 'reflectionTexture' } }, [
-                        hh('cubeTexture', {
-                            props: {
-                                url: 'assets/textures/nebula',
-                                coordinatesMode: BABYLON.Texture.SKYBOX_MODE,
-                            },
-                        }),
-                    ]),
-                ]
-            ),
-        ]),
-    ]);
+Sky.defaultProps = { size: 1000, infiniteDistance: true };
 
 module.exports = Sky;

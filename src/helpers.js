@@ -1,4 +1,9 @@
+/*const R = {
+    reduce: require('ramda/src/reduce'),
+    equals: require('ramda/src/equals'),
+};*/
 const R = require('ramda');
+
 const { NodeBabylon } = require('./node');
 
 const createProp = (node, name, opts, context) =>

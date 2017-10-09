@@ -1,6 +1,6 @@
 'use strict';
 
-const createComponent = opts => {
+const createApp = opts => {
     if (!opts || !opts.api) {
         throw new Error(
             'Invalid paramaters, you need to provide an object with a key named api:\n{ api: createBabylonSceneAPI(...) }'
@@ -27,4 +27,4 @@ const hh = (name, props, children) => {
     return { name, props, children };
 };
 
-module.exports = { createComponent, hh };
+module.exports = { createApp, hh };

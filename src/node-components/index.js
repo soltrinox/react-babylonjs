@@ -9,4 +9,5 @@ const _definitions = [
 ];
 
 const R = require('ramda');
+
 module.exports = R.reduce(R.concat, [], _definitions);

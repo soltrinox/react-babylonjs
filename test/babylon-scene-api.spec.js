@@ -10,26 +10,46 @@ describe('babylon-scene-api', function() {
     it('should initialize and have the required methods', () => {
         const api = createBabylonSceneAPI({ BABYLON: {}, canvas: {}, engine: {}, scene: {} });
 
-        expect(api)
-            .to.an('object')
-            .to.have.all.keys([
-                'createTextNode',
-                'appendChild',
-                'createElement',
-                'createRootElement',
-                'createElementNS',
-                'insertBefore',
-                'nextSibling',
-                'parentNode',
-                'removeChild',
-                'tagName',
-                'patch',
-            ]);
+        expect(api).to.be.an('object');
+
+        [
+            'createTextNode',
+            'appendChild',
+            'createElement',
+            'createRootElement',
+            'createElementNS',
+            'insertBefore',
+            'nextSibling',
+            'parentNode',
+            'removeChild',
+            'tagName',
+            'patch',
+        ].forEach(propName => expect(api).to.have.property(propName));
     });
 
     describe('methods', function() {
         before(function() {
-            this.api = createBabylonSceneAPI({ BABYLON: {}, canvas: {}, engine: {}, scene: {} });
+            this.canvas = Symbol('Canvas');
+            this.engine = Symbol('Engine');
+            this.scene = Symbol('Scene');
+            this.api = createBabylonSceneAPI({
+                BABYLON: {},
+                canvas: this.canvas,
+                engine: this.engine,
+                scene: this.scene,
+            });
+        });
+
+        it('canvas should be available', function() {
+            expect(this.api.canvas).to.be.equals(this.canvas);
+        });
+
+        it('scene should be available', function() {
+            expect(this.api.scene).to.be.equals(this.scene);
+        });
+
+        it('engine should be available', function() {
+            expect(this.api.engine).to.be.equals(this.engine);
         });
 
         it('createTextNode should throw an Error', function() {

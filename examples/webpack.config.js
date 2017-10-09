@@ -23,10 +23,14 @@ module.exports = {
             },
         ],
     },
+    resolve: {
+        alias: {
+            'react-babylonjs-3d': path.resolve(__dirname, '../src/index.js'),
+        },
+    },
     plugins: [
         new webpack.ProvidePlugin({
-            hh: path.resolve(__dirname, '../src/hh.js'),
-            hhh: path.resolve(__dirname, '../src/hhh.js'),
+            hhh: ['react-babylonjs-3d', 'hhh'],
         }),
         new webpack.HotModuleReplacementPlugin(),
         new HtmlWebpackPlugin({

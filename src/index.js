@@ -2,6 +2,7 @@ const { createBabylonSceneAPI } = require('./babylon-scene-api');
 const { createApp } = require('./component');
 const hhh = require('./hhh');
 const hh = require('./hh');
+const reactApi = require('./react-api');
 
 const createRender = ({ BABYLON, canvas }) => {
     const engine = new BABYLON.Engine(canvas, true);
@@ -32,4 +33,5 @@ module.exports = {
     hhh,
     hh,
     createRender,
+    reactApi,
 };

@@ -1,3 +1,4 @@
+/** @jsx hhh */
 const BABYLON = require('babylonjs');
 const { createBabylonSceneAPI, createApp } = require('react-babylonjs-3d');
 

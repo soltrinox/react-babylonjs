@@ -1,3 +1,4 @@
+/** @jsx hhh */
 const ScenarioGround = () => (
     <ground name="ground1" width={2000} height={2000} subdivisions={2} position={[0, 0, 0]}>
         <parentProp name="material">

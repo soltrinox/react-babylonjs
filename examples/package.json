@@ -7,10 +7,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --color --progress",
-    "dev": "webpack --watch"
+    "dev": "webpack-dev-server --color --progress --watch"
   },
   "dependencies": {
-    "babylonjs": "^3.1.0-alpha3.5"
+    "babylonjs": "^3.1.0-alpha3.5",
+    "react": "^16.0.0-alpha.6",
+    "react-dom": "^16.0.0-alpha.6"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

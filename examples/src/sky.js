@@ -1,3 +1,4 @@
+/** @jsx hhh */
 const BABYLON = require('babylonjs');
 const Sky = ({ size, infiniteDistance }) => (
     <box name="skybox" size={size} infiniteDistance={infiniteDistance}>

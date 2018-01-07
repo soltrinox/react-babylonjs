@@ -74,64 +74,32 @@ Look how it looks like:
 const BABYLON = require('babylonjs');
 const { hhh, createRender } = require('react-babylonjs-3d');
 
-// this is very important, it's the pragma for the JSX syntax
-// this is very important, it's the pragma for the JSX syntax
-// this is very important, it's the pragma for the JSX syntax
-/** @jsx hhh */
-
-const Camera = ({ position }) => (
-    <freeCamera name="camera1" position={position} defaultTarget={[0, 0, 1]} inputs={[]}>
-        <fxaaPostProcess options={1} samplingMode={BABYLON.Texture.TRILINEAR_SAMPLINGMODE} />
-    </freeCamera>
-);
 
 const ScenarioGround = () => (
-    <ground name="ground1" width={2000} height={2000} subdivisions={2} position={[0, 0, 0]}>
-        <parentProp name="material">
-            <shaderMaterial
-                name="ground1-tile"
-                attributes={['position', 'uv']}
-                uniforms={['worldViewProjection', 'boxSize', 'width', 'height', 'edgeColor', 'hue']}
-                width={2000}
-                height={2000}
-                boxSize={0.5}
-                edgeColor={[0, 0, 0, 1.0]}
-                hue={[0.3, 0.3, 0.3, 1.0]}
-                shaderPath="/assets/shaders/groundTile"
-            >
-                <parentProp name="tileTex">
-                    <texture url="/assets/textures/vpc-tile.png" />
-                </parentProp>
-            </shaderMaterial>
-        </parentProp>
-    </ground>
+    <ground name="ground1"
+        width={2000}
+        height={2000}
+        subdivisions={2}
+        position={[0, 0, 0]}
+        material={groundMaterial}/>
 );
-
-const Sky = ({ size, infiniteDistance }) => (
-    <box name="skybox" size={size} infiniteDistance={infiniteDistance}>
-        <parentProp name="material">
-            <standardMaterial
-                name="skyboxMaterial"
-                backFaceCulling={false}
-                diffuseColor={[0, 0, 0]}
-                specularColor={[0, 0, 0]}
-            >
-                <parentProp name="reflectionTexture">
-                    <cubeTexture
-                        url="assets/textures/nebula"
-                        coordinatesMode={BABYLON.Texture.SKYBOX_MODE}
-                    />
-                </parentProp>
-            </standardMaterial>
-        </parentProp>
-    </box>
+const Sky = ({ size ,infiniteDistance }) => (
+    <box
+        name="skybox"
+        size={size}
+        infiniteDistance={infiniteDistance}
+    />
 );
 Sky.defaultProps = { size: 1000, infiniteDistance: true };
 
 // now using all the components created above
 const Scenario = ({y, z}) => <scene clearColor={[0, 0, 0]}>
     <hemisphericLight name="light1" target={[0, 1, 0]} intensity={0.5} />
-    <Camera position={[0, y, z]} />
+    <freeCamera
+        position={[0, y, z]}
+        target={[0,0,0]}
+        attachControl={true}
+    />
     <Sky size={1000} infiniteDistance={true} />
     <ScenarioGround />
 </scene>
@@ -142,30 +110,22 @@ const canvas = document.querySelector('canvas');
 
 
 // create the react-babylonjs-3d renderer
-// and takes care all the BABYLON stuff(engine, scene, runRenderLoop).
-// it makes our live easier
-const renderer = createRender({ BABYLON, canvas });
 
-// now lets render the component you've just declared
-renderer.render(<Scenario y={5} z={-16} />);
+require("react-hot-loader");
 
-// after 2000ms  let's change the property z
-setTimeout(function() {
-    renderer.render(<Scenario y={5} z={-12} />);
-}, 2000);
+import React from "react";
+import BABYLON from "babylonjs";
+import ReactBabylonJS from "react-babylonjs-3d";
 
-// after 5000ms  let's change the property z
-setTimeout(function() {
-    renderer.render(<Scenario y={5} z={-9} />);
-}, 5000);
+import App from "./app";
 
-// As react-babylonjs-3d uses a virtual tree, it actually just updates the changed values.
-// So, you can call renderer.render as many time as you need, or even better whenever the state changes.
-
+const canvas = document.querySelector(".scene");
+const renderer = ReactBabylonJS.createRenderer({ BABYLON, canvas });
+renderer.render(<App />);
 ```
+
 As you can see the react-babylon-3d has already a few components already implemented, see the list of all the properties and components available:
 
-- [x] BABYLON.FxaaPostProcess - ('fxaa', 1, BABYLON.Texture.TRILINEAR_SAMPLINGMODE) hard-coded(I'll fix it)
 - [x] BABYLON.FreeCamera - (name, defaultTarget, inputs, position) 
 - [x] BABYLON.HemisphericLight - (name, intensity, target)
 - [x] BABYLON.StandardMaterial - (name, backFaceCulling, reflectionTexture, diffuseColor, specularColor
@@ -180,40 +140,6 @@ As you can see the react-babylon-3d has already a few components already impleme
 
 
 As you can see there are a lot of missing components and properties, also there are some hard-coded properties as well.
-
-
-## CSS FLAVOR - JUST A PROPOSAL ##
-***this is just an idea from a friend, he suggested to create a style property instead of components. It's still not implemented, but I would love to know what you guys think about it.***
-I guess that it would look like:
-```jsx
-<scene style={{ clearColor:[0, 1, 0] }}>
-    <hemisphericLight name="light1" target={[0, 1, 0]} intensity={0.5} />
-    <freeCamera name="camera1" 
-        style={{
-            fxaaPostProcess: {
-                options: 1,
-                samplingMode: BABYLON.Texture.TRILINEAR_SAMPLINGMODE,  
-            },
-        }}
-        position={[0, 5, -10]}
-        defaultTarget={[0, 0, 0]}
-        inputs={[defaultCameraKeyboardMoveInput, defaultCameraMouseZoomInput]}
-    />
-    <box name="skybox" size={1000} infiniteDistance={true}
-        style={{
-            standardMaterial: {
-                backFaceCulling: false,
-                diffuseColor: [0, 0, 0],
-                specularColor: [0, 0, 0],
-                cubeTexture: {
-                    url: "assets/textures/nebula",
-                    coordinatesMode: BABYLON.Texture.SKYBOX_MODE,
-                },
-            },  
-        }}
-    />
-</scene>
-```
 
 [![https://nodei.co/npm/react-babylonjs-3d.png?downloads=true&downloadRank=true&stars=true](https://nodei.co/npm/react-babylonjs-3d.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/react-babylonjs-3d)
 

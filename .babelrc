@@ -1,25 +1,32 @@
 {
-  "presets": [
-    [
-      "env",
-      {
-        "targets": {
-          "browsers": ["last 2 versions", "safari 7"]
-        },
-        "commonjs": {
-          "plugins": [["transform-es2015-modules-commonjs", { "loose": true }]]
-        },
-        "modules": false,
-        "loose": true
-      }
+    "presets": [
+        [
+            "env",
+            {
+                "targets": {
+                    "browsers": [
+                        "last 2 versions",
+                        "safari 7"
+                    ]
+                },
+                "commonjs": {
+                    "plugins": [
+                        [
+                            "transform-es2015-modules-commonjs",
+                            {
+                                "loose": true
+                            }
+                        ]
+                    ]
+                },
+                "modules": false,
+                "loose": true
+            }
+        ]
+    ],
+    "plugins": [
+        "transform-flow-strip-types",
+        "transform-object-rest-spread",
+        "transform-react-jsx"
     ]
-  ],
-  "plugins": [
-    [
-      "transform-react-jsx",
-      {
-        "pragma": "hhh"
-      }
-    ]
-  ]
 }

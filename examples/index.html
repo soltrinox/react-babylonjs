@@ -1,49 +1,35 @@
-
 <!DOCTYPE html>
-
-
 <html>
 
+    <head>
+        <meta http-equiv="Content-Type"
+            content="text/html; charset=utf-8">
 
-<head>
-    <meta http-equiv="Content-Type"
-        content="text/html; charset=utf-8">
+        <title><%= htmlWebpackPlugin.options.title %></title>
+        <script> window.DEBUG = console.log</script>
+        <style>
+            html,
+            body {
+                overflow: hidden;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
 
-    <title><%= htmlWebpackPlugin.options.title %></title>
+            .scene {
+                width: 100%;
+                height: 100%;
+                display: flex;
+            }
 
-    <style>
-        html,
-        body {
-            overflow: hidden;
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
+        </style>
+    </head>
 
-        .scenes {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            background-color: cyan;
-        }
+    <body>
+        <canvas class="scene">
+        </canvas>
 
-        .component {
-            touch-action: none;
-            flex: 1 1 100%;
-            margin: 5px;
-        }
+    </body>
 
-    </style>
-</head>
-
-<body>
-
-    <div class="scenes">
-
-        <canvas class="component" data-view="VTree1"></canvas>
-        <canvas class="component" data-view="VTree2"></canvas>
-
-    </div>
-</body>
 </html>

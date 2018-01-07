@@ -40,19 +40,19 @@ but for now that is all you can do:
 * share resources in very simple and clear way
 
 There are alot of things to implement. As this project is in it's very early stage, some very simple things are still to be implemented. So far the ROADMAP is:
-- [ ] Architectural diagram
+- [ ] Guideline for contribution
 - [ ] Documentation(always working in progress)
-- [ ] React reconciler <https://github.com/facebook/react/pull/10758>
+- [x] React reconciler <https://github.com/facebook/react/pull/10758>
 - [ ] Exemple with Redux
-- [ ] Exemple with RxJS
+~~- [ ] Exemple with RxJS~~
 - [ ] unit test for node components
 - [ ] events hook/actions
-- [ ] special node for custom components(JSX)
-- [ ] implement lazy load(Thunks)
-- [ ] refactor to compose all the properties and behaviours
+~~- [ ] special node for custom components(JSX)~~
+~~- [ ] implement lazy load(Thunks)~~
+- [x] refactor to compose all the properties and behaviours
 - [ ] layout(flexbox)
-- [ ] set materials and textures as style
-- [ ] support for hot reload
+- [x] set materials and textures as style
+- [x] support for hot reload
 - [ ] animations
 - [ ] driver for CycleJS
 - [ ] lint/eslint

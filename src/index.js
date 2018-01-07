@@ -1,37 +1,45 @@
-const { createBabylonSceneAPI } = require('./babylon-scene-api');
-const { createApp } = require('./component');
-const hhh = require('./hhh');
-const hh = require('./hh');
-const reactApi = require('./react-api');
+const { Node, BabylonJSRenderer } = require("./react-api");
+const componentManager = require("./babylonjs/helpers/component-manager");
+const elements = require("./babylonjs/elements");
 
-const createRender = ({ BABYLON, canvas }) => {
+const createRenderer = ({ BABYLON, canvas }) => {
     const engine = new BABYLON.Engine(canvas, true);
     const scene = new BABYLON.Scene(engine);
-    const api = createBabylonSceneAPI({ canvas, BABYLON, engine, scene });
-    const app = createApp({ api });
-    const renderLoop = () => api.scene.render();
+    const rootNode = new Node(undefined, {
+        BABYLON,
+        canvas,
+        componentManager: componentManager.create(),
+        elements,
+        engine,
+        scene,
+        logger: console,
+        type: "root",
+    });
+
+    const rootContainer = BabylonJSRenderer.createContainer(rootNode);
+
+    const startLoop = (function() {
+        let loopStarted = false;
+        return () => {
+            if (!loopStarted) {
+                loopStarted = true;
+                engine.runRenderLoop(() => scene.render());
+            }
+        };
+    })();
+
+    const render = Component => {
+        BabylonJSRenderer.updateContainer(Component, rootContainer, null, () =>
+            startLoop()
+        );
+    };
+
+    const dispose = () => {};
 
     return {
-        render(component) {
-            if (!renderLoop.started) {
-                renderLoop.started = true;
-                engine.runRenderLoop(renderLoop);
-            }
-
-            app.render(component);
-        },
-        dispose() {
-            app.dispose();
-            engine.dispose();
-        },
+        render,
+        dispose,
     };
 };
 
-module.exports = {
-    createBabylonSceneAPI,
-    createApp,
-    hhh,
-    hh,
-    createRender,
-    reactApi,
-};
+module.exports = { createRenderer, elements };

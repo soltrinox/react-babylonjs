@@ -4,7 +4,7 @@
   "name": "react-babylonjs-3d",
   "version": "0.1.1",
   "description": "BabylonJS 3D in a declarative way",
-  "main": "src/index.js",
+  "main": "./lib/react-babylon-3d.min.js",
   "keywords": [
     "babylonjs",
     "react",

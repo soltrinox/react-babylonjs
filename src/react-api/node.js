@@ -1,3 +1,4 @@
+const DEBUG = () => {};
 class Node {
     // Stores all the children
 

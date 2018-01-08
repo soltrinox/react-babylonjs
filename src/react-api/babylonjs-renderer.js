@@ -20,7 +20,7 @@ const buildFiberPath = ({ child, sibling, ...fiber }) => {
 const debug_fiber = ({ return: fiber }) => {
     return { stateNode: fiber.stateNode, type: fiber.type, fiber };
 };
-
+const DEBUG = () => {};
 const mutation = {
     commitMount(
         instance: Instance,

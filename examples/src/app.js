@@ -4,7 +4,6 @@ import React from "react";
 
 import GroundGrid from "./components/ground-grid";
 import SkyNebule from "./components/sky-nebule";
-import { mat01 } from "./materials";
 
 class App extends React.Component {
     render() {

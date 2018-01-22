@@ -1,5 +1,3 @@
-"use strict";
-
 const { fullPath, caption } = getTargetName(__filename);
 const target = require(fullPath);
 
@@ -54,7 +52,6 @@ describe(caption, function() {
         });
 
         it("should throw an Error if the type is not provided", function() {
-            const { mocks: { type } } = this;
             const expectError = "Component's type is required";
             expect(() => this.target.compose()).to.throw(expectError);
         });
@@ -192,8 +189,6 @@ describe(caption, function() {
             const {
                 mocks: {
                     definitionNoProps: definition,
-                    scene,
-                    BABYLON,
                     type,
                     context,
                     updater,
@@ -310,7 +305,6 @@ describe(caption, function() {
                 definition,
                 updater
             );
-            const expectedPosition = { x: 1, y: 1, z: 1 };
 
             definition.createComponent.returns(camera);
 
@@ -326,7 +320,6 @@ describe(caption, function() {
 
         it("should call component.dispose when disposing the component", function() {
             const {
-                sandbox,
                 mocks: {
                     definitionFreeCamera: definition,
                     context,
@@ -492,7 +485,6 @@ describe(caption, function() {
 
         it("should set a property in the current mesh", function() {
             const {
-                sandbox,
                 mocks: {
                     definitionFreeCamera: definition,
                     context,

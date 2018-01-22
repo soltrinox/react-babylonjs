@@ -1,5 +1,3 @@
-"use strict";
-
 const { fullPath, caption } = getTargetName(__filename);
 const target = require(fullPath);
 

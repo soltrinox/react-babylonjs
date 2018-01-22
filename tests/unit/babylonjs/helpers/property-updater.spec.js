@@ -1,5 +1,3 @@
-"use strict";
-
 const { fullPath, caption } = getTargetName(__filename);
 const target = require(fullPath);
 
@@ -12,7 +10,7 @@ describe(caption, function() {
     setup();
 
     it("should warn if the property does not exist in the definition", function() {
-        const { target, mocks: { context } } = this;
+        const { mocks: { context } } = this;
         const type = "box";
         const updater = this.target(type, {});
 
@@ -25,7 +23,7 @@ describe(caption, function() {
     });
 
     it("should skip newComponentRequired properties", function() {
-        const { sandbox, target, mocks: { context } } = this;
+        const { sandbox, mocks: { context } } = this;
         const type = "box";
 
         const definitions = {
@@ -52,7 +50,7 @@ describe(caption, function() {
     });
 
     it("should call setter without transformer", function() {
-        const { sandbox, target, mocks: { context } } = this;
+        const { sandbox, mocks: { context } } = this;
         const type = "box";
         const definitions = {
             anyName: sandbox.stub({ setter: () => {} }),
@@ -71,14 +69,13 @@ describe(caption, function() {
     });
 
     it("should not save nor get the transformer's returned if transformer.needLastReturned !== true ", function() {
-        const { sandbox, target, mocks: { context } } = this;
+        const { sandbox, mocks: { context } } = this;
         const type = "box";
         const definitions = {
             anyName: sandbox.stub({ transformer: () => {}, setter: () => {} }),
         };
         const componentId = "my-component-id";
         const props = { anyName: { height: 1 } };
-        const transformedValue = Symbol({ vla: 1 });
 
         const updater = this.target(type, definitions);
         updater(context, {}, props, componentId);
@@ -88,7 +85,7 @@ describe(caption, function() {
     });
 
     it("should save the transformer's returned value in the context.componentManager", function() {
-        const { sandbox, target, mocks: { context } } = this;
+        const { sandbox, mocks: { context } } = this;
         const type = "box";
 
         const transformer = () => {};
@@ -114,7 +111,7 @@ describe(caption, function() {
     });
 
     it("should call transformer and passing the last returned value", function() {
-        const { sandbox, target, mocks: { context } } = this;
+        const { sandbox, mocks: { context } } = this;
         const type = "box";
         const transformer = () => {};
         transformer.needLastReturned = true;

@@ -1,5 +1,3 @@
-"use strict";
-
 const { fullPath, caption } = getTargetName(__filename);
 
 const setup = () =>
@@ -87,10 +85,6 @@ describe(caption, function() {
 
         it("should call prevReturned.dispose if prevReturned is not null and value is null", function() {
             const { sandbox, target: { component: target } } = this;
-            const params = {
-                type: "shaderMaterial",
-                value: { name: "my-name", width: 1000 },
-            };
 
             const prevReturned = sandbox.stub({ dispose: () => {} });
 

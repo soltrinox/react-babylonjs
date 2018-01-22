@@ -1,5 +1,3 @@
-"use strict";
-
 const { fullPath, caption } = getTargetName(__filename);
 
 const setup = () =>
@@ -38,7 +36,7 @@ describe(caption, function() {
 
         it("should throw an error on save if the provided id is invalid", function() {
             const result = this.target.create();
-            const id = result.newId();
+            result.newId();
             expect(() => result.save("sds2")).to.throw("Invalid id");
             expect(() => result.save("2")).to.throw("Invalid id");
         });
@@ -60,7 +58,7 @@ describe(caption, function() {
 
         it("should throw an error if the provided id is invalid", function() {
             const result = this.target.create();
-            const id = result.newId();
+            result.newId();
             expect(() => result.get("sds2")).to.throw("Invalid id");
             expect(() => result.get("2")).to.throw("Invalid id");
         });

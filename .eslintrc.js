@@ -22,6 +22,10 @@ module.exports = {
         module: true,
         AWS: true,
         sinon: true,
+        expect: true,
+        getTargetName: true,
+        setupTest: true,
+        testHelpers: true,
     },
     rules: {
         "flowtype/define-flow-type": 1,

@@ -1,5 +1,3 @@
-"use strict";
-
 const createClasseByType = (type, sandbox) =>
     sandbox.spy(function(...args) {
         return { type, args };
@@ -43,7 +41,7 @@ const _babylonTypes = [
 ];
 
 const create = sandbox => {
-    const { symbolByType, classesByType, classesBySymbol } = createClasses(
+    const { symbolByType, classesByType } = createClasses(
         _babylonTypes,
         sandbox
     );

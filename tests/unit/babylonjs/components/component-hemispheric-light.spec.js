@@ -64,7 +64,6 @@ describe(caption, function() {
         });
 
         it("should assign a property on intensity's setter", function() {
-            const { sandbox } = this;
             const component = {};
             const value = "my-value";
 

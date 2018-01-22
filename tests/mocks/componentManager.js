@@ -1,5 +1,3 @@
-"use strict";
-
 const create = sandbox => {
     const componentManager = {
         newId: sandbox.stub(),

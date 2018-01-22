@@ -1,5 +1,3 @@
-"use strict";
-
 const create = sandbox => {
     const logger = sandbox.stub({
         warn: () => {},

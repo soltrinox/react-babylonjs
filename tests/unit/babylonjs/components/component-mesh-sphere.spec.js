@@ -72,7 +72,6 @@ describe(caption, function() {
         });
 
         it("should assign a property on infiniteDistance's setter", function() {
-            const { sandbox } = this;
             const component = {};
             const value = "my-value";
 

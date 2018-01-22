@@ -1,5 +1,3 @@
-const webpack = require("webpack");
-const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 const path = require("path");
 
 const config = {
@@ -35,7 +33,6 @@ const config = {
         modules: [path.resolve("./node_modules"), path.resolve("./src")],
         extensions: [".json", ".js"],
     },
-    // plugins: [new UglifyJsPlugin({ minimize: true })],
 };
 
 module.exports = config;

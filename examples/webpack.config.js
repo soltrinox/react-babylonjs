@@ -11,12 +11,13 @@ module.exports = {
         path: path.join(__dirname, "public"),
     },
     // devtool: 'cheap-source-map',
-    // devtool: "inline-source-map",
+    devtool: "inline-source-map",
     devServer: {
         contentBase: path.resolve(__dirname, "public"),
         publicPath: "/",
         hot: true,
         headers: { "Access-Control-Allow-Origin": "*" },
+        host: "0.0.0.0",
     },
     module: {
         rules: [

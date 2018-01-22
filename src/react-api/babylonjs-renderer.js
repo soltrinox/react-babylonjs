@@ -1,3 +1,6 @@
+
+
+
 // 1. evetns
 // 1.1 warning message event doesn't exist
 // 1.2 not recreate the component if the handler hasn't changed
@@ -8,12 +11,12 @@
 // const babylonjsFactoryComponent = require("./babylonjs-factory-component");
 class ErrorNotImplemented extends Error {}
 
-const React = require("react");
+// const React = require("react");
 
 const ReactFiberReconciler = require("react-reconciler");
 
 let i = 0;
-const buildFiberPath = ({ child, sibling, ...fiber }) => {
+const buildFiberPath = ({ child, sibling /*,...fiber*/ }) => {
     return [{ child, sibling }];
 };
 
@@ -103,7 +106,7 @@ const mutation = {
         parentInstance: Container,
         child: Instance | TextInstance
     ): void {
-        DEBUG(`-@@@MUTATION.appendChildToContainer`, { parentInstance, child });
+        DEBUG("-@@@MUTATION.appendChildToContainer", { parentInstance, child });
     },
 
     insertBefore(
@@ -121,9 +124,10 @@ const mutation = {
     insertInContainerBefore(
         parentInstance: Container,
         child: Instance | TextInstance,
+        // eslint-disable-next-line no-unused-vars
         beforeChild: Instance | TextInstance
     ): void {
-        DEBUG(`-@@@MUTATION.insertInContainerBefore`);
+        DEBUG("-@@@MUTATION.insertInContainerBefore");
     },
 
     removeChild(
@@ -135,9 +139,10 @@ const mutation = {
     },
     removeChildFromContainer(
         parentInstance: Container,
+        // eslint-disable-next-line no-unused-vars
         child: Instance | TextInstance
     ): void {
-        DEBUG(`-@@@MUTATION.removeChildFromContainer`);
+        DEBUG("-@@@MUTATION.removeChildFromContainer");
     },
 };
 
@@ -165,7 +170,7 @@ const BabylonJSRenderer = ReactFiberReconciler({
         });
         return Object.assign(
             {
-                [`childHostContext${i}`]: `childddddd`,
+                [`childHostContext${i}`]: "childddddd",
             },
             parentContext,
             { type, rootContainer }
@@ -255,6 +260,7 @@ const BabylonJSRenderer = ReactFiberReconciler({
         oldProps: Props,
         newProps: Props,
         rootContainerInstance: Container,
+        // eslint-disable-next-line no-unused-vars
         hostContext: {}
     ): null | Object {
         DEBUG("BabylonJSRenderer.prepareUpdate", {
@@ -285,9 +291,11 @@ const BabylonJSRenderer = ReactFiberReconciler({
     // **********************************
     // as it doesn't support pure text content....
     // **********************************
+    // eslint-disable-next-line no-unused-vars
     shouldSetTextContent(type: string, props: Props): boolean {
         return false;
     },
+    // eslint-disable-next-line no-unused-vars
     resetTextContent(instance: Instance): void {
         throw new ErrorNotImplemented();
     },
@@ -295,6 +303,7 @@ const BabylonJSRenderer = ReactFiberReconciler({
         text,
         rootContainerInstance,
         hostContext,
+        // eslint-disable-next-line no-unused-vars
         internalInstanceHandle
     ) {
         throw new ErrorNotImplemented();
@@ -302,6 +311,7 @@ const BabylonJSRenderer = ReactFiberReconciler({
     commitTextUpdate(
         textInstance: TextInstance,
         oldText: string,
+        // eslint-disable-next-line no-unused-vars
         newText: string
     ): void {
         throw new ErrorNotImplemented();
@@ -342,7 +352,7 @@ function TmpNode(values) {
 
     this.dispose = function() {
         if (this.cmp && this.cmp.dispose) {
-            ele.cmp.dispose();
+            this.cmp.dispose();
         }
     };
 }
@@ -358,6 +368,7 @@ function createElement(rootContext, parentContext, type, props) {
     return ele;
 }
 
+// eslint-disable-next-line no-unused-vars
 function processProps(instance: number, props: Props): Object {
     const propsPayload = {};
     for (let key in props) {
@@ -378,6 +389,7 @@ function processProps(instance: number, props: Props): Object {
     return propsPayload;
 }
 
+// eslint-disable-next-line no-unused-vars
 function arePropsEqual(oldProps: Props, newProps: Props): boolean {
     for (let key in newProps) {
         if (key === "children") {

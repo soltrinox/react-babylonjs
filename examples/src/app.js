@@ -4,7 +4,7 @@ import React from "react";
 
 import GroundGrid from "./components/ground-grid";
 import SkyNebule from "./components/sky-nebule";
-import { mat01, mat02 } from "./materials";
+import { mat01 } from "./materials";
 
 class App extends React.Component {
     render() {
@@ -33,13 +33,6 @@ class App extends React.Component {
                     diameter={2}
                 />
 
-                <sphere
-                    key="sphere-1"
-                    position={[-7, 5, 0]}
-                    segments={16}
-                    diameter={2.5}
-                    material={mat01}
-                />
             </scene>
         );
     }

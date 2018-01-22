@@ -1,5 +1,4 @@
 const setters = require("../helpers/property-setters");
-const transformers = require("../helpers/property-transformers");
 
 const createComponent = ({ BABYLON, scene }, props) => {
     const component = new BABYLON.HemisphericLight(

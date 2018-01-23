@@ -291,6 +291,7 @@ const BabylonJSRenderer = ReactFiberReconciler({
     // eslint-disable-next-line no-unused-vars
     shouldSetTextContent(
         type /* : string */,
+        // eslint-disable-next-line no-unused-vars
         props /* : Props*/
     ) /*:  boolean*/ {
         return false;

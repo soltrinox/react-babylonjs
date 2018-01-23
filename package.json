@@ -89,6 +89,7 @@
     "nyc": "^11.4.1",
     "prettier": "^1.10.2",
     "ramda": "^0.25.0",
+    "react": "^16.2.0",
     "react-devtools": "^3.0.0",
     "react-reconciler": "^0.7.0",
     "sinon": "^4.2.0",

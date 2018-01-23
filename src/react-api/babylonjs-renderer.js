@@ -6,11 +6,10 @@
 // 3.1 as it for now just throws an Error
 
 // const babylonjsFactoryComponent = require("./babylonjs-factory-component");
+const Node = require("./node");
+const DEBUG = () => {};
+
 class ErrorNotImplemented extends Error {}
-
-// const React = require("react");
-
-const ReactFiberReconciler = require("react-reconciler");
 
 let i = 0;
 const buildFiberPath = ({ child, sibling /*,...fiber*/ }) => {
@@ -20,7 +19,18 @@ const buildFiberPath = ({ child, sibling /*,...fiber*/ }) => {
 const debug_fiber = ({ return: fiber }) => {
     return { stateNode: fiber.stateNode, type: fiber.type, fiber };
 };
-const DEBUG = () => {};
+
+function createElement(rootContext, parentContext, type, props) {
+    const ele = new Node(type);
+
+    if (rootContext.props.elements.byType[type]) {
+        ele.cmp = rootContext.props.elements.byType[type](parentContext, props);
+        return ele;
+    }
+
+    return ele;
+}
+
 const mutation = {
     commitMount(
         instance /* : Instance */,
@@ -92,7 +102,7 @@ const mutation = {
                 child,
             }
         );
-        parentInstance.addChild(child);
+        parentInstance.appendChild(child);
         // if (parentInstance.appendChild) {
         //     parentInstance.appendChild(child);
         // } else {
@@ -143,7 +153,7 @@ const mutation = {
     },
 };
 
-const BabylonJSRenderer = ReactFiberReconciler({
+const BabylonJSRenderer = {
     mutation,
     useSyncScheduling: true,
     getPublicInstance(instance) {
@@ -239,7 +249,7 @@ const BabylonJSRenderer = ReactFiberReconciler({
                 child,
             }
         );
-        parentInstance.addChild(child);
+        parentInstance.appendChild(child);
         // if (parentInstance.appendChild) {
         //     parentInstance.appendChild(child);
         // } else {
@@ -319,55 +329,10 @@ const BabylonJSRenderer = ReactFiberReconciler({
     },
     // **********************************
     // **********************************
-});
-
-BabylonJSRenderer.injectIntoDevTools({
-    bundleType: 0, // 0 for PROD, 1 for DEV
-    version: "0.1.0", // version for your renderer
-    rendererPackageName: "babylon3d", // package name
-});
+};
 
 module.exports = BabylonJSRenderer;
 
-function TmpNode(values) {
-    Object.keys(values).forEach(key => (this[key] = values[key]));
-    this.children = [];
-
-    this.addChild = function(item) {
-        this.children.push(item);
-        item.parent = this;
-    };
-
-    this.removeChild = function(child) {
-        while (child.children.length > 0)
-            child.removeChild(child.children[child.children.length - 1]);
-
-        const index = this.children.indexOf(child);
-        if (index >= 0) {
-            this.children.splice(index, 1);
-        }
-        if (child.dispose) {
-            child.dispose();
-        }
-    };
-
-    this.dispose = function() {
-        if (this.cmp && this.cmp.dispose) {
-            this.cmp.dispose();
-        }
-    };
-}
-
-function createElement(rootContext, parentContext, type, props) {
-    const ele = new TmpNode({ type, props });
-
-    if (rootContext.props.elements.byType[type]) {
-        ele.cmp = rootContext.props.elements.byType[type](parentContext, props);
-        return ele;
-    }
-
-    return ele;
-}
 
 // eslint-disable-next-line no-unused-vars
 function processProps(

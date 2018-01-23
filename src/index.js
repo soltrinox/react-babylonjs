@@ -5,7 +5,7 @@ const elements = require("./babylonjs/elements");
 const createRenderer = ({ BABYLON, canvas }) => {
     const engine = new BABYLON.Engine(canvas, true);
     const scene = new BABYLON.Scene(engine);
-    const rootNode = new Node(undefined, {
+    const rootNode = new Node({
         BABYLON,
         canvas,
         componentManager: componentManager.create(),

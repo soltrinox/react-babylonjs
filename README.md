@@ -7,8 +7,10 @@
 [![devDependencies Status](https://david-dm.org/viniciusrmcarneiro/react-babylonjs/dev-status.svg)](https://david-dm.org/viniciusrmcarneiro/react-babylonjs?type=dev)
 [![npm version](https://badge.fury.io/js/react-babylonjs-3d.svg)](https://badge.fury.io/js/react-babylonjs-3d)
 
-
 # react-babylonjs-3d
+
+ 
+![Screenshot of the code bellow][screenshot1]
 
 Look how easy it can be to create 3D objects using JSX syntax:
 ### index.js
@@ -163,3 +165,5 @@ As you can see there are a lot of missing components and properties, also there 
 [![bitHound Dev Dependencies](https://www.bithound.io/github/viniciusrmcarneiro/react-babylonjs/badges/devDependencies.svg)](https://www.bithound.io/github/viniciusrmcarneiro/react-babylonjs/master/dependencies/npm)
 [![Node version](https://img.shields.io/node/v/react-babylonjs-3d.svg?style=flat)](https://github.com/viniciusrmcarneiro/react-babylonjs)
 [![HitCount](http://hits.dwyl.com/viniciusrmcarneiro/react-babylonjs.svg)](http://hits.dwyl.com/viniciusrmcarneiro/react-babylonjs)
+
+[screenshot1]: https://github.com/viniciusrmcarneiro/react-babylonjs/raw/master/docs/images/screenshot.png "Sky, Ground and a Sphere"

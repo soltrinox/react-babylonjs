@@ -1,6 +1,3 @@
-
-
-
 // 1. evetns
 // 1.1 warning message event doesn't exist
 // 1.2 not recreate the component if the handler hasn't changed
@@ -26,11 +23,11 @@ const debug_fiber = ({ return: fiber }) => {
 const DEBUG = () => {};
 const mutation = {
     commitMount(
-        instance: Instance,
-        type: string,
-        newProps: Props,
-        internalInstanceHandle: Object
-    ): void {
+        instance /* : Instance */,
+        type /* : string */,
+        newProps /* : Props */,
+        internalInstanceHandle /* : Object */
+    ) /* : void */ {
         DEBUG(
             "-@@@MUTATION.commitMount",
             type,
@@ -45,13 +42,13 @@ const mutation = {
     },
 
     commitUpdate(
-        instance: Instance,
-        updatePayload: Object,
-        type: string,
-        oldProps: Props,
-        newProps: Props,
-        internalInstanceHandle: Object
-    ): void {
+        instance /* : Instance */,
+        updatePayload /* : Object */,
+        type /* : string */,
+        oldProps /* : Props */,
+        newProps /* : Props */,
+        internalInstanceHandle /* : Object */
+    ) /* : void */ {
         DEBUG(
             "+@@@MUTATION.commitUpdate",
             type,
@@ -85,9 +82,9 @@ const mutation = {
     },
 
     appendChild(
-        parentInstance: Instance | Container,
-        child: Instance | TextInstance
-    ): void {
+        parentInstance /* : Instance  | Container*/,
+        child /* : Instance | TextInstance */
+    ) /* : void */ {
         DEBUG(
             `+@@@MUTATION.appendChild ${child.type} into => ${parentInstance.type}`,
             {
@@ -103,17 +100,17 @@ const mutation = {
         // }
     },
     appendChildToContainer(
-        parentInstance: Container,
-        child: Instance | TextInstance
-    ): void {
+        parentInstance /* : Container */,
+        child /* : Instance | TextInstance*/
+    ) /* : void */ {
         DEBUG("-@@@MUTATION.appendChildToContainer", { parentInstance, child });
     },
 
     insertBefore(
-        parentInstance: Instance,
-        child: Instance | TextInstance,
-        beforeChild: Instance | TextInstance
-    ): void {
+        parentInstance /* : Instance */,
+        child /* : Instance | TextInstance*/,
+        beforeChild /* : Instance | TextInstance*/
+    ) /* : void */ {
         DEBUG("-@@@MUTATION.insertBefore", {
             parentInstance,
             child,
@@ -122,26 +119,26 @@ const mutation = {
         // noop
     },
     insertInContainerBefore(
-        parentInstance: Container,
-        child: Instance | TextInstance,
+        parentInstance /* : Container */,
+        child /* : Instance  | TextInstance*/,
         // eslint-disable-next-line no-unused-vars
-        beforeChild: Instance | TextInstance
-    ): void {
+        beforeChild /* : Instance | TextInstance*/
+    ) /* : void */ {
         DEBUG("-@@@MUTATION.insertInContainerBefore");
     },
 
     removeChild(
-        parentInstance: Instance,
-        child: Instance | TextInstance
-    ): void {
+        parentInstance /* : Instance */,
+        child /* : Instance  | TextInstance*/
+    ) /* : void */ {
         DEBUG("+@@@MUTATION.removeChild", child);
         parentInstance.removeChild(child);
     },
     removeChildFromContainer(
-        parentInstance: Container,
+        parentInstance /* : Container */,
         // eslint-disable-next-line no-unused-vars
-        child: Instance | TextInstance
-    ): void {
+        child /* : Instance  | TextInstance*/
+    ) /* : void */ {
         DEBUG("-@@@MUTATION.removeChildFromContainer");
     },
 };
@@ -161,7 +158,7 @@ const BabylonJSRenderer = ReactFiberReconciler({
         );
         return Object.assign({ iAmTheHost: true }, container.props);
     },
-    getChildHostContext(parentContext, type: string, rootContainer) {
+    getChildHostContext(parentContext, type /* : string */, rootContainer) {
         i++;
         DEBUG(`BabylonJSRenderer.getChildHostContext-${i}}`, {
             parentContext,
@@ -180,12 +177,12 @@ const BabylonJSRenderer = ReactFiberReconciler({
     now: () => Date.now(),
 
     createInstance(
-        type: string,
-        props: Props,
-        rootContainerInstance: Container,
-        hostContext: {},
-        internalInstanceHandle: Object
-    ): Instance {
+        type /* : string */,
+        props /* : Props */,
+        rootContainerInstance /* : Container */,
+        hostContext /* : {} */,
+        internalInstanceHandle /* : Object */
+    ) /* : Instance */ {
         DEBUG(
             "BabylonJSRenderer.createInstance",
             {
@@ -218,11 +215,11 @@ const BabylonJSRenderer = ReactFiberReconciler({
     // 3. if it returns true, eventually it will trigger a commitMount
     // 4. another thing(if not the most important) you should set the properties in your component
     finalizeInitialChildren(
-        instance: Instance,
-        type: string,
-        props: Props,
-        rootContainerInstance: Container
-    ): boolean {
+        instance /* : Instance */,
+        type /* : string */,
+        props /* : Props */,
+        rootContainerInstance /* : Container */
+    ) /* : boolean */ {
         DEBUG("BabylonJSRenderer.finalizeInitialChildren", {
             type,
             props,
@@ -232,9 +229,9 @@ const BabylonJSRenderer = ReactFiberReconciler({
         return true;
     },
     appendInitialChild(
-        parentInstance: Instance,
-        child: Instance | TextInstance
-    ): void {
+        parentInstance /* : Instance */,
+        child /* : Instance  | TextInstance*/
+    ) /* : void */ {
         DEBUG(
             `+BabylonJSRenderer.appendInitialChild ${child.type} into => ${parentInstance.type}`,
             {
@@ -255,14 +252,14 @@ const BabylonJSRenderer = ReactFiberReconciler({
     // otherwise to make your life easier, calculate what needs to be changed and return it
     // it's result will be passed to `mutation.commitUpdate` as `updatePayload` (2nd parameter)
     prepareUpdate(
-        instance: Instance,
-        type: string,
-        oldProps: Props,
-        newProps: Props,
-        rootContainerInstance: Container,
+        instance /* : Instance */,
+        type /* : string */,
+        oldProps /* : Props */,
+        newProps /* : Props */,
+        rootContainerInstance /* : Container */,
         // eslint-disable-next-line no-unused-vars
-        hostContext: {}
-    ): null | Object {
+        hostContext /* : {} */
+    ) /* : null  | Object*/ {
         DEBUG("BabylonJSRenderer.prepareUpdate", {
             type,
             instance,
@@ -292,11 +289,14 @@ const BabylonJSRenderer = ReactFiberReconciler({
     // as it doesn't support pure text content....
     // **********************************
     // eslint-disable-next-line no-unused-vars
-    shouldSetTextContent(type: string, props: Props): boolean {
+    shouldSetTextContent(
+        type /* : string */,
+        props /* : Props*/
+    ) /*:  boolean*/ {
         return false;
     },
     // eslint-disable-next-line no-unused-vars
-    resetTextContent(instance: Instance): void {
+    resetTextContent(instance /* : Instance*/) /*:  void*/ {
         throw new ErrorNotImplemented();
     },
     createTextInstance(
@@ -309,11 +309,11 @@ const BabylonJSRenderer = ReactFiberReconciler({
         throw new ErrorNotImplemented();
     },
     commitTextUpdate(
-        textInstance: TextInstance,
-        oldText: string,
+        textInstance /* : TextInstance */,
+        oldText /* : string */,
         // eslint-disable-next-line no-unused-vars
-        newText: string
-    ): void {
+        newText /* : string */
+    ) /* : void */ {
         throw new ErrorNotImplemented();
     },
     // **********************************
@@ -369,7 +369,10 @@ function createElement(rootContext, parentContext, type, props) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function processProps(instance: number, props: Props): Object {
+function processProps(
+    instance /* : number */,
+    props /* : Props*/
+) /*:  Object*/ {
     const propsPayload = {};
     for (let key in props) {
         if (key === "children") {
@@ -390,7 +393,10 @@ function processProps(instance: number, props: Props): Object {
 }
 
 // eslint-disable-next-line no-unused-vars
-function arePropsEqual(oldProps: Props, newProps: Props): boolean {
+function arePropsEqual(
+    oldProps /* : Props */,
+    newProps /* : Props*/
+) /*:  boolean*/ {
     for (let key in newProps) {
         if (key === "children") {
             // Skip special case.

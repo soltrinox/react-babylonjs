@@ -7,7 +7,8 @@
 
 // const babylonjsFactoryComponent = require("./babylonjs-factory-component");
 // const Node = require("./node");
-// const DEBUG = console.log;
+
+const DEBUG = () => {};
 
 class ErrorNotImplemented extends Error {}
 
@@ -24,7 +25,7 @@ const createInstance = ({ logger, Node }) => (
     props /* : Props */,
     rootContainerInstance /* : Container */,
     hostContext /* : {} */,
-    internalInstanceHandle /* : Instance */ /* : Object */
+    internalInstanceHandle /* : Object */ /* : Instance */
 ) => {
     logger.debug(
         "BabylonJSRenderer.createInstance",

@@ -1,6 +1,14 @@
-function Node(props) {
+function Node(type, props = {}) {
     // Stores all the children
+    if (typeof type !== "string") {
+        throw new Error(`invalid type of Node [${typeof type}]`);
+    }
 
+    if (typeof props !== "object") {
+        throw new Error(`invalid type of props [${typeof props}]`);
+    }
+
+    this.type = type;
     this.props = props;
     this.children = [];
 
@@ -15,7 +23,6 @@ function Node(props) {
 
         while (child.children.length > 0) {
             child.removeChild(child.children[child.children.length - 1]);
-            n;
         }
 
         if (child.dispose) {

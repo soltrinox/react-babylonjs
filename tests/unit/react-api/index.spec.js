@@ -10,7 +10,7 @@ describe(caption, function() {
         it("should export a object called BabylonJSRenderer", function() {
             expect(this.target)
                 .to.be.an("object")
-                .to.have.property("BabylonJSRenderer")
+                .to.have.property("babylonJSRenderer")
                 .to.be.an("object");
         });
 

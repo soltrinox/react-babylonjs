@@ -6,12 +6,11 @@
 // 3.1 as it for now just throws an Error
 
 // const babylonjsFactoryComponent = require("./babylonjs-factory-component");
-const Node = require("./node");
-const DEBUG = () => {};
+// const Node = require("./node");
+// const DEBUG = console.log;
 
 class ErrorNotImplemented extends Error {}
 
-let i = 0;
 const buildFiberPath = ({ child, sibling /*,...fiber*/ }) => {
     return [{ child, sibling }];
 };
@@ -20,25 +19,45 @@ const debug_fiber = ({ return: fiber }) => {
     return { stateNode: fiber.stateNode, type: fiber.type, fiber };
 };
 
-function createElement(rootContext, parentContext, type, props) {
-    const ele = new Node(type);
+const createInstance = ({ logger, Node }) => (
+    type /* : string */,
+    props /* : Props */,
+    rootContainerInstance /* : Container */,
+    hostContext /* : {} */,
+    internalInstanceHandle /* : Instance */ /* : Object */
+) => {
+    logger.debug(
+        "BabylonJSRenderer.createInstance",
+        {
+            type,
+            props,
+            rootContainerInstance,
+            hostContext,
+            internalInstanceHandle,
+        },
+        ...buildFiberPath(internalInstanceHandle)
+    );
 
-    if (rootContext.props.elements.byType[type]) {
-        ele.cmp = rootContext.props.elements.byType[type](parentContext, props);
-        return ele;
+    const node = new Node(type);
+
+    if (rootContainerInstance.props.elements.byType[type]) {
+        node.cmp = rootContainerInstance.props.elements.byType[type](
+            hostContext,
+            props
+        );
     }
 
-    return ele;
-}
+    return node;
+};
 
-const mutation = {
+const Mutation = ({ logger }) => ({
     commitMount(
         instance /* : Instance */,
         type /* : string */,
         newProps /* : Props */,
         internalInstanceHandle /* : Object */
     ) /* : void */ {
-        DEBUG(
+        logger.debug(
             "-@@@MUTATION.commitMount",
             type,
             // {
@@ -59,7 +78,7 @@ const mutation = {
         newProps /* : Props */,
         internalInstanceHandle /* : Object */
     ) /* : void */ {
-        DEBUG(
+        logger.debug(
             "+@@@MUTATION.commitUpdate",
             type,
             // {
@@ -72,30 +91,14 @@ const mutation = {
             debug_fiber(internalInstanceHandle)
         );
 
-        if (instance.cmp && instance.cmp.updateProps) {
-            instance.cmp.updateProps(updatePayload);
-            return;
-        }
-
-        const { rootContext, hostContext } = updatePayload;
-        Object.keys(newProps)
-            .filter(key => instance[key] && typeof instance[key] === "function")
-            .forEach(propertySetter => {
-                instance[propertySetter](
-                    rootContext,
-                    hostContext,
-                    instance.cmp,
-                    newProps,
-                    oldProps
-                );
-            });
+        instance.cmp.updateProps(updatePayload);
     },
 
     appendChild(
         parentInstance /* : Instance  | Container*/,
         child /* : Instance | TextInstance */
     ) /* : void */ {
-        DEBUG(
+        logger.debug(
             `+@@@MUTATION.appendChild ${child.type} into => ${parentInstance.type}`,
             {
                 parentInstance,
@@ -103,17 +106,15 @@ const mutation = {
             }
         );
         parentInstance.appendChild(child);
-        // if (parentInstance.appendChild) {
-        //     parentInstance.appendChild(child);
-        // } else {
-        //     parentInstance.babylonJSStuff = child;
-        // }
     },
     appendChildToContainer(
         parentInstance /* : Container */,
         child /* : Instance | TextInstance*/
     ) /* : void */ {
-        DEBUG("-@@@MUTATION.appendChildToContainer", { parentInstance, child });
+        logger.debug("-@@@MUTATION.appendChildToContainer", {
+            parentInstance,
+            child,
+        });
     },
 
     insertBefore(
@@ -121,7 +122,7 @@ const mutation = {
         child /* : Instance | TextInstance*/,
         beforeChild /* : Instance | TextInstance*/
     ) /* : void */ {
-        DEBUG("-@@@MUTATION.insertBefore", {
+        logger.debug("-@@@MUTATION.insertBefore", {
             parentInstance,
             child,
             beforeChild,
@@ -134,14 +135,14 @@ const mutation = {
         // eslint-disable-next-line no-unused-vars
         beforeChild /* : Instance | TextInstance*/
     ) /* : void */ {
-        DEBUG("-@@@MUTATION.insertInContainerBefore");
+        logger.debug("-@@@MUTATION.insertInContainerBefore");
     },
 
     removeChild(
         parentInstance /* : Instance */,
         child /* : Instance  | TextInstance*/
     ) /* : void */ {
-        DEBUG("+@@@MUTATION.removeChild", child);
+        logger.debug("+@@@MUTATION.removeChild", child);
         parentInstance.removeChild(child);
     },
     removeChildFromContainer(
@@ -149,12 +150,12 @@ const mutation = {
         // eslint-disable-next-line no-unused-vars
         child /* : Instance  | TextInstance*/
     ) /* : void */ {
-        DEBUG("-@@@MUTATION.removeChildFromContainer");
+        logger.debug("-@@@MUTATION.removeChildFromContainer");
     },
-};
+});
 
-const BabylonJSRenderer = {
-    mutation,
+const BabylonJSRenderer = opts => ({
+    mutation: Mutation(opts),
     useSyncScheduling: true,
     getPublicInstance(instance) {
         DEBUG("@@BabylonJSRenderer.getPublicInstance");
@@ -169,15 +170,14 @@ const BabylonJSRenderer = {
         return Object.assign({ iAmTheHost: true }, container.props);
     },
     getChildHostContext(parentContext, type /* : string */, rootContainer) {
-        i++;
-        DEBUG(`BabylonJSRenderer.getChildHostContext-${i}}`, {
+        DEBUG("BabylonJSRenderer.getChildHostContext", {
             parentContext,
             type,
             rootContainer,
         });
         return Object.assign(
             {
-                [`childHostContext${i}`]: "childddddd",
+                childHostContext: "childddddd",
             },
             parentContext,
             { type, rootContainer }
@@ -186,39 +186,7 @@ const BabylonJSRenderer = {
 
     now: () => Date.now(),
 
-    createInstance(
-        type /* : string */,
-        props /* : Props */,
-        rootContainerInstance /* : Container */,
-        hostContext /* : {} */,
-        internalInstanceHandle /* : Object */
-    ) /* : Instance */ {
-        DEBUG(
-            "BabylonJSRenderer.createInstance",
-            {
-                type,
-                props,
-                rootContainerInstance,
-                hostContext,
-                internalInstanceHandle,
-            },
-            ...buildFiberPath(internalInstanceHandle)
-        );
-
-        const ele = createElement(
-            rootContainerInstance,
-            hostContext,
-            type,
-            props
-        );
-
-        if (ele.cmp) {
-            // ele.dispose = () => DEBUG('************');
-            ele.dispose = () => ele.cmp.dispose();
-        }
-        return ele;
-    },
-
+    createInstance: createInstance(opts),
     // at this stage all children were created and already had the `finalizeInitialChildren` executed
     // 1. when a component's created it's possible to set some default values
     // 2. also some actions, such as setting focus
@@ -250,11 +218,6 @@ const BabylonJSRenderer = {
             }
         );
         parentInstance.appendChild(child);
-        // if (parentInstance.appendChild) {
-        //     parentInstance.appendChild(child);
-        // } else {
-        //     parentInstance.babylonJSStuff = child;
-        // }
     },
 
     // decides if there is any update to be done
@@ -329,10 +292,9 @@ const BabylonJSRenderer = {
     },
     // **********************************
     // **********************************
-};
+});
 
 module.exports = BabylonJSRenderer;
-
 
 // eslint-disable-next-line no-unused-vars
 function processProps(

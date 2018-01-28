@@ -1,11 +1,11 @@
-const { Node, BabylonJSRenderer } = require("./react-api");
+const { Node, babylonJSRenderer } = require("./react-api");
 const componentManager = require("./babylonjs/helpers/component-manager");
 const elements = require("./babylonjs/elements");
 
 const createRenderer = ({ BABYLON, canvas }) => {
     const engine = new BABYLON.Engine(canvas, true);
     const scene = new BABYLON.Scene(engine);
-    const rootNode = new Node({
+    const rootNode = new Node("root", {
         BABYLON,
         canvas,
         componentManager: componentManager.create(),
@@ -13,10 +13,9 @@ const createRenderer = ({ BABYLON, canvas }) => {
         engine,
         scene,
         logger: console,
-        type: "root",
     });
 
-    const rootContainer = BabylonJSRenderer.createContainer(rootNode);
+    const rootContainer = babylonJSRenderer.createContainer(rootNode);
 
     const startLoop = (function() {
         let loopStarted = false;
@@ -29,7 +28,7 @@ const createRenderer = ({ BABYLON, canvas }) => {
     })();
 
     const render = Component => {
-        BabylonJSRenderer.updateContainer(Component, rootContainer, null, () =>
+        babylonJSRenderer.updateContainer(Component, rootContainer, null, () =>
             startLoop()
         );
     };

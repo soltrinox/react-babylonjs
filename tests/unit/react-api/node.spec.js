@@ -7,7 +7,7 @@ describe(caption, function() {
     describe("exports", function() {
         setup();
 
-        it("should export an object function", function() {
+        it("should export a function", function() {
             expect(this.target).to.be.a("function");
         });
     });
@@ -15,10 +15,17 @@ describe(caption, function() {
     describe("create", function() {
         setup();
         const props = { a: 1, b: 2 };
+        const myType = "my-type";
 
         it("should create an node", function() {
-            this.node = new this.target(props);
+            this.node = new this.target(myType, props);
             expect(this.node).to.be.an("object");
+        });
+
+        it("should have a property named [type]", function() {
+            expect(this.node)
+                .to.have.property("type")
+                .to.be.equals(myType);
         });
 
         it("should have a property named [props]", function() {
@@ -26,14 +33,30 @@ describe(caption, function() {
                 .to.have.property("props")
                 .to.be.equals(props);
         });
+
+        it("should not create if type is not a string", function() {
+            expect(() => this.target({})).to.throws(
+                "invalid type of Node [object]"
+            );
+
+            expect(() => this.target()).to.throws(
+                "invalid type of Node [undefined]"
+            );
+        });
+
+        it("should not create if props is not a object", function() {
+            expect(() => this.target("my-type", "")).to.throws(
+                "invalid type of props [string]"
+            );
+        });
     });
 
     describe("append", function() {
         setup();
 
         before(function() {
-            this.node = new this.target();
-            this.childNode = new this.target();
+            this.node = new this.target("my-type");
+            this.childNode = new this.target("my-type");
         });
 
         it("should append a child node", function() {
@@ -57,8 +80,8 @@ describe(caption, function() {
         setup();
 
         it("should remove a node without child", function() {
-            const node = new this.target({});
-            const childNode = new this.target({});
+            const node = new this.target("my-type");
+            const childNode = new this.target("my-type");
             node.appendChild(childNode);
 
             node.removeChild(childNode);
@@ -68,8 +91,8 @@ describe(caption, function() {
 
         it("should call dispose", function() {
             const { sandbox } = this;
-            const node = new this.target({});
-            const childNode = new this.target({});
+            const node = new this.target("my-type");
+            const childNode = new this.target("my-type");
             node.appendChild(childNode);
 
             sandbox.spy(childNode, "dispose");
@@ -78,8 +101,8 @@ describe(caption, function() {
         });
 
         it("should work even if child doesn't have dispose", function() {
-            const node = new this.target({});
-            const childNode = new this.target({});
+            const node = new this.target("my-type");
+            const childNode = new this.target("my-type");
             delete childNode.dispose;
             node.appendChild(childNode);
             node.removeChild(childNode);
@@ -87,9 +110,9 @@ describe(caption, function() {
 
         it("should remove a node child recursively", function() {
             const { sandbox } = this;
-            const node = new this.target({});
-            const childNode0 = new this.target({});
-            const childNode1 = new this.target({});
+            const node = new this.target("my-type");
+            const childNode0 = new this.target("my-type");
+            const childNode1 = new this.target("my-type");
             node.appendChild(childNode0);
             childNode0.appendChild(childNode1);
 
@@ -108,20 +131,20 @@ describe(caption, function() {
         setup();
 
         it("should dispose", function() {
-            const node = new this.target({});
+            const node = new this.target("my-type");
             node.dispose();
         });
 
         it("should call cmp dispose", function() {
             const { sandbox } = this;
-            const node = new this.target({});
+            const node = new this.target("my-type");
             node.cmp = sandbox.stub({ dispose: () => {} });
             node.dispose();
             sinon.assert.calledOnce(node.cmp.dispose);
         });
 
         it("should only call cmp.dispose if it exsits", function() {
-            const node = new this.target({});
+            const node = new this.target("my-type");
             node.cmp = {};
             node.dispose();
         });

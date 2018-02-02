@@ -121,7 +121,10 @@ const compose = (type, definition, updater) => {
                 }
                 updater(context, getComponent(), clone(values), componentId);
             },
-            dispose: () => getComponent().dispose(),
+            dispose: () => {
+                updater.dispose(context, getComponent(), props, componentId);
+                getComponent().dispose();
+            },
         };
 
         componentId = context.componentManager.newId(instance);

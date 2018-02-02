@@ -1,52 +1,18 @@
-const equals = (a, b) => {
-    if (Array.isArray(a) && Array.isArray(b)) {
-        if (a.length !== b.length) {
-            return false;
-        }
+const { clone, equals } = require("./utils");
 
-        for (let i = 0; i < a.length; i++) {
-            if (a[i] !== b[i]) {
-                return false;
+const shouldCreateNewComponent = propsDefinitions => {
+    const defs = Object.keys(propsDefinitions)
+        .filter(def => propsDefinitions[def].newComponentRequired)
+        .reduce((acc, key) => Object.assign(acc, { [key]: true }), {});
+
+    return (props, currentProps) => {
+        for (let prop in props) {
+            if (defs[prop] && !equals(currentProps[prop], props[prop])) {
+                return true;
             }
         }
-        return true;
-    }
-
-    if (typeof a === "object" && typeof b === "object") {
-        for (let key in a) {
-            if (equals(a[key], b[key]) === false) {
-                return false;
-            }
-        }
-
-        for (let key in b) {
-            if (equals(a[key], b[key]) === false) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    return a === b;
-};
-
-const clone = obj => {
-    if (Array.isArray(obj)) {
-        return obj.slice(0);
-    }
-
-    if (typeof obj !== "object") {
-        return obj;
-    }
-
-    const newObj = Object.assign({}, obj);
-
-    for (let key in obj) {
-        newObj[key] = clone(obj[key]);
-    }
-
-    return newObj;
+        return false;
+    };
 };
 
 const validateComponent = (type, definition, updater) => {
@@ -67,21 +33,6 @@ const validateComponent = (type, definition, updater) => {
     if (!updater) {
         throw new Error("Updater is required");
     }
-};
-
-const shouldCreateNewComponent = propsDefinitions => {
-    const defs = Object.keys(propsDefinitions)
-        .filter(def => propsDefinitions[def].newComponentRequired)
-        .reduce((acc, key) => Object.assign(acc, { [key]: true }), {});
-
-    return (props, currentProps) => {
-        for (let prop in props) {
-            if (defs[prop] && !equals(currentProps[prop], props[prop])) {
-                return true;
-            }
-        }
-        return false;
-    };
 };
 
 const compose = (type, definition, updater) => {
@@ -121,7 +72,10 @@ const compose = (type, definition, updater) => {
                 }
                 updater(context, getComponent(), clone(values), componentId);
             },
-            dispose: () => getComponent().dispose(),
+            dispose: () => {
+                updater.dispose(context, getComponent(), props, componentId);
+                getComponent().dispose();
+            },
         };
 
         componentId = context.componentManager.newId(instance);

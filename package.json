@@ -21,7 +21,6 @@
     "lint": "eslint .",
     "test-only": "mocha --opts ./mocha.opts",
     "test-only-legacy": "mocha --opts test/mocha.opts",
-    "coverage": "nyc report --reporter=text-lcov | coveralls",
     "test": "nyc mocha --opts ./mocha.opts",
     "prettier": "prettier --config ./.prettierrc --write \"{src,test,tests,mocks,examples}/**/*.js\""
   },
@@ -54,7 +53,9 @@
     ],
     "reporter": [
       "lcov",
-      "text-summary"
+      "text",
+      "text-summary",
+      "html"
     ]
   },
   "repository": {
@@ -81,6 +82,7 @@
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-preset-env": "^1.6.1",
     "chai": "4.1.2",
+    "codacy-coverage": "^2.0.3",
     "coveralls": "^3.0.0",
     "eslint": "^4.16.0",
     "eslint-plugin-flowtype": "^2.41.0",
@@ -89,6 +91,7 @@
     "nyc": "^11.4.1",
     "prettier": "^1.10.2",
     "ramda": "^0.25.0",
+    "react": "^16.2.0",
     "react-devtools": "^3.0.0",
     "react-reconciler": "^0.7.0",
     "sinon": "^4.2.0",

@@ -1,4 +1,6 @@
 language: node_js
 node_js:
   - "8"
-after_success: npm run coverage
+after_success:
+  - cat ./coverage/lcov.info | ./node_modules/.bin/coveralls
+  - cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage

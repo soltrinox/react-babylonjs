@@ -38,6 +38,7 @@ const setup = () => {
                 setTarget: () => {},
             }),
         });
+        this.mocks.updater.dispose = this.sandbox.stub();
     });
 };
 
@@ -344,6 +345,42 @@ describe(caption, function() {
             component.dispose();
 
             sinon.assert.calledOnce(camera.dispose);
+        });
+
+        it("should call updater.dispose when disposing the component", function() {
+            const {
+                mocks: {
+                    definitionFreeCamera: definition,
+                    context,
+                    type,
+                    camera,
+                    updater,
+                },
+            } = this;
+
+            const myComponentWrapper = this.target.compose(
+                type,
+                definition,
+                updater
+            );
+
+            definition.createComponent.returns(camera);
+
+            const props = { position: [0, 0, 0] };
+            const myId = "any-thing";
+            context.componentManager.newId.returns(myId);
+            const component = myComponentWrapper(context, props);
+
+            component.dispose();
+
+            sinon.assert.calledOnce(updater.dispose);
+            sinon.assert.calledWithExactly(
+                updater.dispose,
+                context,
+                camera,
+                props,
+                myId
+            );
         });
     });
 

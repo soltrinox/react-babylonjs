@@ -1,24 +1,40 @@
-const DEBUG = () => {};
-class Node {
+function Node(type, props = {}) {
     // Stores all the children
-
-    constructor(root, props) {
-        DEBUG("@@Node.constructor");
-        this.root = root;
-        this.props = props;
-        this.children = [];
+    if (typeof type !== "string") {
+        throw new Error(`invalid type of Node [${typeof type}]`);
     }
 
-    appendChild(child) {
-        DEBUG("@@Node.appendChild", { child });
+    if (typeof props !== "object") {
+        throw new Error(`invalid type of props [${typeof props}]`);
+    }
+
+    this.type = type;
+    this.props = props;
+    this.children = [];
+
+    this.appendChild = function(child) {
         this.children.push(child);
-    }
+        child.parent = this;
+    };
 
-    removeChild(child, a, b) {
-        DEBUG("@@Node.removeChild", { child, a, b });
+    this.removeChild = function(child) {
         const index = this.children.indexOf(child);
-        this.children.slice(index, 1);
-    }
+        this.children.splice(index, 1);
+
+        while (child.children.length > 0) {
+            child.removeChild(child.children[child.children.length - 1]);
+        }
+
+        if (child.dispose) {
+            child.dispose();
+        }
+    };
+
+    this.dispose = function() {
+        if (this.cmp && this.cmp.dispose) {
+            this.cmp.dispose();
+        }
+    };
 }
 
 module.exports = Node;

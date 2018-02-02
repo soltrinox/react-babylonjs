@@ -1,5 +1,24 @@
+const getValue = (transformer, propValue, propName, componentId, context) => {
+    if (!transformer) {
+        return propValue;
+    }
+
+    if (!transformer.needLastReturned) {
+        return transformer(context, propValue);
+    }
+
+    const keyComponent = `${componentId}::${propName}`;
+    const value = transformer(
+        context,
+        propValue,
+        context.componentManager.get(keyComponent)
+    );
+    context.componentManager.save(keyComponent, value);
+    return value;
+};
+
 const propertyUpdater = (type, propsDefinition) => {
-    return (context, component, props, componentId) => {
+    const updater = (context, component, props, componentId) =>
         Object.keys(props).forEach(propName => {
             if (!propsDefinition[propName]) {
                 context.logger.warn(
@@ -14,26 +33,31 @@ const propertyUpdater = (type, propsDefinition) => {
 
             const { transformer, setter } = propsDefinition[propName];
 
-            let value;
-            if (transformer) {
-                if (transformer.needLastReturned) {
-                    const keyComponent = `${componentId}::${propName}`;
-                    value = transformer(
-                        context,
-                        props[propName],
-                        context.componentManager.get(keyComponent)
-                    );
-                    context.componentManager.save(keyComponent, value);
-                } else {
-                    value = transformer(context, props[propName]);
-                }
-            } else {
-                value = props[propName];
-            }
+            const value = getValue(
+                transformer,
+                props[propName],
+                propName,
+                componentId,
+                context
+            );
 
             setter(component, value);
         });
+
+    updater.dispose = (context, component, props, componentId) => {
+        Object.keys(propsDefinition).forEach(propName => {
+            const prop = propsDefinition[propName];
+            if (prop.dispose) {
+                const keyComponent = `${componentId}::${propName}`;
+                prop.dispose(
+                    component,
+                    context.componentManager.get(keyComponent),
+                    propsDefinition[propName].setter
+                );
+            }
+        });
     };
+    return updater;
 };
 
 module.exports = propertyUpdater;

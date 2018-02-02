@@ -9,18 +9,17 @@
 // const Node = require("./node");
 
 class ErrorNotImplemented extends Error {}
-const _noop = name => () => {};
+const _noop = () => () => {};
 const _notImplemented = name => () => {
     throw new ErrorNotImplemented(name);
 };
 
-const DEBUG = _noop("DEBUG");
-
-const createInstance = ({ logger, Node }) => (
+const createInstance = ({ /*logger,*/ Node }) => (
     type /* : string */,
     props /* : Props */,
     rootContainerInstance /* : Container */,
     hostContext /* : {} */,
+    // eslint-disable-next-line no-unused-vars
     internalInstanceHandle /* : Object */ /* : Instance */
 ) => {
     const node = new Node(type);
@@ -55,13 +54,14 @@ const getChildHostContext = (
     rootContainer
 ) => Object.assign({}, parentContext, { type, rootContainer });
 
-const Mutation = ({ logger }) => ({
+const Mutation = (/*{ logger }*/) => ({
     appendChild,
     removeChild,
     commitMount(
         instance /* : Instance */,
         type /* : string */,
         newProps /* : Props */,
+        // eslint-disable-next-line no-unused-vars
         internalInstanceHandle /* : Object */
     ) /* : void */ {
     },
@@ -72,12 +72,14 @@ const Mutation = ({ logger }) => ({
         type /* : string */,
         oldProps /* : Props */,
         newProps /* : Props */,
+        // eslint-disable-next-line no-unused-vars
         internalInstanceHandle /* : Object */
     ) /* : void */ {
         instance.cmp.updateProps(updatePayload);
     },
     appendChildToContainer(
         parentInstance /* : Container */,
+        // eslint-disable-next-line no-unused-vars
         child /* : Instance | TextInstance*/
     ) /* : void */ {
     },
@@ -85,6 +87,7 @@ const Mutation = ({ logger }) => ({
     insertBefore(
         parentInstance /* : Instance */,
         child /* : Instance | TextInstance*/,
+        // eslint-disable-next-line no-unused-vars
         beforeChild /* : Instance | TextInstance*/
     ) /* : void */ {
         // noop
@@ -123,6 +126,7 @@ const BabylonJSRenderer = opts => ({
         instance /* : Instance */,
         type /* : string */,
         props /* : Props */,
+        // eslint-disable-next-line no-unused-vars
         rootContainerInstance /* : Container */
     ) /* : boolean */ {
         return true;

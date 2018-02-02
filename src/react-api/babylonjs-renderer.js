@@ -8,17 +8,13 @@
 // const babylonjsFactoryComponent = require("./babylonjs-factory-component");
 // const Node = require("./node");
 
-const DEBUG = () => {};
-
 class ErrorNotImplemented extends Error {}
-
-const buildFiberPath = ({ child, sibling /*,...fiber*/ }) => {
-    return [{ child, sibling }];
+const _noop = name => () => {};
+const _notImplemented = name => () => {
+    throw new ErrorNotImplemented(name);
 };
 
-const debug_fiber = ({ return: fiber }) => {
-    return { stateNode: fiber.stateNode, type: fiber.type, fiber };
-};
+const DEBUG = _noop("DEBUG");
 
 const createInstance = ({ logger, Node }) => (
     type /* : string */,
@@ -27,18 +23,6 @@ const createInstance = ({ logger, Node }) => (
     hostContext /* : {} */,
     internalInstanceHandle /* : Object */ /* : Instance */
 ) => {
-    logger.debug(
-        "BabylonJSRenderer.createInstance",
-        {
-            type,
-            props,
-            rootContainerInstance,
-            hostContext,
-            internalInstanceHandle,
-        },
-        ...buildFiberPath(internalInstanceHandle)
-    );
-
     const node = new Node(type);
 
     if (rootContainerInstance.props.elements.byType[type]) {
@@ -51,24 +35,35 @@ const createInstance = ({ logger, Node }) => (
     return node;
 };
 
+const getPublicInstance = instance => instance;
+
+const appendChild = (
+    parentInstance /* : Instance  | Container*/,
+    child /* : Instance | TextInstance */ /* : void */
+) => parentInstance.appendChild(child);
+
+const removeChild = (
+    parentInstance /* : Instance */,
+    child /* : void */ /* : Instance  | TextInstance*/
+) => parentInstance.removeChild(child);
+
+const getRootHostContext = container => container.props;
+
+const getChildHostContext = (
+    parentContext,
+    type /* : string */,
+    rootContainer
+) => Object.assign({}, parentContext, { type, rootContainer });
+
 const Mutation = ({ logger }) => ({
+    appendChild,
+    removeChild,
     commitMount(
         instance /* : Instance */,
         type /* : string */,
         newProps /* : Props */,
         internalInstanceHandle /* : Object */
     ) /* : void */ {
-        logger.debug(
-            "-@@@MUTATION.commitMount",
-            type,
-            // {
-            //     newProps,
-            //     instance,
-            //     internalInstanceHandle,
-            // },
-            // ...buildFiberPath(internalInstanceHandle),
-            debug_fiber(internalInstanceHandle)
-        );
     },
 
     commitUpdate(
@@ -79,43 +74,12 @@ const Mutation = ({ logger }) => ({
         newProps /* : Props */,
         internalInstanceHandle /* : Object */
     ) /* : void */ {
-        logger.debug(
-            "+@@@MUTATION.commitUpdate",
-            type,
-            // {
-            //     updatePayload,
-            //     oldProps,
-            //     newProps,
-            //     instance,
-            //     internalInstanceHandle,
-            // },
-            debug_fiber(internalInstanceHandle)
-        );
-
         instance.cmp.updateProps(updatePayload);
-    },
-
-    appendChild(
-        parentInstance /* : Instance  | Container*/,
-        child /* : Instance | TextInstance */
-    ) /* : void */ {
-        logger.debug(
-            `+@@@MUTATION.appendChild ${child.type} into => ${parentInstance.type}`,
-            {
-                parentInstance,
-                child,
-            }
-        );
-        parentInstance.appendChild(child);
     },
     appendChildToContainer(
         parentInstance /* : Container */,
         child /* : Instance | TextInstance*/
     ) /* : void */ {
-        logger.debug("-@@@MUTATION.appendChildToContainer", {
-            parentInstance,
-            child,
-        });
     },
 
     insertBefore(
@@ -123,11 +87,6 @@ const Mutation = ({ logger }) => ({
         child /* : Instance | TextInstance*/,
         beforeChild /* : Instance | TextInstance*/
     ) /* : void */ {
-        logger.debug("-@@@MUTATION.insertBefore", {
-            parentInstance,
-            child,
-            beforeChild,
-        });
         // noop
     },
     insertInContainerBefore(
@@ -136,58 +95,25 @@ const Mutation = ({ logger }) => ({
         // eslint-disable-next-line no-unused-vars
         beforeChild /* : Instance | TextInstance*/
     ) /* : void */ {
-        logger.debug("-@@@MUTATION.insertInContainerBefore");
     },
 
-    removeChild(
-        parentInstance /* : Instance */,
-        child /* : Instance  | TextInstance*/
-    ) /* : void */ {
-        logger.debug("+@@@MUTATION.removeChild", child);
-        parentInstance.removeChild(child);
-    },
     removeChildFromContainer(
         parentInstance /* : Container */,
         // eslint-disable-next-line no-unused-vars
         child /* : Instance  | TextInstance*/
     ) /* : void */ {
-        logger.debug("-@@@MUTATION.removeChildFromContainer");
     },
 });
 
 const BabylonJSRenderer = opts => ({
-    mutation: Mutation(opts),
-    useSyncScheduling: true,
-    getPublicInstance(instance) {
-        DEBUG("@@BabylonJSRenderer.getPublicInstance");
-        return instance;
-    },
-    getRootHostContext(container) {
-        DEBUG(
-            "BabylonJSRenderer.getRootHostContext",
-            container.props,
-            container.children
-        );
-        return Object.assign({ iAmTheHost: true }, container.props);
-    },
-    getChildHostContext(parentContext, type /* : string */, rootContainer) {
-        DEBUG("BabylonJSRenderer.getChildHostContext", {
-            parentContext,
-            type,
-            rootContainer,
-        });
-        return Object.assign(
-            {
-                childHostContext: "childddddd",
-            },
-            parentContext,
-            { type, rootContainer }
-        );
-    },
-
     now: () => Date.now(),
-
+    useSyncScheduling: true,
+    mutation: Mutation(opts),
+    getRootHostContext,
+    getPublicInstance,
     createInstance: createInstance(opts),
+    getChildHostContext,
+
     // at this stage all children were created and already had the `finalizeInitialChildren` executed
     // 1. when a component's created it's possible to set some default values
     // 2. also some actions, such as setting focus
@@ -199,27 +125,9 @@ const BabylonJSRenderer = opts => ({
         props /* : Props */,
         rootContainerInstance /* : Container */
     ) /* : boolean */ {
-        DEBUG("BabylonJSRenderer.finalizeInitialChildren", {
-            type,
-            props,
-            instance,
-            rootContainerInstance,
-        });
         return true;
     },
-    appendInitialChild(
-        parentInstance /* : Instance */,
-        child /* : Instance  | TextInstance*/
-    ) /* : void */ {
-        DEBUG(
-            `+BabylonJSRenderer.appendInitialChild ${child.type} into => ${parentInstance.type}`,
-            {
-                parentInstance,
-                child,
-            }
-        );
-        parentInstance.appendChild(child);
-    },
+    appendInitialChild: appendChild,
 
     // decides if there is any update to be done
     // if there is no change to apply, then just returns null
@@ -234,30 +142,16 @@ const BabylonJSRenderer = opts => ({
         // eslint-disable-next-line no-unused-vars
         hostContext /* : {} */
     ) /* : null  | Object*/ {
-        DEBUG("BabylonJSRenderer.prepareUpdate", {
-            type,
-            instance,
-            oldProps,
-            newProps,
-        });
         // if (arePropsEqual(oldProps, newProps)) {
         //     return newProps;
         // }
-
         return newProps;
     },
     // **********************************
     // hooks whenever an update happens
     // **********************************
-    prepareForCommit() {
-        DEBUG("-BabylonJSRenderer.prepareForCommit");
-        // noop
-    },
-
-    resetAfterCommit() {
-        DEBUG("-BabylonJSRenderer.resetAfterCommit");
-        // noop
-    },
+    prepareForCommit: _noop("prepareForCommit"),
+    resetAfterCommit: _noop("resetAfterCommit"),
 
     // **********************************
     // as it doesn't support pure text content....
@@ -271,80 +165,85 @@ const BabylonJSRenderer = opts => ({
         return false;
     },
     // eslint-disable-next-line no-unused-vars
-    resetTextContent(instance /* : Instance*/) /*:  void*/ {
-        throw new ErrorNotImplemented();
-    },
-    createTextInstance(
-        text,
-        rootContainerInstance,
-        hostContext,
-        // eslint-disable-next-line no-unused-vars
-        internalInstanceHandle
-    ) {
-        throw new ErrorNotImplemented();
-    },
-    commitTextUpdate(
-        textInstance /* : TextInstance */,
-        oldText /* : string */,
-        // eslint-disable-next-line no-unused-vars
-        newText /* : string */
-    ) /* : void */ {
-        throw new ErrorNotImplemented();
-    },
+    resetTextContent: _notImplemented("resetTextContent"),
+    // (instance /* : Instance*/) /*:  void*/ {
+    //     throw new ErrorNotImplemented();
+    // },
+
+    createTextInstance: _notImplemented("createTextInstance"),
+    // (
+    //     text,
+    //     rootContainerInstance,
+    //     hostContext,
+    //     // eslint-disable-next-line no-unused-vars
+    //     internalInstanceHandle
+    // ) {
+    //     throw new ErrorNotImplemented();
+    // },
+
+    commitTextUpdate: _notImplemented("commitTextUpdate"),
+    // (
+    //     textInstance /* : TextInstance */,
+    //     oldText /* : string */,
+    //     // eslint-disable-next-line no-unused-vars
+    //     newText /* : string */
+    // ) /* : void */ {
+    //     throw new ErrorNotImplemented();
+    // },
     // **********************************
     // **********************************
 });
 
 module.exports = BabylonJSRenderer;
 
-// eslint-disable-next-line no-unused-vars
-function processProps(
-    instance /* : number */,
-    props /* : Props*/
-) /*:  Object*/ {
-    const propsPayload = {};
-    for (let key in props) {
-        if (key === "children") {
-            // Skip special case.
-            continue;
-        }
-        let value = props[key];
-        if (typeof value === "function") {
-            value = {
-                style: "rt-event",
-                event: key,
-                tag: instance,
-            };
-        }
-        propsPayload[key] = value;
-    }
-    return propsPayload;
-}
+// // eslint-disable-next-line no-unused-vars
+// function processProps(
+//     instance /* : number */,
+//     props /* : Props*/
+// ) /*:  Object*/ {
+//     const propsPayload = {};
+//     for (let key in props) {
+//         if (key === "children") {
+//             // Skip special case.
+//             continue;
+//         }
+//         let value = props[key];
+//         if (typeof value === "function") {
+//             value = {
+//                 style: "rt-event",
+//                 event: key,
+//                 tag: instance,
+//             };
+//         }
+//         propsPayload[key] = value;
+//     }
+//     return propsPayload;
+// }
 
-// eslint-disable-next-line no-unused-vars
-function arePropsEqual(
-    oldProps /* : Props */,
-    newProps /* : Props*/
-) /*:  boolean*/ {
-    for (let key in newProps) {
-        if (key === "children") {
-            // Skip special case.
-            continue;
-        }
+// // eslint-disable-next-line no-unused-vars
+// function arePropsEqual(
+//     oldProps /* : Props */,
+//     newProps /* : Props*/
+// ) /*:  boolean*/ {
+//     for (let key in newProps) {
+//         if (key === "children") {
+//             // Skip special case.
+//             continue;
+//         }
 
-        if (newProps[key] !== oldProps[key]) {
-            return false;
-        }
-    }
+//         if (newProps[key] !== oldProps[key]) {
+//             return false;
+//         }
+//     }
 
-    for (let key in oldProps) {
-        if (key === "children") {
-            // Skip special case.
-            continue;
-        }
-        if (!(key in newProps)) {
-            return false;
-        }
-    }
-    return true;
-}
+//     for (let key in oldProps) {
+//         if (key === "children") {
+//             // Skip special case.
+//             continue;
+//         }
+//         if (!(key in newProps)) {
+//             return false;
+//         }
+//     }
+//     return true;
+// }

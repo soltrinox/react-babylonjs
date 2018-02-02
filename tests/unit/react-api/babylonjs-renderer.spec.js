@@ -89,4 +89,78 @@ describe(caption, function() {
             );
         });
     });
+    describe("update", function() {
+        setup();
+
+        it("should commitUpdate", function() {
+            const instance = { cmp: { updateProps: this.sandbox.stub() } };
+            const newProps = { a: 123 };
+            this.target({}).mutation.commitUpdate(instance, newProps);
+            sinon.assert.calledOnce(instance.cmp.updateProps);
+            sinon.assert.calledWithExactly(instance.cmp.updateProps, newProps);
+        });
+    });
+
+    describe("children", function() {
+        setup();
+
+        it("should appendChild to the parent", function() {
+            const parent = this.sandbox.stub({ appendChild: () => {} });
+            const child = 123;
+            this.target({}).mutation.appendChild(parent, child);
+            sinon.assert.calledOnce(parent.appendChild);
+            sinon.assert.calledWithExactly(parent.appendChild, child);
+        });
+        it("should removeChild from the parent", function() {
+            const parent = this.sandbox.stub({ removeChild: () => {} });
+            const child = 123;
+            this.target({}).mutation.removeChild(parent, child);
+            sinon.assert.calledOnce(parent.removeChild);
+            sinon.assert.calledWithExactly(parent.removeChild, child);
+        });
+    });
+
+    describe("getPublicInstance", function() {
+        setup();
+
+        it("should getPublicInstance to the parent", function() {
+            const instance = { a: 123 };
+            expect(this.target({}).getPublicInstance(instance)).equals(
+                instance
+            );
+        });
+    });
+
+    describe("getRootHostContext", function() {
+        setup();
+
+        it("should getRootHostContext to the parent", function() {
+            const container = { props: { a: 1 } };
+            expect(this.target({}).getRootHostContext(container)).equals(
+                container.props
+            );
+        });
+    });
+
+    describe("getChildHostContext", function() {
+        setup();
+
+        it("should getChildHostContext to the parent", function() {
+            const parentContext = { a: 1 };
+            const type = "type-123";
+            const rootContainer = { name: "rootContainer" };
+            const expected = {
+                a: 1,
+                type,
+                rootContainer,
+            };
+            expect(
+                this.target({}).getChildHostContext(
+                    parentContext,
+                    type,
+                    rootContainer
+                )
+            ).eqls(expected);
+        });
+    });
 });

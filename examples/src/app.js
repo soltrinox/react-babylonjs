@@ -7,8 +7,31 @@ import Sample2 from "./sample-2";
 import Sample3 from "./sample-3";
 
 class App extends React.Component {
+    constructor() {
+        super();
+        this.state = { currentView: 1 };
+    }
+    componentDidMount() {
+        this._unsubscribe = this.props.store.subscribe(storeState =>
+            this.setState({ currentView: storeState.currentView })
+        );
+    }
+    componentWillUnmount() {
+        this._unsubscribe();
+    }
     render() {
-        return <Sample3 />;
+        const { currentView } = this.state;
+
+        if (currentView === 1) {
+            return <Sample1 />;
+        }
+        if (currentView === 2) {
+            return <Sample2 />;
+        }
+        if (currentView === 3) {
+            return <Sample3 />;
+        }
+        return null;
     }
 }
 

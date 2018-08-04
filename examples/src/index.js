@@ -4,11 +4,20 @@
 require("react-hot-loader");
 
 import React from "react";
+import ReactDOM from "react-dom";
 import BABYLON from "babylonjs";
 import ReactBabylonJS from "react-babylonjs-3d";
 
 import App from "./app";
+import AppPage from "./app-page";
+import Store from "./store";
 
 const canvas = document.querySelector(".scene");
 const renderer = ReactBabylonJS.createRenderer({ BABYLON, canvas });
-renderer.render(<App />);
+
+
+const store = Store();
+renderer.render(<App store={store} />);
+
+const divApp = document.getElementById("app");
+ReactDOM.render(<AppPage selectView={store.actions.selectView} />, divApp);

@@ -26,6 +26,7 @@ module.exports = {
         getTargetName: true,
         setupTest: true,
         testHelpers: true,
+        // BABYLON: true,
     },
     rules: {
         "flowtype/define-flow-type": 1,

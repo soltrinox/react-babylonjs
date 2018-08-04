@@ -44,19 +44,26 @@ const props = {
     },
     cap: {
         newComponentRequired: true,
-        transformer: transformers.enum(
+        transformer: transformers.byPass,
+        // TODO: enum type
+        /*
+        transformers.enum(({ BABYLON }) => [
             BABYLON.Mesh.NO_CAP,
             BABYLON.Mesh.CAP_START,
             BABYLON.Mesh.CAP_END,
-            BABYLON.Mesh.CAP_ALL
-        ),
+            BABYLON.Mesh.CAP_ALL,
+        ]) */
     },
     sideOrientation: {
         newComponentRequired: true,
-        transformer: transformers.enum(
+        transformer: transformers.byPass,
+        /*
+        // TODO: enum type
+        transformers.enum(
             BABYLON.Mesh.DOUBLESIDE,
             BABYLON.Mesh.DEFAULTSIDE
         ),
+        */
     },
     frontUVs: {
         newComponentRequired: true,

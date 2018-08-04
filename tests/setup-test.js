@@ -13,7 +13,7 @@ const setupTest = (name, target, opts) => {
         }
 
         this.target = target;
-        this.sandbox = sinon.sandbox.create();
+        this.sandbox = sinon.createSandbox();
 
         this.mocks = mocksToEnable.reduce(
             (state, name) =>

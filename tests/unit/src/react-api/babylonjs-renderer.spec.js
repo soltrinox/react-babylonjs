@@ -30,6 +30,7 @@ describe(caption, function() {
                 "createInstance",
                 "finalizeInitialChildren",
                 "appendInitialChild",
+                "commitMount",
                 "prepareUpdate",
                 "prepareForCommit",
                 "resetAfterCommit",

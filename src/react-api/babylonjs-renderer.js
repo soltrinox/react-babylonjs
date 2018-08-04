@@ -20,7 +20,7 @@ const createInstance = ({ /*logger,*/ Node }) => (
     rootContainerInstance /* : Container */,
     hostContext /* : {} */,
     // eslint-disable-next-line no-unused-vars
-    internalInstanceHandle /* : Object */ /* : Instance */
+    internalInstanceHandle /* : Instance */ /* : Object */
 ) => {
     const node = new Node(type);
 
@@ -38,12 +38,12 @@ const getPublicInstance = instance => instance;
 
 const appendChild = (
     parentInstance /* : Instance  | Container*/,
-    child /* : Instance | TextInstance */ /* : void */
+    child /* : void */ /* : Instance | TextInstance */
 ) => parentInstance.appendChild(child);
 
 const removeChild = (
     parentInstance /* : Instance */,
-    child /* : void */ /* : Instance  | TextInstance*/
+    child /* : Instance  | TextInstance*/ /* : void */
 ) => parentInstance.removeChild(child);
 
 const getRootHostContext = container => container.props;
@@ -63,8 +63,7 @@ const Mutation = (/*{ logger }*/) => ({
         newProps /* : Props */,
         // eslint-disable-next-line no-unused-vars
         internalInstanceHandle /* : Object */
-    ) /* : void */ {
-    },
+    ) /* : void */ {},
 
     commitUpdate(
         instance /* : Instance */,
@@ -81,8 +80,7 @@ const Mutation = (/*{ logger }*/) => ({
         parentInstance /* : Container */,
         // eslint-disable-next-line no-unused-vars
         child /* : Instance | TextInstance*/
-    ) /* : void */ {
-    },
+    ) /* : void */ {},
 
     insertBefore(
         parentInstance /* : Instance */,
@@ -97,15 +95,13 @@ const Mutation = (/*{ logger }*/) => ({
         child /* : Instance  | TextInstance*/,
         // eslint-disable-next-line no-unused-vars
         beforeChild /* : Instance | TextInstance*/
-    ) /* : void */ {
-    },
+    ) /* : void */ {},
 
     removeChildFromContainer(
         parentInstance /* : Container */,
         // eslint-disable-next-line no-unused-vars
         child /* : Instance  | TextInstance*/
-    ) /* : void */ {
-    },
+    ) /* : void */ {},
 });
 
 const BabylonJSRenderer = opts => ({
@@ -116,6 +112,7 @@ const BabylonJSRenderer = opts => ({
     getPublicInstance,
     createInstance: createInstance(opts),
     getChildHostContext,
+    commitMount() {},
 
     // at this stage all children were created and already had the `finalizeInitialChildren` executed
     // 1. when a component's created it's possible to set some default values

@@ -8,8 +8,8 @@ const createComponent = ({ BABYLON, scene }, props) => {
         scene,
         props.shaderPath,
         {
-            attributes: Array.from(props.attributes),
-            uniforms: Array.from(props.uniforms),
+            attributes: Array.from(props.attributes || []),
+            uniforms: Array.from(props.uniforms || []),
         }
     );
     return component;

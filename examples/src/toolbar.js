@@ -2,9 +2,9 @@ import { hot } from "react-hot-loader";
 
 import React from "react";
 
-const MyApp = ({ selectView }) => {
+const Toolbar = ({ selectView }) => {
     return (
-        <div>
+        <div style={{ position: "absolute" }}>
             <button onClick={() => selectView(1)}>1</button>
             <button onClick={() => selectView(2)}>2</button>
             <button onClick={() => selectView(3)}>3</button>
@@ -12,4 +12,4 @@ const MyApp = ({ selectView }) => {
     );
 };
 
-export default hot(module)(MyApp);
+export default hot(module)(Toolbar);

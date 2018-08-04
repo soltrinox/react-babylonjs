@@ -23,22 +23,21 @@ class Sample2 extends React.Component {
     }
 
     render() {
-        return (
-            <scene>
-                <arcRotateCamera
-                    position={[5, 5, -5]}
-                    target={[0, 0, 0]}
-                    attachControl={true}
-                    alpha={0}
-                    beta={0}
-                    radius={0}
-                />
+        return [
+            <arcRotateCamera
+                key="camera"
+                position={[5, 5, -5]}
+                target={[0, 0, 0]}
+                attachControl={true}
+                alpha={0}
+                beta={0}
+                radius={0}
+            />,
 
-                <hemisphericLight name="light1" target={[0, 1, 0]} />
+            <hemisphericLight key="light" name="light1" target={[0, 1, 0]} />,
 
-                <lines points={this.state.springLines} color={[1, 0, 1]}/>
-            </scene>
-        );
+            <lines key="body" points={this.state.springLines} color={[1, 0, 1]} />,
+        ];
     }
 }
 

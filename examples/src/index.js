@@ -9,7 +9,7 @@ import BABYLON from "babylonjs";
 import ReactBabylonJS from "react-babylonjs-3d";
 
 import App from "./app";
-import AppPage from "./app-page";
+import Toolbar from "./toolbar";
 import Store from "./store";
 
 const canvas = document.querySelector(".scene");
@@ -19,5 +19,5 @@ const renderer = ReactBabylonJS.createRenderer({ BABYLON, canvas });
 const store = Store();
 renderer.render(<App store={store} />);
 
-const divApp = document.getElementById("app");
-ReactDOM.render(<AppPage selectView={store.actions.selectView} />, divApp);
+const divToolbar = document.getElementById("toolbar");
+ReactDOM.render(<Toolbar selectView={store.actions.selectView} />, divToolbar);

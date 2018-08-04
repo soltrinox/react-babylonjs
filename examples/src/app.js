@@ -21,17 +21,11 @@ class App extends React.Component {
     }
     render() {
         const { currentView } = this.state;
-
-        if (currentView === 1) {
-            return <Sample1 />;
-        }
-        if (currentView === 2) {
-            return <Sample2 />;
-        }
-        if (currentView === 3) {
-            return <Sample3 />;
-        }
-        return null;
+        return <scene>
+            {currentView === 1 ? <Sample1 /> : null}
+            {currentView === 2 ? <Sample2 /> : null}
+            {currentView === 3 ? <Sample3 /> : null}
+        </scene>;
     }
 }
 

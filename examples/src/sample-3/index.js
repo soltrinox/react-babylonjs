@@ -12,31 +12,31 @@ const wheelMaterial = styles.standardMaterial({
 
 class Sample3 extends React.Component {
     render() {
-        return (
-            <scene>
-                <arcRotateCamera
+        return [
+            <arcRotateCamera
+                key="camera"
                 name="arc-1"
-                    position={[-12, 10, -24]}
-                    target={[0, 0, 0]}
-                    attachControl={true}
-                    alpha={0}
-                    beta={0}
-                    radius={0}
-                />
+                position={[-12, 10, -24]}
+                target={[0, 0, 0]}
+                attachControl={true}
+                alpha={0}
+                beta={0}
+                radius={0}
+            />,
 
-                <hemisphericLight name="light-1" target={[1, 0.5, 0]} />
+            <hemisphericLight key="light" name="light-1" target={[1, 0.5, 0]} />,
 
-                <cylinder
-                    diameter={3}
-                    height={1}
-                    tessellation={24}
-                    faceColors={[, [0, 0, 0]]}
-                    faceUV={[[0, 0, 1, 1], , [0, 0, 1, 1]]}
-                    material={wheelMaterial}
-                    rotation={[Math.PI / 2, 0, 0]}
-                />
-            </scene>
-        );
+            <cylinder
+                key="body"
+                diameter={3}
+                height={1}
+                tessellation={24}
+                faceColors={[, [0, 0, 0]]}
+                faceUV={[[0, 0, 1, 1], , [0, 0, 1, 1]]}
+                material={wheelMaterial}
+                rotation={[Math.PI / 2, 0, 0]}
+            />,
+        ];
     }
 }
 

@@ -1,11 +1,11 @@
 const path = require("path");
 
 const config = {
-    entry: path.resolve(__dirname, "./src/index.js"),
+    entry: path.resolve(__dirname, "./dist/index.js"),
     devtool: "source-map",
     output: {
-        path: path.join(__dirname, "lib"),
-        filename: "react-babylon-3d.min.js",
+        path: path.join(__dirname, "dist"),
+        filename: "react-babylon-3d.js",
         library: "ReactBabylon3D",
         libraryTarget: "umd",
         umdNamedDefine: true,
@@ -17,8 +17,8 @@ const config = {
             amd: "BABYLON",
             root: "BABYLON",
         },
+        react: "react",
         "react-reconciler": "react-reconciler",
-        "react": "react",
     },
     module: {
         rules: [
@@ -30,7 +30,10 @@ const config = {
         ],
     },
     resolve: {
-        modules: [path.resolve("./node_modules"), path.resolve("./src")],
+        modules: [
+            path.resolve("./node_modules"),
+            path.resolve("./src"),
+        ],
         extensions: [".json", ".js"],
     },
 };

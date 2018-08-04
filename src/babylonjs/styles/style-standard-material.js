@@ -32,6 +32,12 @@ const props = {
         transformer: transformers.component,
         dispose: disposers.component,
     },
+
+    diffuseTexture: {
+        setter: setters.propertyFromComponent("diffuseTexture"),
+        transformer: transformers.component,
+        dispose: disposers.component,
+    },
 };
 
 const standardMaterial = {

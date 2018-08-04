@@ -1,5 +1,6 @@
 const { compose } = require("./helpers/composer");
 const propertyUpdater = require("./helpers/property-updater");
+const { fromPairs } = require("./helpers/functional");
 
 const styles = {
     standardMaterial: props => ({ type: "standardMaterial", props }),
@@ -8,16 +9,19 @@ const styles = {
     cubeTexture: props => ({ type: "cubeTexture", props }),
 };
 
-const fromPairs = arr =>
-    arr.reduce((obj, [key, value]) => Object.assign(obj, { [key]: value }), {});
-
 const byType = fromPairs(
     [
         require("./components/component-scene"),
         require("./components/component-mesh-box"),
         require("./components/component-mesh-ground"),
+        require("./components/component-mesh-cylinder"),
+        require("./components/component-mesh-extrude-shape"),
+        require("./components/component-mesh-lines"),
+
         require("./components/component-mesh-sphere"),
         require("./components/component-free-camera"),
+        require("./components/component-arc-rotate-camera"),
+
         require("./components/component-hemispheric-light"),
 
         require("./styles/style-shader-material"),

@@ -4,7 +4,8 @@
   "name": "react-babylonjs-3d",
   "version": "0.2.0",
   "description": "BabylonJS 3D in a declarative way",
-  "main": "./lib/react-babylon-3d.min.js",
+  "main": "./dist/react-babylon-3d.js",
+  "module": "./src/index.js",
   "keywords": [
     "babylonjs",
     "react",
@@ -87,7 +88,7 @@
     "eslint": "^4.16.0",
     "eslint-plugin-flowtype": "^2.41.0",
     "eslint-plugin-react": "^7.5.1",
-    "mocha": "^5.0.0",
+    "mocha": "^5.2.0",
     "nyc": "^11.4.1",
     "prettier": "^1.10.2",
     "ramda": "^0.25.0",
@@ -95,6 +96,7 @@
     "react-devtools": "^3.0.0",
     "react-reconciler": "^0.7.0",
     "sinon": "^4.2.0",
+    "typescript": "^2.7.2",
     "webpack": "^3.10.0"
   }
 }

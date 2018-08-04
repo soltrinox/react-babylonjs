@@ -36,7 +36,6 @@ const _babylonTypes = [
     "Vector3",
     "HemisphericLight",
     "FreeCamera",
-
     "ShaderMaterial",
 ];
 

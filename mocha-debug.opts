@@ -1,0 +1,5 @@
+--require ./tests/setup-env.js
+--no-timeouts
+--recursive
+--sort
+tests/unit/**/*.spec.js

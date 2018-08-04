@@ -4,13 +4,17 @@
 [![Build Status](https://travis-ci.org/viniciusrmcarneiro/react-babylonjs.svg)](https://travis-ci.org/viniciusrmcarneiro/react-babylonjs)
 [![bitHound Overall Score](https://www.bithound.io/github/viniciusrmcarneiro/react-babylonjs/badges/score.svg)](https://www.bithound.io/github/viniciusrmcarneiro/react-babylonjs)
 [![bitHound Code](https://www.bithound.io/github/viniciusrmcarneiro/react-babylonjs/badges/code.svg)](https://www.bithound.io/github/viniciusrmcarneiro/react-babylonjs)
-[![Dependency Status](https://david-dm.org/viniciusrmcarneiro/react-babylonjs.svg)](https://david-dm.org/viniciusrmcarneiro/react-babylonjs) 
+[![Dependency Status](https://david-dm.org/viniciusrmcarneiro/react-babylonjs.svg)](https://david-dm.org/viniciusrmcarneiro/react-babylonjs)
 [![devDependencies Status](https://david-dm.org/viniciusrmcarneiro/react-babylonjs/dev-status.svg)](https://david-dm.org/viniciusrmcarneiro/react-babylonjs?type=dev)
 [![npm version](https://badge.fury.io/js/react-babylonjs-3d.svg)](https://badge.fury.io/js/react-babylonjs-3d)
 
 # react-babylonjs-3d
+- valor default for props
+- loading model
+- comparing properties to no wast time rendering something that doesn't have to be rendered
+- clean up code
 
- 
+
 ![Screenshot of the code bellow][screenshot1]
 
 Look how easy it can be to create 3D objects using JSX syntax:
@@ -104,7 +108,7 @@ export default App;
 
 ## implemented
 ### components
-- [x] BABYLON.FreeCamera - (name, defaultTarget, inputs, position) 
+- [x] BABYLON.FreeCamera - (name, defaultTarget, inputs, position)
 - [x] BABYLON.HemisphericLight - (name, intensity, target)
 - [x] BABYLON.Mesh.CreateSphere - (name, subdivisions, diameter, position)
 - [x] BABYLON.Mesh.CreateGround- (name, width, height, subdivisions, position, material)

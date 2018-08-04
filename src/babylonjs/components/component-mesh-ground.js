@@ -17,15 +17,14 @@ const props = {
     width: { newComponentRequired: true },
     height: { newComponentRequired: true },
     subdivisions: { newComponentRequired: true },
+    position: {
+        setter: setters.property("position"),
+        transformer: transformers.vector3,
+    },
     material: {
         setter: setters.propertyFromComponent("material"),
         transformer: transformers.component,
         dispose: disposers.component,
-    },
-
-    position: {
-        setter: setters.property("position"),
-        transformer: transformers.vector3,
     },
 };
 

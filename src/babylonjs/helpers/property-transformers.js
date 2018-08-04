@@ -1,5 +1,13 @@
 const vector3 = ({ BABYLON }, value) => new BABYLON.Vector3(...value);
 const vector4 = ({ BABYLON }, value) => new BABYLON.Vector4(...value);
+const color4 = ({ BABYLON }, value) => new BABYLON.Color4(...value);
+const color3 = ({ BABYLON }, value) => new BABYLON.Color3(...value);
+const byPass = (_, value) => value;
+// TODO: validate
+const _enum = enums => (_, value) => value;
+// TODO: include size
+const arrayOf = transformer => (context, value) =>
+    value.map(v => transformer(context, v));
 
 const component = (context, value, prevReturned) => {
     if (!value) {
@@ -27,6 +35,11 @@ const component = (context, value, prevReturned) => {
 component.needLastReturned = true;
 
 const transformers = {
+    enum: _enum,
+    byPass,
+    arrayOf,
+    color3,
+    color4,
     vector3,
     vector4,
     component,

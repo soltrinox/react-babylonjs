@@ -12,6 +12,7 @@ const createComponent = ({ BABYLON, scene }, props) => {
 const props = {
     target: { newComponentRequired: true },
     intensity: { setter: setters.property("intensity") },
+    name: { setter: setters.property("name") },
 };
 
 const hemisphericLight = { type: "hemisphericLight", createComponent, props };

@@ -8,6 +8,7 @@ const createComponent = ({ BABYLON, scene }, props) => {
 };
 
 const props = {
+    name: { setter: setters.property("name") },
     backFaceCulling: { setter: setters.property("backFaceCulling") },
     diffuseColor: {
         setter: setters.property("diffuseColor"),

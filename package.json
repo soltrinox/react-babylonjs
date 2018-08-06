@@ -70,7 +70,7 @@
   "dependencies": {},
   "peerDepedencies": {
     "babylonjs": "3.*",
-    "react-reconciler": "0.6.*",
+    "react-reconciler": "0.12.*",
     "react": "16.*.*"
   },
   "devDependencies": {

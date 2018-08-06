@@ -14,6 +14,9 @@ const createComponent = ({ BABYLON, scene }, props) => {
 };
 
 const props = {
+    name: {
+        setter: setters.property("name"),
+    },
     width: { newComponentRequired: true },
     height: { newComponentRequired: true },
     subdivisions: { newComponentRequired: true },

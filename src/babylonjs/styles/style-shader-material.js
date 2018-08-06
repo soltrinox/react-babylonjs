@@ -16,6 +16,9 @@ const createComponent = ({ BABYLON, scene }, props) => {
 };
 
 const props = {
+    name: {
+        setter: setters.property("name"),
+    },
     shaderPath: { newComponentRequired: true },
     attributes: { newComponentRequired: true },
     uniforms: { newComponentRequired: true },

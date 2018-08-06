@@ -15,7 +15,6 @@ import Store from "./store";
 const canvas = document.querySelector(".scene");
 const renderer = ReactBabylonJS.createRenderer({ BABYLON, canvas });
 
-
 const store = Store();
 renderer.render(<App store={store} />);
 

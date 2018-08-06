@@ -38,6 +38,11 @@ describe(caption, function() {
                 "resetTextContent",
                 "createTextInstance",
                 "commitTextUpdate",
+                "supportsMutation",
+                "removeChild",
+                "commitUpdate",
+                "appendChildToContainer",
+                "appendChild",
             ];
             expect(this.babylonJSRenderer).to.have.all.keys(...props);
         });

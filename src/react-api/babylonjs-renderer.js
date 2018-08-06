@@ -20,7 +20,7 @@ const createInstance = ({ /*logger,*/ Node }) => (
     rootContainerInstance /* : Container */,
     hostContext /* : {} */,
     // eslint-disable-next-line no-unused-vars
-    internalInstanceHandle /* : Instance */ /* : Object */
+    internalInstanceHandle /* : Object */ /* : Instance */
 ) => {
     const node = new Node(type);
 
@@ -38,13 +38,15 @@ const getPublicInstance = instance => instance;
 
 const appendChild = (
     parentInstance /* : Instance  | Container*/,
-    child /* : void */ /* : Instance | TextInstance */
+    child /* : Instance | TextInstance */ /* : void */
 ) => parentInstance.appendChild(child);
 
 const removeChild = (
     parentInstance /* : Instance */,
-    child /* : Instance  | TextInstance*/ /* : void */
-) => parentInstance.removeChild(child);
+    child /* : void */ /* : Instance  | TextInstance*/
+) => {
+    return parentInstance.removeChild(child);
+};
 
 const getRootHostContext = container => container.props;
 
@@ -53,6 +55,24 @@ const getChildHostContext = (
     type /* : string */,
     rootContainer
 ) => Object.assign({}, parentContext, { type, rootContainer });
+const commitUpdate = (
+    instance /* : Instance */,
+    updatePayload /* : Object */,
+    type /* : string */,
+    oldProps /* : Props */,
+    newProps /* : Props */,
+    // eslint-disable-next-line no-unused-vars
+    internalInstanceHandle /* : Object */
+) => /* : void */ {
+    instance.cmp.updateProps(updatePayload);
+};
+
+// shouldn't matter, 'cause it's adding the scene to the root
+const appendChildToContainer = (
+    parentInstance /* : Container */,
+    // eslint-disable-next-line no-unused-vars
+    child /* : Instance | TextInstance*/ /* : void */
+) => {};
 
 const Mutation = (/*{ logger }*/) => ({
     appendChild,
@@ -63,25 +83,10 @@ const Mutation = (/*{ logger }*/) => ({
         newProps /* : Props */,
         // eslint-disable-next-line no-unused-vars
         internalInstanceHandle /* : Object */
-    ) /* : void */ {},
-
-    commitUpdate(
-        instance /* : Instance */,
-        updatePayload /* : Object */,
-        type /* : string */,
-        oldProps /* : Props */,
-        newProps /* : Props */,
-        // eslint-disable-next-line no-unused-vars
-        internalInstanceHandle /* : Object */
     ) /* : void */ {
-        instance.cmp.updateProps(updatePayload);
     },
-    appendChildToContainer(
-        parentInstance /* : Container */,
-        // eslint-disable-next-line no-unused-vars
-        child /* : Instance | TextInstance*/
-    ) /* : void */ {},
-
+    commitUpdate,
+    appendChildToContainer,
     insertBefore(
         parentInstance /* : Instance */,
         child /* : Instance | TextInstance*/,
@@ -95,16 +100,19 @@ const Mutation = (/*{ logger }*/) => ({
         child /* : Instance  | TextInstance*/,
         // eslint-disable-next-line no-unused-vars
         beforeChild /* : Instance | TextInstance*/
-    ) /* : void */ {},
+    ) /* : void */ {
+    },
 
     removeChildFromContainer(
         parentInstance /* : Container */,
         // eslint-disable-next-line no-unused-vars
         child /* : Instance  | TextInstance*/
-    ) /* : void */ {},
+    ) /* : void */ {
+    },
 });
 
 const BabylonJSRenderer = opts => ({
+    supportsMutation: true,
     now: () => Date.now(),
     useSyncScheduling: true,
     mutation: Mutation(opts),
@@ -112,6 +120,10 @@ const BabylonJSRenderer = opts => ({
     getPublicInstance,
     createInstance: createInstance(opts),
     getChildHostContext,
+    commitUpdate,
+    appendChild,
+    removeChild,
+    appendChildToContainer,
     commitMount() {},
 
     // at this stage all children were created and already had the `finalizeInitialChildren` executed

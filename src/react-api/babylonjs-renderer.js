@@ -44,7 +44,9 @@ const appendChild = (
 const removeChild = (
     parentInstance /* : Instance */,
     child /* : void */ /* : Instance  | TextInstance*/
-) => parentInstance.removeChild(child);
+) => {
+    return parentInstance.removeChild(child);
+};
 
 const getRootHostContext = container => container.props;
 
@@ -53,6 +55,24 @@ const getChildHostContext = (
     type /* : string */,
     rootContainer
 ) => Object.assign({}, parentContext, { type, rootContainer });
+const commitUpdate = (
+    instance /* : Instance */,
+    updatePayload /* : Object */,
+    type /* : string */,
+    oldProps /* : Props */,
+    newProps /* : Props */,
+    // eslint-disable-next-line no-unused-vars
+    internalInstanceHandle /* : Object */
+) => /* : void */ {
+    instance.cmp.updateProps(updatePayload);
+};
+
+// shouldn't matter, 'cause it's adding the scene to the root
+const appendChildToContainer = (
+    parentInstance /* : Container */,
+    // eslint-disable-next-line no-unused-vars
+    child /* : Instance | TextInstance*/ /* : void */
+) => {};
 
 const Mutation = (/*{ logger }*/) => ({
     appendChild,
@@ -65,25 +85,8 @@ const Mutation = (/*{ logger }*/) => ({
         internalInstanceHandle /* : Object */
     ) /* : void */ {
     },
-
-    commitUpdate(
-        instance /* : Instance */,
-        updatePayload /* : Object */,
-        type /* : string */,
-        oldProps /* : Props */,
-        newProps /* : Props */,
-        // eslint-disable-next-line no-unused-vars
-        internalInstanceHandle /* : Object */
-    ) /* : void */ {
-        instance.cmp.updateProps(updatePayload);
-    },
-    appendChildToContainer(
-        parentInstance /* : Container */,
-        // eslint-disable-next-line no-unused-vars
-        child /* : Instance | TextInstance*/
-    ) /* : void */ {
-    },
-
+    commitUpdate,
+    appendChildToContainer,
     insertBefore(
         parentInstance /* : Instance */,
         child /* : Instance | TextInstance*/,
@@ -109,6 +112,7 @@ const Mutation = (/*{ logger }*/) => ({
 });
 
 const BabylonJSRenderer = opts => ({
+    supportsMutation: true,
     now: () => Date.now(),
     useSyncScheduling: true,
     mutation: Mutation(opts),
@@ -116,6 +120,11 @@ const BabylonJSRenderer = opts => ({
     getPublicInstance,
     createInstance: createInstance(opts),
     getChildHostContext,
+    commitUpdate,
+    appendChild,
+    removeChild,
+    appendChildToContainer,
+    commitMount() {},
 
     // at this stage all children were created and already had the `finalizeInitialChildren` executed
     // 1. when a component's created it's possible to set some default values

@@ -8,14 +8,17 @@ const createComponent = ({ BABYLON, scene }, props) => {
         scene,
         props.shaderPath,
         {
-            attributes: Array.from(props.attributes),
-            uniforms: Array.from(props.uniforms),
+            attributes: Array.from(props.attributes || []),
+            uniforms: Array.from(props.uniforms || []),
         }
     );
     return component;
 };
 
 const props = {
+    name: {
+        setter: setters.property("name"),
+    },
     shaderPath: { newComponentRequired: true },
     attributes: { newComponentRequired: true },
     uniforms: { newComponentRequired: true },

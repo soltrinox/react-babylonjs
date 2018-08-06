@@ -8,7 +8,7 @@ const babylonJSRenderer = ReactFiberReconciler(
 );
 
 babylonJSRenderer.injectIntoDevTools({
-    bundleType: 0, // 0 for PROD, 1 for DEV
+    bundleType: 1, // 0 for PROD, 1 for DEV
     version: "0.2.0", // version for your renderer
     rendererPackageName: "react-babylonjs-3d", // package name
 });

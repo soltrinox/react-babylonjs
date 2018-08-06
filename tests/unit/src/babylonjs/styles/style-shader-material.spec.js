@@ -56,6 +56,7 @@ describe(caption, function() {
             "edgeColor",
             "height",
             "hue",
+            "name",
             "tileTex",
             "width",
         ];

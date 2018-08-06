@@ -2,6 +2,7 @@ const path = require("path");
 
 const config = {
     entry: path.resolve(__dirname, "./dist/index.js"),
+    mode: "production",
     devtool: "source-map",
     output: {
         path: path.join(__dirname, "dist"),
@@ -30,10 +31,7 @@ const config = {
         ],
     },
     resolve: {
-        modules: [
-            path.resolve("./node_modules"),
-            path.resolve("./src"),
-        ],
+        modules: [path.resolve("./node_modules"), path.resolve("./src")],
         extensions: [".json", ".js"],
     },
 };

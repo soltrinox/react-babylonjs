@@ -1,4 +1,3 @@
-const disposers = require("../helpers/property-disposers");
 const setters = require("../helpers/property-setters");
 const transformers = require("../helpers/property-transformers");
 const { fromPairs } = require("../helpers/functional");

@@ -48,7 +48,11 @@ describe(caption, function() {
         setup();
 
         it("should export only the properties: [target, intensity]", function() {
-            expect(this.target.props).to.have.all.keys("target", "intensity");
+            expect(this.target.props).to.have.all.keys(
+                "target",
+                "intensity",
+                "name"
+            );
         });
 
         it("should export target", function() {

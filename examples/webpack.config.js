@@ -6,6 +6,7 @@ module.exports = {
     entry: {
         index: path.join(__dirname, "src", "index.js"),
     },
+    mode: "development",
     output: {
         filename: "[name].js",
         path: path.join(__dirname, "public"),
@@ -38,12 +39,21 @@ module.exports = {
             ),
         },
     },
+    optimization: {
+        splitChunks: {},
+    },
+    optimization: {
+        splitChunks: {
+            // include all types of chunks
+            chunks: "all",
+        },
+    },
     plugins: [
-        new webpack.optimize.CommonsChunkPlugin({
-            name: "vendors-static",
-            filename: "vendors-static.js",
-            minChunks: ({ context }) => /\bnode_modules\b/.test(context),
-        }),
+        // new webpack.optimization.splitChunks({
+        //     name: "vendors-static",
+        //     filename: "vendors-static.js",
+        //     minChunks: ({ context }) => /\bnode_modules\b/.test(context),
+        // }),
         new webpack.ProvidePlugin({
             React: ["react"],
             babylonjs: path.resolve(__dirname, "node_modules/babylonjs"),

@@ -8,6 +8,9 @@ const createComponent = ({ BABYLON, scene }, props) => {
 };
 
 const props = {
+    name: {
+        setter: setters.property("name"),
+    },
     size: { newComponentRequired: true },
     infiniteDistance: {
         setter: setters.property("infiniteDistance"),

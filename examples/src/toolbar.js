@@ -8,6 +8,7 @@ const Toolbar = ({ selectView }) => {
             <button onClick={() => selectView(1)}>Example 1</button>
             <button onClick={() => selectView(2)}>Example 2</button>
             <button onClick={() => selectView(3)}>Example 3</button>
+            <button onClick={() => selectView(4)}>Example 4</button>
         </div>
     );
 };

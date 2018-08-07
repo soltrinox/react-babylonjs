@@ -5,6 +5,7 @@ import React from "react";
 import Sample1 from "./sample-1";
 import Sample2 from "./sample-2";
 import Sample3 from "./sample-3";
+import Sample4 from "./sample-4";
 
 class App extends React.Component {
     constructor() {
@@ -21,11 +22,15 @@ class App extends React.Component {
     }
     render() {
         const { currentView } = this.state;
-        return <scene>
-            {currentView === 1 ? <Sample1 /> : null}
-            {currentView === 2 ? <Sample2 /> : null}
-            {currentView === 3 ? <Sample3 /> : null}
-        </scene>;
+        if (currentView === 1) return <Sample1 />;
+        return (
+            <scene>
+                {currentView === 1 ? <Sample1 /> : null}
+                {currentView === 2 ? <Sample2 /> : null}
+                {currentView === 3 ? <Sample3 /> : null}
+                {currentView === 4 ? <Sample4 /> : null}
+            </scene>
+        );
     }
 }
 

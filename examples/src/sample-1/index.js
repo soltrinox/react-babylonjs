@@ -22,7 +22,7 @@ class Sample1 extends React.Component {
 
             <SkyNebule key="top" size={1000} />,
 
-            <GroundGrid key="bottom"/>,
+            <GroundGrid key="bottom" />,
 
             <sphere
                 key="sphere-0"

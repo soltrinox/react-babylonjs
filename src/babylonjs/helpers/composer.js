@@ -73,6 +73,10 @@ const compose = (type, definition, updater) => {
                 updater(context, getComponent(), clone(values), componentId);
             },
             dispose: () => {
+                // TODO: come up with a better way of doing it
+                if (type === "scene") {
+                    return;
+                }
                 updater.dispose(context, getComponent(), props, componentId);
                 getComponent().dispose();
             },

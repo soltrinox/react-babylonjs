@@ -13,49 +13,59 @@ const _noop = () => () => {};
 const _notImplemented = name => () => {
     throw new ErrorNotImplemented(name);
 };
-
-const createInstance = ({ /*logger,*/ Node }) => (
-    type /* : string */,
-    props /* : Props */,
-    rootContainerInstance /* : Container */,
-    hostContext /* : {} */,
+const DEBUGGER = (
+    fn,
     // eslint-disable-next-line no-unused-vars
-    internalInstanceHandle /* : Object */ /* : Instance */
-) => {
-    const node = new Node(type);
-
-    if (rootContainerInstance.props.elements.byType[type]) {
-        node.cmp = rootContainerInstance.props.elements.byType[type](
-            hostContext,
-            props
-        );
-    }
-
-    return node;
+    name
+) => (...args) => {
+    return fn(...args);
 };
 
 const getPublicInstance = instance => instance;
-
-const appendChild = (
-    parentInstance /* : Instance  | Container*/,
-    child /* : Instance | TextInstance */ /* : void */
-) => parentInstance.appendChild(child);
-
-const removeChild = (
-    parentInstance /* : Instance */,
-    child /* : void */ /* : Instance  | TextInstance*/
-) => {
-    return parentInstance.removeChild(child);
-};
-
 const getRootHostContext = container => container.props;
-
 const getChildHostContext = (
     parentContext,
     type /* : string */,
     rootContainer
 ) => Object.assign({}, parentContext, { type, rootContainer });
-const commitUpdate = (
+
+const createInstance = ({ /*logger,*/ Node }) =>
+    DEBUGGER((
+        type /* : string */,
+        props /* : Props */,
+        rootContainerInstance /* : Container */,
+        hostContext /* : {} */,
+        // eslint-disable-next-line no-unused-vars
+        internalInstanceHandle /* : Instance */ /* : Object */
+    ) => {
+        const node = new Node(type);
+
+        if (rootContainerInstance.props.elements.byType[type]) {
+            node.cmp = rootContainerInstance.props.elements.byType[type](
+                hostContext,
+                props
+            );
+        }
+
+        return node;
+    }, "createInstance");
+
+const appendChild = DEBUGGER(
+    (
+        parentInstance /* : Instance  | Container*/,
+        child /* : void */ /* : Instance | TextInstance */
+    ) => parentInstance.appendChild(child),
+    "appendChild"
+);
+
+const removeChild = DEBUGGER((
+    parentInstance /* : Instance */,
+    child /* : Instance  | TextInstance*/ /* : void */
+) => {
+    return parentInstance.removeChild(child);
+}, "removeChild");
+
+const commitUpdate = DEBUGGER((
     instance /* : Instance */,
     updatePayload /* : Object */,
     type /* : string */,
@@ -65,14 +75,33 @@ const commitUpdate = (
     internalInstanceHandle /* : Object */
 ) => /* : void */ {
     instance.cmp.updateProps(updatePayload);
-};
+}, "commitUpdate");
 
 // shouldn't matter, 'cause it's adding the scene to the root
-const appendChildToContainer = (
+const appendChildToContainer = DEBUGGER((
     parentInstance /* : Container */,
     // eslint-disable-next-line no-unused-vars
-    child /* : Instance | TextInstance*/ /* : void */
-) => {};
+    child /* : void */ /* : Instance | TextInstance*/
+) => {
+    return parentInstance.appendChild(child);
+}, "appendChildToContainer");
+
+const removeChildFromContainer = DEBUGGER((
+    parentInstance /* : Container */,
+    // eslint-disable-next-line no-unused-vars
+    child /* : Instance  | TextInstance*/ /* : void */
+) => {
+    return parentInstance.removeChild(child);
+}, "removeChildFromContainer");
+
+const insertBefore = DEBUGGER((
+    parentInstance /* : Instance */,
+    child /* : Instance | TextInstance*/,
+    // eslint-disable-next-line no-unused-vars
+    beforeChild /* : Instance | TextInstance*/ /* : void */
+) => {
+    // noop
+}, "insertBefore");
 
 const Mutation = (/*{ logger }*/) => ({
     appendChild,
@@ -87,14 +116,7 @@ const Mutation = (/*{ logger }*/) => ({
     },
     commitUpdate,
     appendChildToContainer,
-    insertBefore(
-        parentInstance /* : Instance */,
-        child /* : Instance | TextInstance*/,
-        // eslint-disable-next-line no-unused-vars
-        beforeChild /* : Instance | TextInstance*/
-    ) /* : void */ {
-        // noop
-    },
+    insertBefore,
     insertInContainerBefore(
         parentInstance /* : Container */,
         child /* : Instance  | TextInstance*/,
@@ -102,13 +124,7 @@ const Mutation = (/*{ logger }*/) => ({
         beforeChild /* : Instance | TextInstance*/
     ) /* : void */ {
     },
-
-    removeChildFromContainer(
-        parentInstance /* : Container */,
-        // eslint-disable-next-line no-unused-vars
-        child /* : Instance  | TextInstance*/
-    ) /* : void */ {
-    },
+    removeChildFromContainer,
 });
 
 const BabylonJSRenderer = opts => ({
@@ -125,7 +141,8 @@ const BabylonJSRenderer = opts => ({
     removeChild,
     appendChildToContainer,
     commitMount() {},
-
+    removeChildFromContainer,
+    insertBefore,
     // at this stage all children were created and already had the `finalizeInitialChildren` executed
     // 1. when a component's created it's possible to set some default values
     // 2. also some actions, such as setting focus

@@ -7,11 +7,6 @@
 [![npm version](https://badge.fury.io/js/react-babylonjs-3d.svg)](https://badge.fury.io/js/react-babylonjs-3d)
 
 # react-babylonjs-3d
-- valor default for props
-- loading model
-- comparing properties to no wast time rendering something that doesn't have to be rendered
-- clean up code
-
 
 ![Screenshot of the code bellow][screenshot1]
 

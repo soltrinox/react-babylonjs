@@ -42,5 +42,5 @@ const props = {
     },
 };
 
-const sphere = { type: "lines", createComponent, props };
+const sphere = { superTypes: ["mesh"], type: "lines", createComponent, props };
 module.exports = sphere;

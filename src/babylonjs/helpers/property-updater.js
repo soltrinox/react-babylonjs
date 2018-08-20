@@ -41,20 +41,29 @@ const propertyUpdater = (type, propsDefinition) => {
                 context
             );
 
-            setter(component, value);
+            setter(component, value, context);
         });
 
     updater.dispose = (context, component, props, componentId) => {
+        if (!component) return;
         Object.keys(propsDefinition).forEach(propName => {
             const prop = propsDefinition[propName];
-            if (prop.dispose) {
-                const keyComponent = `${componentId}::${propName}`;
-                prop.dispose(
-                    component,
-                    context.componentManager.get(keyComponent),
-                    propsDefinition[propName].setter
-                );
+            if (!prop.dispose) {
+                return;
             }
+
+            const keyComponent = `${componentId}::${propName}`;
+            const propComponent = context.componentManager.get(keyComponent);
+
+            if (!propComponent) {
+                return;
+            }
+
+            prop.dispose(
+                component,
+                propComponent,
+                propsDefinition[propName].setter
+            );
         });
     };
     return updater;

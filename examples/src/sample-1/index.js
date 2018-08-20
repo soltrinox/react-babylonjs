@@ -4,6 +4,9 @@ import GroundGrid from "../components/ground-grid";
 import SkyNebule from "../components/sky-nebule";
 
 class Sample1 extends React.Component {
+    doublePickTrigger(evt) {
+        console.log("OnDoublePickTrigger", { evt });
+    }
     render() {
         return [
             <freeCamera
@@ -29,6 +32,10 @@ class Sample1 extends React.Component {
                 position={[3, 5, 0]}
                 segments={16}
                 diameter={2}
+                actionManager={{
+                    OnPickTrigger: evt => console.log("picked", evt),
+                    OnDoublePickTrigger: this.doublePickTrigger,
+                }}
             />,
         ];
     }

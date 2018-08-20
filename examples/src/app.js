@@ -22,7 +22,6 @@ class App extends React.Component {
     }
     render() {
         const { currentView } = this.state;
-        if (currentView === 1) return <Sample1 />;
         return (
             <scene>
                 {currentView === 1 ? <Sample1 /> : null}

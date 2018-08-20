@@ -1,6 +1,7 @@
 const { compose } = require("./helpers/composer");
 const propertyUpdater = require("./helpers/property-updater");
 const { fromPairs } = require("./helpers/functional");
+const propertyActionManager = require("./properties/property-action-manager");
 
 const styles = {
     standardMaterial: props => ({ type: "standardMaterial", props }),
@@ -9,8 +10,15 @@ const styles = {
     cubeTexture: props => ({ type: "cubeTexture", props }),
 };
 
+const _superType = {
+    mesh: {
+        actionManager: propertyActionManager,
+    },
+};
 const byType = fromPairs(
     [
+        require("./components/component-action-manager"),
+
         require("./components/component-scene"),
         require("./components/component-mesh-box"),
         require("./components/component-mesh-ground"),
@@ -29,10 +37,24 @@ const byType = fromPairs(
 
         require("./styles/style-texture"),
         require("./styles/style-cube-texture"),
-    ].map(({ type, props, createComponent }) => [
-        type,
-        compose(type, { props, createComponent }, propertyUpdater(type, props)),
-    ])
+    ].map(({ superTypes = [], type, props, createComponent }) => {
+        const allProps = superTypes
+            .map(superType => _superType[superType])
+            .filter(superType => superType)
+            .reduce(
+                (acc, tempProp) => Object.assign(acc, tempProp),
+                Object.assign({}, props)
+            );
+
+        return [
+            type,
+            compose(
+                type,
+                { props: allProps, createComponent },
+                propertyUpdater(type, allProps)
+            ),
+        ];
+    })
 );
 
 module.exports = { styles, byType };

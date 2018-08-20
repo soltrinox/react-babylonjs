@@ -29,5 +29,5 @@ const props = {
     },
 };
 
-const box = { type: "box", createComponent, props };
+const box = { superTypes: ["mesh"], type: "box", createComponent, props };
 module.exports = box;

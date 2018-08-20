@@ -31,5 +31,5 @@ const props = {
     },
 };
 
-const ground = { type: "ground", createComponent, props };
+const ground = { superTypes: ["mesh"], type: "ground", createComponent, props };
 module.exports = ground;

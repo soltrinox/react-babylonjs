@@ -27,5 +27,5 @@ const props = {
     },
 };
 
-const sphere = { type: "sphere", createComponent, props };
+const sphere = { superTypes: ["mesh"], type: "sphere", createComponent, props };
 module.exports = sphere;

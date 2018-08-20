@@ -45,6 +45,9 @@ class Sample2 extends React.Component {
                     key="body"
                     points={this.state.springLines}
                     color={[1, 0, 1]}
+                    actionManager={{
+                        OnPickTrigger: evt => console.log("line pick=>", evt),
+                    }}
                 />
             </scene>
         );

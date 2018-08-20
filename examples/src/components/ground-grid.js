@@ -34,7 +34,10 @@ const ScenarioGround = () => (
         subdivisions={2}
         position={[0, 0, 0]}
         material={groundMaterial}
-    />
+        actionManager={{
+            OnPickTrigger: evt => console.log("ground pick=>", evt),
+        }}
+/>
 );
 
 export default ScenarioGround;

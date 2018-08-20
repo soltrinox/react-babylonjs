@@ -34,64 +34,70 @@ import React from "react";
 const { elements: { styles } } = require("react-babylonjs-3d");
 
 const ScenarioGround = () => (
-    <ground
-        name="ground1"
-        width={2000}
-        height={2000}
-        subdivisions={2}
-        position={[0, 0, 0]}
-    >
+  <ground
+    name="ground1"
+    width={2000}
+    height={2000}
+    subdivisions={2}
+    position={[0, 0, 0]}
+    actionManager={{
+      OnPickTrigger: evt => console.log("ground pick=>", evt),
+    }}
+  >
 );
 ```
 ```jsx
 const skyMaterial = styles.standardMaterial({
-    name: "skyboxMaterial",
-    backFaceCulling: false,
-    diffuseColor: [0, 0, 0],
-    specularColor: [0, 0, 0],
+  name: "skyboxMaterial",
+  backFaceCulling: false,
+  diffuseColor: [0, 0, 0],
+  specularColor: [0, 0, 0],
 });
 ```
 ```jsx
 const Sky = ({ size }) => (
-    <box
-        name="skybox"
-        size={size}
-        infiniteDistance={true}
-        material={skyMaterial}
-    />
+  <box
+    name="skybox"
+    size={size}
+    infiniteDistance={true}
+    material={skyMaterial}
+  />
 );
 ```
 ```jsx
 class App extends React.Component {
-    render() {
-        return (
-            <scene clearColor={[1, 1, 1]} ambientColor={[1, 0, 0]}>
-                <freeCamera
-                    position={[0, 5, -16]}
-                    defaultTarget={[0, 0, 0]}
-                    attachControl={true}
-                />
+  render() {
+    return (
+      <scene clearColor={[1, 1, 1]} ambientColor={[1, 0, 0]}>
+        <freeCamera
+          position={[0, 5, -16]}
+          defaultTarget={[0, 0, 0]}
+          attachControl={true}
+        />
 
-                <hemisphericLight
-                    name="light1"
-                    target={[0, 1, 0]}
-                    intensity={0.5}
-                />
+        <hemisphericLight
+          name="light1"
+          target={[0, 1, 0]}
+          intensity={0.5}
+        />
 
-                <SkyNebule size={1000} />
+        <SkyNebule size={1000} />
 
-                <GroundGrid />
+        <GroundGrid />
 
-                <sphere
-                    key="sphere-0"
-                    position={[3, 5, 0]}
-                    segments={16}
-                    diameter={2}
-                />
+        <sphere
+          key="sphere-0"
+          position={[3, 5, 0]}
+          segments={16}
+          diameter={2}
+          actionManager={{
+            OnPickTrigger: evt => console.log("sphere pick=>", evt),
+          }}
+        />
 
-            </scene>
-        );
-    }
+      </scene>
+    );
+  }
 }
 
 export default App;
@@ -104,22 +110,50 @@ export default App;
 - HOT REALOD
 
 ## components
-- <arcRotateCamera alpha beta radius target position attachControl/>  BABYLON.ArcRotateCamera
-- <freeCamera name defaultTarget target position attachControl/>  BABYLON.FreeCamera
-- <hemisphericLight name intensity target/>  BABYLON.HemisphericLight
-- <box name size width height subdivisions material position/>  BABYLONMesh.CreateBox
-- <cylinder height diameterTop diameterBottom tessellation subdivisions arc sideOrientation sideOrientation faceUV frontUVs backUVs position rotation material/>  BABYLONMeshBuilder.CreateCylinder
-- <extrudeShape shape path scale cap sideOrientation frontUVs backUVs invertUV material/>  BABYLONMeshBuilder.ExtrudeShape
-- <ground name width height subdivisions position material/>  BABYLONMesh.CreateGround
-- <lines points colors color useVertexColor/>  BABYLONMeshBuilder.CreateLines
-- <sphere name diameter infiniteDistance position material/>  BABYLONMesh.CreateSphere
-- <scene clearColor ambientColor/>  BABYLON.Scene
 
-## properties(styles)
-- <cubeTexture url coordinatesMode/>  BABYLON.CubeTexture
-- <shaderMaterial name shaderPath attributes uniforms diffuseColor backFaceCulling width height boxSize edgeColor hue tileTex/>  BABYLON.ShaderMaterial
-- <standardMaterial name backFaceCulling diffuseColor specularColor emissiveColor ambientColor reflectionTexture diffuseTexture/>  BABYLON.StandardMaterial
-- <texture url/>  BABYLON.Texture
+### arcRotateCamera (BABYLON.ArcRotateCamera)
+##### props: (alpha beta radius target position attachControl)
+
+### freeCamera (BABYLON.FreeCamera)
+##### props: (name defaultTarget target position attachControl)
+
+### hemisphericLight (BABYLON.HemisphericLight)
+##### props: (name intensity target)
+
+### box (BABYLONMesh.CreateBox)
+##### props: (name size width height subdivisions material position)
+
+### cylinder (arc sideOrientation )
+##### props: (height diameterTop diameterBottom tessellation subdivisions sideOrientation faceUV frontUVs backUVs position rotation material) BABYLONMeshBuilder.CreateCylinder
+
+### extrudeShape (BABYLONMeshBuilder.ExtrudeShape)
+##### props: (shape path scale cap sideOrientation frontUVs backUVs invertUV material)
+
+### ground (BABYLONMesh.CreateGround)
+##### props: (name width height subdivisions position material)
+
+### lines (BABYLONMeshBuilder.CreateLines)
+##### props: (points colors color useVertexColor)
+
+### sphere (BABYLONMesh.CreateSphere)
+##### props: (name diameter infiniteDistance position material)
+
+### scene (BABYLON.Scene)
+##### props: (clearColor ambientColor)
+
+## properties kinda style
+
+### cubeTexture(BABYLON.CubeTexture)
+#### props: url coordinatesMode
+
+### shaderMaterial (BABYLON.ShaderMaterial)
+#### props: name shaderPath attributes uniforms diffuseColor backFaceCulling width height boxSize edgeColor hue tileTex
+
+### standardMaterial(BABYLON.StandardMaterial)
+#### props: name backFaceCulling diffuseColor specularColor emissiveColor ambientColor reflectionTexture diffuseTexture
+
+### texture(BABYLON.Texture)
+#### props: url
 
 ## So far
 The better way to get started is to clone this [repo](https://github.com/viniciusrmcarneiro/react-babylonjs-3d-example), it's a very simple example. Doing that you could focus on how you can compose your BABYLON components.
@@ -141,7 +175,6 @@ In order make it possible to have react like components this package uses [react
 
 
 There are alot of things wating to be implemented. As this project is in it's very early stage, some very simple things are still to be implemented. So far the ROADMAP is:
-- [ ] events hook/actions
 - [ ] unit test for api
 - [ ] Guideline for contribution
 - [ ] layout(flexbox)

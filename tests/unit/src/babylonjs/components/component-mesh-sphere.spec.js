@@ -49,8 +49,8 @@ describe(caption, function() {
     describe("properties", function() {
         setup();
 
-        it("should export only the properties: [segments, diameter, infiniteDistance, position, material]", function() {
-            expect(this.target.props).to.have.all.keys(
+        it("should export the properties", function() {
+            expect(this.target.props).to.include.all.keys(
                 "segments",
                 "diameter",
                 "infiniteDistance",

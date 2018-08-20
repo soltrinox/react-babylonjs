@@ -1,0 +1,11 @@
+{
+	"settings": {
+		"prettier.trailingComma": "es5",
+		"files.exclude": {
+			"**/.git": true, // this is a default value
+			"**/.DS_Store": true, // this is a default value
+			"**/node_modules": true, // this excludes all folders
+			"dist": true // this excludes the folder
+		}
+	}
+}

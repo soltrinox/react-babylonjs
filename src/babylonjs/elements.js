@@ -11,6 +11,8 @@ const styles = {
 
 const byType = fromPairs(
     [
+        require("./components/component-action-manager"),
+
         require("./components/component-scene"),
         require("./components/component-mesh-box"),
         require("./components/component-mesh-ground"),
@@ -31,7 +33,11 @@ const byType = fromPairs(
         require("./styles/style-cube-texture"),
     ].map(({ type, props, createComponent }) => [
         type,
-        compose(type, { props, createComponent }, propertyUpdater(type, props)),
+        compose(
+            type,
+            { props, createComponent },
+            propertyUpdater(type, props)
+        ),
     ])
 );
 

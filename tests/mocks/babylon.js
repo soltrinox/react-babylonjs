@@ -1,3 +1,6 @@
+const _defaultProps = {
+    ActionManager: { OnPickTrigger: "OnPickTrigger-12" },
+};
 const createClasseByType = (type, sandbox) =>
     sandbox.spy(function(...args) {
         return { type, args };
@@ -8,6 +11,8 @@ const createClasses = (types, sandbox) =>
         (all, type) => {
             const mySymbol = Symbol(type);
             const myClass = createClasseByType(mySymbol, sandbox);
+
+            Object.assign(all.classesByType, _defaultProps[type]);
 
             Object.assign(all.classesByType, {
                 [type]: myClass,
@@ -37,6 +42,8 @@ const _babylonTypes = [
     "HemisphericLight",
     "FreeCamera",
     "ShaderMaterial",
+    "ActionManager",
+    "ExecuteCodeAction",
 ];
 
 const create = sandbox => {

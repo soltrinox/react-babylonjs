@@ -161,4 +161,56 @@ describe(caption, function() {
             transformedValue
         );
     });
+
+    describe("dispose", function() {
+        it("should not dispose for props that does not have an instanced component", function() {
+            const {
+                sandbox,
+                mocks: { context },
+            } = this;
+            const component = "component-";
+
+            const propsDefinition = { prop1: { dispose: sandbox.stub() } };
+            const updater = this.target(
+                "anything",
+                propsDefinition,
+            );
+            context.componentManager.get.returns(null);
+
+            updater.dispose(context, component);
+
+            sinon.assert.notCalled(propsDefinition.prop1.dispose);
+        });
+
+        it("should not call dispose for props if component is null", function() {
+            const propsDefinition = { prop1: { dispose: this.sandbox.stub() } };
+            const updater = this.target("anything", propsDefinition);
+            updater.dispose(context, null);
+            sinon.assert.notCalled(propsDefinition.prop1.dispose);
+        });
+
+        it("should call dispose for props that have a method named dispose and an instance", function() {
+            const {
+                sandbox,
+                mocks: { context },
+            } = this;
+
+            const component = "component-";
+            const componentId = "componentId-12";
+            const propsDefinition = { prop1: { dispose: sandbox.stub() } };
+
+            const updater = this.target(
+                "anything",
+                propsDefinition,
+            );
+            context.componentManager.get.returns(null);
+            context.componentManager.get
+                .withArgs(`${componentId}::prop1`)
+                .returns("aaa");
+
+            updater.dispose(context, component, {}, componentId);
+            sinon.assert.calledOnce(propsDefinition.prop1.dispose);
+            sinon.assert.calledWith(propsDefinition.prop1.dispose, component);
+        });
+    });
 });

@@ -18,7 +18,9 @@
     }
   ],
   "scripts": {
-    "build": "webpack",
+    "build:prod": "NODE_ENV=production webpack",
+    "build:dev": "NODE_ENV=development webpack",
+    "prepublish": "npm run build:prod && npm run build:dev",
     "lint": "eslint .",
     "test-only": "mocha --opts ./mocha.opts",
     "test": "nyc npm run test-only",

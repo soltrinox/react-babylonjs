@@ -1,39 +1,51 @@
 const path = require("path");
 
-const config = {
-    entry: path.resolve(__dirname, "./src/index.js"),
-    mode: "production",
-    devtool: "source-map",
-    output: {
-        path: path.join(__dirname, "dist"),
-        filename: "react-babylon-3d.js",
-        library: "ReactBabylon3D",
-        libraryTarget: "umd",
-        umdNamedDefine: true,
-    },
-    externals: {
-        babylonjs: {
-            commonjs: "BABYLON",
-            commonjs2: "BABYLON",
-            amd: "BABYLON",
-            root: "BABYLON",
+const _DEV = process.env.NODE_ENV === "development";
+
+const filename = `react-babylon-3d${_DEV ? "" : ".min"}.js`;
+const mode = _DEV ? "development" : "production";
+
+const config = Object.assign(
+    {},
+    _DEV ? { devtool: "inline-source-map" } : null,
+    {
+        entry: path.resolve(__dirname, "./src/index.js"),
+        mode,
+        output: {
+            path: path.join(__dirname, "dist"),
+            filename,
+            library: "ReactBabylon",
+            libraryTarget: "umd",
+            umdNamedDefine: true,
         },
-        react: "react",
-        "react-reconciler": "react-reconciler",
-    },
-    module: {
-        rules: [
-            {
-                test: /\.js$/,
-                loader: "babel-loader",
-                exclude: /node_modules/,
+        externals: {
+            babylonjs: {
+                commonjs: "BABYLON",
+                commonjs2: "BABYLON",
+                amd: "BABYLON",
+                root: "BABYLON",
             },
-        ],
-    },
-    resolve: {
-        modules: [path.resolve("./node_modules"), path.resolve("./src")],
-        extensions: [".json", ".js"],
-    },
-};
+            react: {
+                commonjs: "React",
+                commonjs2: "React",
+                amd: "React",
+                root: "React",
+            },
+        },
+        module: {
+            rules: [
+                {
+                    test: /\.js$/,
+                    loader: "babel-loader",
+                    exclude: /node_modules/,
+                },
+            ],
+        },
+        resolve: {
+            modules: [path.resolve("./node_modules"), path.resolve("./src")],
+            extensions: [".json", ".js"],
+        },
+    }
+);
 
 module.exports = config;

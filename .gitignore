@@ -58,3 +58,4 @@ typings/
 # dotenv environment variables file
 .env
 .vscode/launch.json
+examples/tests/tests_output

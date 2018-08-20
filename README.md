@@ -5,7 +5,7 @@
 [![Dependency Status](https://david-dm.org/viniciusrmcarneiro/react-babylonjs.svg)](https://david-dm.org/viniciusrmcarneiro/react-babylonjs)
 [![devDependencies Status](https://david-dm.org/viniciusrmcarneiro/react-babylonjs/dev-status.svg)](https://david-dm.org/viniciusrmcarneiro/react-babylonjs?type=dev)
 [![npm version](https://badge.fury.io/js/react-babylonjs-3d.svg)](https://badge.fury.io/js/react-babylonjs-3d)
-
+[![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=VDVTTXRFQVhSQ2l5eVRzSmp3RVA1TkorbmtZMXQwSEpEdzd6ZGZPZktMbz0tLTN1VklTbHUxdHd2Z0N2SWVaRFhQVnc9PQ==--4223762786c10927508895203f56eb9bb7e3b834)](https://www.browserstack.com/automate/public-build/VDVTTXRFQVhSQ2l5eVRzSmp3RVA1TkorbmtZMXQwSEpEdzd6ZGZPZktMbz0tLTN1VklTbHUxdHd2Z0N2SWVaRFhQVnc9PQ==--4223762786c10927508895203f56eb9bb7e3b834)
 # react-babylonjs-3d
 
 ![Screenshot of the code bellow][screenshot1]
@@ -144,7 +144,6 @@ There are alot of things wating to be implemented. As this project is in it's ve
 - [ ] events hook/actions
 - [ ] unit test for api
 - [ ] Guideline for contribution
-- [ ] Documentation(always working in progress)
 - [ ] layout(flexbox)
 - [ ] animations
 

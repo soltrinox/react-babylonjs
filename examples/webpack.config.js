@@ -1,25 +1,76 @@
 const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const _configKey = process.env.CONFIG_KEY || "dev";
+
+const opts = {
+    dev: {
+        externals: {},
+        devServer: {
+            hot: true,
+        },
+        plugins: [
+            new webpack.ProvidePlugin({
+                React: ["react"],
+                babylonjs: path.resolve(__dirname, "node_modules/babylonjs"),
+            }),
+            new HtmlWebpackPlugin({
+                template: "./index.html",
+                title: "BabylonJS as React",
+                inject: "body",
+                minify: false,
+                scripts: "",
+            }),
+        ],
+    },
+    nonDev: {
+        externals: {
+            babylonjs: "BABYLON",
+            react: "React",
+            "react-dom": "ReactDOM",
+        },
+        devServer: {},
+        plugins: [
+            new HtmlWebpackPlugin({
+                template: "./index.html",
+                title: "BabylonJS as React",
+                inject: "body",
+                minify: true,
+                scripts: [
+                    '<script src="https://cdnjs.cloudflare.com/ajax/libs/babylonjs/3.3.0-beta.2/babylon.worker.js"></script>',
+                    '<script crossorigin src="https://unpkg.com/react@16.4.2/umd/react.production.min.js"></script>',
+                    '<script crossorigin src="https://unpkg.com/react-dom@16.4.2/umd/react-dom.production.min.js"></script>',
+                ].join("\n"),
+            }),
+        ],
+    },
+};
+const config = opts[_configKey];
 
 module.exports = {
     entry: {
         index: path.join(__dirname, "src", "index.js"),
     },
-    mode: "development",
     output: {
         filename: "[name].js",
         path: path.join(__dirname, "public"),
     },
-    // devtool: 'cheap-source-map',
-    devtool: "inline-source-map",
-    devServer: {
-        contentBase: path.resolve(__dirname, "public"),
-        publicPath: "/",
-        hot: true,
-        headers: { "Access-Control-Allow-Origin": "*" },
-        host: "0.0.0.0",
-    },
+    devServer: Object.assign(
+        {
+            contentBase: path.resolve(__dirname, "public"),
+            publicPath: "/",
+            port: "8091",
+            headers: { "Access-Control-Allow-Origin": "*" },
+            host: "0.0.0.0",
+            before: function(app) {
+                app.use("*", function(req, res, next) {
+                    console.log(`${req.headers.referer} ${req.originalUrl}`);
+                    next();
+                });
+            },
+        },
+        config.devServer
+    ),
     module: {
         rules: [
             {
@@ -32,7 +83,6 @@ module.exports = {
     resolve: {
         alias: {
             "react-babylonjs-3d": path.resolve(__dirname, "../src"),
-            react: path.resolve(__dirname, "node_modules/react"),
             "react-reconciler": path.resolve(
                 __dirname,
                 "node_modules/react-reconciler"
@@ -44,25 +94,12 @@ module.exports = {
     },
     optimization: {
         splitChunks: {
-            // include all types of chunks
             chunks: "all",
         },
     },
+    externals: config.externals,
     plugins: [
-        // new webpack.optimization.splitChunks({
-        //     name: "vendors-static",
-        //     filename: "vendors-static.js",
-        //     minChunks: ({ context }) => /\bnode_modules\b/.test(context),
-        // }),
-        new webpack.ProvidePlugin({
-            React: ["react"],
-            babylonjs: path.resolve(__dirname, "node_modules/babylonjs"),
-        }),
-        new HtmlWebpackPlugin({
-            template: "./index.html",
-            title: "BabylonJS as React",
-            inject: "body",
-        }),
+        ...config.plugins,
         new webpack.NamedModulesPlugin(),
         new webpack.HotModuleReplacementPlugin(),
     ],

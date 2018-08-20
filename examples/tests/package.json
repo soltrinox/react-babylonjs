@@ -1,0 +1,16 @@
+{
+  "name": "react-babylonjs-3d-tests",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node scripts/local.runner.js -c conf/local.conf.js",
+    "test:nw": "nightwatch -c conf/local.conf.js"
+  },
+  "author": "Vinicius Carneiro",
+  "license": "ISC",
+  "dependencies": {
+    "browserstack-local": "^1.3.3",
+    "nightwatch": "^0.9.21"
+  }
+}

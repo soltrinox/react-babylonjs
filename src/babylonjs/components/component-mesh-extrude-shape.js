@@ -86,5 +86,10 @@ const props = {
     },
 };
 
-const extrudeShape = { type: "extrudeShape", createComponent, props };
+const extrudeShape = {
+    superTypes: ["mesh"],
+    type: "extrudeShape",
+    createComponent,
+    props,
+};
 module.exports = extrudeShape;

@@ -26,3 +26,5 @@ node_modules/
 .editorconfig
 .gitignore
 .prettierrc
+tests
+examples

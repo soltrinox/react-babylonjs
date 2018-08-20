@@ -8,11 +8,11 @@ const createComponent = ({ scene }) => {
 const props = {
     clearColor: {
         setter: setters.property("clearColor"),
-        transformer: transformers.vector3,
+        transformer: transformers.color3,
     },
     ambientColor: {
         setter: setters.property("ambientColor"),
-        transformer: transformers.vector3,
+        transformer: transformers.color3,
     },
 
 };

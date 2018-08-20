@@ -10,11 +10,11 @@ describe(caption, function() {
             {},
             [1, 2],
             { a: 1, b: "asres", d: new Date() },
-        ].forEach((a, index) => {
+        ].forEach((objToClone, index) => {
             it(`fixture #${index}`, function() {
-                const result = this.target.clone(a);
-                expect(a).not.equals(result);
-                expect(a).eqls(result);
+                const result = this.target.clone(objToClone);
+                expect(objToClone).not.equals(result);
+                expect(objToClone).eqls(result);
             });
         });
     });

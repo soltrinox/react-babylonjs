@@ -34,6 +34,18 @@ const validateComponent = (type, definition, updater) => {
         throw new Error("Updater is required");
     }
 };
+const createPropFilter = (propDefinitions, cb) => obj => {
+    const result = {};
+    for (const key in obj) {
+
+        if (!propDefinitions[key]) {
+            continue;
+        }
+
+        result[key] = obj[key];
+    }
+    return cb(result);
+};
 
 const compose = (type, definition, updater) => {
     validateComponent(type, definition, updater);
@@ -41,16 +53,17 @@ const compose = (type, definition, updater) => {
     const definitionProps = Object.assign({}, definition.props);
 
     const requireNewComponent = shouldCreateNewComponent(definitionProps);
+    const cloneProps =  createPropFilter(definitionProps, clone);
 
     const creator = (context, providedProps) => {
-        const props = clone(providedProps);
+        const props = cloneProps(providedProps);
 
         let componentId;
         let baseComponent;
 
         const getComponent = () => baseComponent;
         const internalCreateComponent = () => {
-            const tmpProps = clone(props);
+            const tmpProps = cloneProps(props);
             if (baseComponent) {
                 baseComponent.dispose();
             }
@@ -64,13 +77,13 @@ const compose = (type, definition, updater) => {
             updateProps: values => {
                 const createNewComponent = requireNewComponent(values, props);
 
-                Object.assign(props, clone(values));
+                Object.assign(props, cloneProps(values));
 
                 if (createNewComponent === true) {
                     internalCreateComponent();
                     return;
                 }
-                updater(context, getComponent(), clone(values), componentId);
+                updater(context, getComponent(), cloneProps(values), componentId);
             },
             dispose: () => {
                 // TODO: come up with a better way of doing it
@@ -83,7 +96,7 @@ const compose = (type, definition, updater) => {
         };
 
         componentId = context.componentManager.newId(instance);
-        updater(context, getComponent(), clone(props), componentId);
+        updater(context, getComponent(), cloneProps(props), componentId);
         return instance;
     };
 

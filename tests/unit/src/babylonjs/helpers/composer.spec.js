@@ -155,7 +155,7 @@ describe(caption, function() {
         it("should pass along componentId to the updater", function() {
             const {
                 mocks: {
-                    definitionNoProps: definition,
+                    definitionBox: definition,
                     type,
                     context,
                     updater,
@@ -168,12 +168,12 @@ describe(caption, function() {
             );
 
             const componentId = "mmmmm";
-            const component = { a: 1 };
+            const component = { position: [1, 2, 3] };
 
             definition.createComponent.returns(component);
             context.componentManager.newId.returns(componentId);
 
-            const props = { a: 1 };
+            const props = { position: [1, 2, 3] };
             myComponentWrapper(context, props);
 
             sinon.assert.calledOnce(updater);
@@ -559,6 +559,70 @@ describe(caption, function() {
                 camera,
                 props1
             );
+        });
+    });
+
+    describe("not defined properties", function () {
+        setup();
+
+        beforeEach(function () {
+            const {
+                mocks: {
+                    definitionBox: definition,
+                    type,
+                    box,
+                    updater,
+                },
+            } = this;
+            this.componentWrapper = this.target.compose(
+                type,
+                definition,
+                updater
+            );
+            definition.createComponent.returns(box);
+        });
+
+        it("should filter out not defined properties when create", function () {
+            const {
+                mocks: {
+                    context,
+                    updater,
+                    box,
+                },
+            } = this;
+
+            const notDefinedProp = { desc : "I'm not defined" };
+            const position = [1, 1, 1];
+            const expectedProps = { position };
+
+            this.componentWrapper(context, { position, notDefinedProp });
+
+            sinon.assert.calledOnce(updater);
+            sinon.assert.calledWithExactly(updater, context, box, expectedProps, undefined);
+        });
+
+        it("should filter out not defined properties when update", function () {
+            const {
+                mocks: {
+                    context,
+                    updater,
+                    box,
+                },
+            } = this;
+
+            const expectedPropsToUpdate = { };
+
+            const component = this.componentWrapper(context, { position: [1, 1, 1] });
+            component.updateProps({ notDefinedProp: "I'm not defined" });
+
+            sinon.assert.calledTwice(updater);
+            sinon.assert.calledWithExactly(
+                updater.getCall(1),
+                context,
+                box,
+                expectedPropsToUpdate,
+                undefined);
+
         });
     });
 });

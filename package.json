@@ -2,7 +2,7 @@
   "private": false,
   "license": "MIT",
   "name": "react-babylonjs-3d",
-  "version": "0.4.5",
+  "version": "0.4.7",
   "description": "BabylonJS 3D in a declarative way",
   "main": "./dist/react-babylon-3d.js",
   "module": "./src/index.js",
@@ -18,7 +18,9 @@
     }
   ],
   "scripts": {
-    "build": "webpack",
+    "build:prod": "NODE_ENV=production webpack",
+    "build:dev": "NODE_ENV=development webpack",
+    "prepublish": "npm run build:prod && npm run build:dev",
     "lint": "eslint .",
     "test-only": "mocha --opts ./mocha.opts",
     "test": "nyc npm run test-only",

@@ -3,4 +3,5 @@ node_modules/*
 lib/*
 coverage/*
 .nyc_output/*
-
+tests/*
+dist/*

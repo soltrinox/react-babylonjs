@@ -2,7 +2,7 @@
   "private": false,
   "license": "MIT",
   "name": "react-babylonjs-3d",
-  "version": "0.4.8",
+  "version": "0.0.0-development",
   "description": "BabylonJS 3D in a declarative way",
   "main": "./dist/react-babylon-3d.js",
   "module": "./src/index.js",
@@ -24,7 +24,10 @@
     "lint": "eslint .",
     "test-only": "mocha --opts ./mocha.opts",
     "test": "nyc npm run test-only",
-    "prettier": "prettier --config ./.prettierrc --write \"{src,test,tests,mocks,examples}/**/*.js\""
+    "prettier": "prettier --config ./.prettierrc --write \"{src,test,tests,mocks,examples}/**/*.js\"",
+    "semantic-release": "semantic-release",
+    "travis-deploy-once": "travis-deploy-once",
+    "commit": "npx git-cz"
   },
   "nyc": {
     "watermarks": {
@@ -62,7 +65,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/viniciusrmcarneiro/react-babylonjs.git"
+    "url": "https://github.com/viniciusrmcarneiro/react-babylonjs.git"
   },
   "engines": {
     "node": ">= 8.2.1",
@@ -97,7 +100,9 @@
     "react": "^16.4.2",
     "react-devtools": "^3.2.3",
     "react-reconciler": "^0.12.0",
+    "semantic-release": "^15.9.12",
     "sinon": "^6.1.4",
+    "travis-deploy-once": "^5.0.7",
     "typescript": "^2.9.2",
     "webpack": "^4.16.4",
     "webpack-cli": "^3.1.0"

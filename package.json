@@ -29,6 +29,22 @@
     "travis-deploy-once": "travis-deploy-once",
     "commit": "npx git-cz"
   },
+  "release": {
+    "verifyConditions": [
+      "@semantic-release/github",
+      "@semantic-release/npm"
+    ],
+    "publish": [
+      "@semantic-release/npm",
+      "@semantic-release/github"
+    ],
+    "success": [
+      "@semantic-release/github"
+    ],
+    "fail": [
+      "@semantic-release/github"
+    ]
+  },
   "nyc": {
     "watermarks": {
       "lines": [
@@ -79,6 +95,8 @@
     "react": "16.*.*"
   },
   "devDependencies": {
+    "@semantic-release/github": "^5.0.4",
+    "@semantic-release/npm": "^5.0.4",
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.6",
     "babel-loader": "^7.1.5",

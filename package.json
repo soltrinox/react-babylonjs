@@ -88,10 +88,11 @@
     "npm": ">= 5.30.0"
   },
   "author": "Vinicius R. M. Carneiro",
-  "dependencies": {},
+  "dependencies": {
+    "react-reconciler": "^0.12.0"
+  },
   "peerDepedencies": {
     "babylonjs": "3.*",
-    "react-reconciler": "0.12.*",
     "react": "16.*.*"
   },
   "devDependencies": {
@@ -117,7 +118,6 @@
     "ramda": "^0.25.0",
     "react": "^16.4.2",
     "react-devtools": "^3.2.3",
-    "react-reconciler": "^0.12.0",
     "semantic-release": "^15.9.12",
     "sinon": "^6.1.4",
     "travis-deploy-once": "^5.0.7",
